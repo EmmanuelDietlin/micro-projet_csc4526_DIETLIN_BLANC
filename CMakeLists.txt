@@ -11,13 +11,6 @@ endif()
 
 set (BUILD_SHARED_LIBS FALSE)
 
-FetchContent_Declare(
-    pugixml
-    GIT_REPOSITORY https://github.com/zeux/pugixml.git
-    GIT_TAG v1.10
-)
-
-FetchContent_MakeAvailable(pugixml)
 
 if(APPLE)
   find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)

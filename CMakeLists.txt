@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 include(FetchContent)
-project(JIN4 VERSION 1.0.0 LANGUAGES CXX)
+project(microprojet-dietlin-blanc VERSION 1.0.0 LANGUAGES CXX)
 
 if(WIN32)
   # SonarLint support for CMake requires the following flag to be set on.

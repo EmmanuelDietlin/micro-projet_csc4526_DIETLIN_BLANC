@@ -1,6 +1,6 @@
 
 class Event {
 public:
-
-private:
+	virtual ~Event() = default;
+	virtual int execute() = 0;
 };

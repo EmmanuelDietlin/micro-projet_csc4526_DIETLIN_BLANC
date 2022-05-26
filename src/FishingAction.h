@@ -2,8 +2,8 @@
 
 class FishingAction : public Action {
 private:
-
+	int baseFishRate = 1;
 public:
-
+	int execute(int const nbTokens) override;
 };
 

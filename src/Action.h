@@ -1,6 +1,6 @@
 
 class Action {
-private:
-
 public:
+	virtual ~Action() = default;
+	virtual int execute(int const nbTokens) = 0;
 };

@@ -1,0 +1,6 @@
+
+class Action {
+private:
+
+public:
+};

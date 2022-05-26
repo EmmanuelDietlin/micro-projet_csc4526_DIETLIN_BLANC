@@ -12,3 +12,4 @@ void Context::setAction(std::unique_ptr<Action> && action) {
 void Context::setEvent(std::unique_ptr<Event>&& evnt) {
 	evnt = std::move(evnt);
 }
+

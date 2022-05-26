@@ -6,6 +6,7 @@ class Context {
 private:
 	std::unique_ptr<Action> action;
 	std::unique_ptr<Event> evnt;
+
 public:
 	Context();
 	void setAction(std::unique_ptr<Action> &&action);

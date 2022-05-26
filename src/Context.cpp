@@ -1,10 +1,8 @@
 #include "Context.h"
 
-Context::Context(int const starting_tokens) {
-	action = nullptr;
-	evnt = nullptr;
-	action_tokens = starting_tokens;
-}
+Context::Context(int const starting_tokens) : action(nullptr),
+											  evnt(nullptr)
+{}
 
 void Context::setAction(std::unique_ptr<Action> && action) {
 	action = std::move(action);

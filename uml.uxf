@@ -29,7 +29,7 @@ fontsize=10
     <id>UMLClass</id>
     <coordinates>
       <x>570</x>
-      <y>410</y>
+      <y>500</y>
       <w>210</w>
       <h>120</h>
     </coordinates>
@@ -42,7 +42,7 @@ fontsize=10
     <id>UMLClass</id>
     <coordinates>
       <x>810</x>
-      <y>160</y>
+      <y>250</y>
       <w>210</w>
       <h>130</h>
     </coordinates>
@@ -59,7 +59,7 @@ _-ClassAttribute: Long_
     <id>UMLClass</id>
     <coordinates>
       <x>630</x>
-      <y>0</y>
+      <y>90</y>
       <w>210</w>
       <h>120</h>
     </coordinates>
@@ -73,7 +73,7 @@ _-ClassAttribute: Long_
     <id>UMLClass</id>
     <coordinates>
       <x>580</x>
-      <y>190</y>
+      <y>280</y>
       <w>210</w>
       <h>130</h>
     </coordinates>
@@ -90,7 +90,7 @@ _-ClassAttribute: Long_
     <id>UMLClass</id>
     <coordinates>
       <x>660</x>
-      <y>600</y>
+      <y>690</y>
       <w>210</w>
       <h>120</h>
     </coordinates>
@@ -106,7 +106,7 @@ _-ClassAttribute: Long_
     <id>UMLClass</id>
     <coordinates>
       <x>420</x>
-      <y>600</y>
+      <y>690</y>
       <w>210</w>
       <h>120</h>
     </coordinates>
@@ -122,7 +122,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>550</x>
-      <y>520</y>
+      <y>610</y>
       <w>130</w>
       <h>100</h>
     </coordinates>
@@ -134,7 +134,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>670</x>
-      <y>520</y>
+      <y>610</y>
       <w>110</w>
       <h>100</h>
     </coordinates>
@@ -146,7 +146,7 @@ _-ClassAttribute: Long_
     <id>UMLClass</id>
     <coordinates>
       <x>270</x>
-      <y>480</y>
+      <y>570</y>
       <w>210</w>
       <h>120</h>
     </coordinates>
@@ -162,7 +162,7 @@ _-ClassAttribute: Long_
     <id>UMLClass</id>
     <coordinates>
       <x>100</x>
-      <y>310</y>
+      <y>400</y>
       <w>210</w>
       <h>120</h>
     </coordinates>
@@ -176,7 +176,7 @@ Event
     <id>UMLClass</id>
     <coordinates>
       <x>30</x>
-      <y>480</y>
+      <y>570</y>
       <w>210</w>
       <h>120</h>
     </coordinates>
@@ -192,7 +192,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>120</x>
-      <y>420</y>
+      <y>510</y>
       <w>110</w>
       <h>80</h>
     </coordinates>
@@ -204,7 +204,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>200</x>
-      <y>420</y>
+      <y>510</y>
       <w>180</w>
       <h>80</h>
     </coordinates>
@@ -216,7 +216,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>710</x>
-      <y>110</y>
+      <y>200</y>
       <w>90</w>
       <h>100</h>
     </coordinates>
@@ -228,7 +228,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>740</x>
-      <y>110</y>
+      <y>200</y>
       <w>190</w>
       <h>70</h>
     </coordinates>
@@ -240,7 +240,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>450</x>
-      <y>120</y>
+      <y>210</y>
       <w>200</w>
       <h>90</h>
     </coordinates>
@@ -251,7 +251,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>470</x>
-      <y>40</y>
+      <y>130</y>
       <w>360</w>
       <h>170</h>
     </coordinates>
@@ -262,7 +262,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>110</x>
-      <y>250</y>
+      <y>340</y>
       <w>40</w>
       <h>80</h>
     </coordinates>
@@ -273,7 +273,7 @@ _-ClassAttribute: Long_
     <id>Relation</id>
     <coordinates>
       <x>230</x>
-      <y>200</y>
+      <y>290</y>
       <w>360</w>
       <h>230</h>
     </coordinates>
@@ -285,7 +285,7 @@ m2=1..n</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>270</x>
-      <y>0</y>
+      <y>90</y>
       <w>210</w>
       <h>130</h>
     </coordinates>
@@ -300,7 +300,7 @@ m2=1..n</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>30</x>
-      <y>130</y>
+      <y>220</y>
       <w>210</w>
       <h>130</h>
     </coordinates>
@@ -318,7 +318,7 @@ m2=1..n</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>160</x>
-      <y>80</y>
+      <y>170</y>
       <w>130</w>
       <h>70</h>
     </coordinates>
@@ -329,7 +329,7 @@ m2=1..n</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>330</x>
-      <y>200</y>
+      <y>290</y>
       <w>210</w>
       <h>130</h>
     </coordinates>
@@ -345,7 +345,7 @@ m2=1..n</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>340</x>
-      <y>120</y>
+      <y>210</y>
       <w>70</w>
       <h>100</h>
     </coordinates>

@@ -8,9 +8,6 @@ class Context {
 private:
 	std::unique_ptr<Action> action;
 	std::unique_ptr<Event> evnt;
-	int action_tokens;
-	std::unique_ptr<Boat> boat;
-	std::unique_ptr<Player> player;
 
 public:
 	explicit Context(int const starting_tokens);

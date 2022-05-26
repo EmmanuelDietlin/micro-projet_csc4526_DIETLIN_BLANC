@@ -49,13 +49,9 @@ fontsize=10
       <w>210</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>ActionStrategy
+    <panel_attributes>Action
 --
--id: Long
-_-ClassAttribute: Long_
---
-#Operation(i: int): int
-/+AbstractOperation()/</panel_attributes>
+/+ execute()/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -85,11 +81,8 @@ _-ClassAttribute: Long_
     </coordinates>
     <panel_attributes>&lt;&lt;Entity&gt;&gt;
 --
--id: Long
-_-ClassAttribute: Long_
---
-#Operation(i: int): int
-/+AbstractOperation()/</panel_attributes>
+- LifePoints : int
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -117,13 +110,12 @@ _-ClassAttribute: Long_
       <w>210</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>RowStrategy
+    <panel_attributes>RowingAction
 --
 -id: Long
 _-ClassAttribute: Long_
 --
-#Operation(i: int): int
-/+AbstractOperation()/</panel_attributes>
++ execute()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -134,13 +126,12 @@ _-ClassAttribute: Long_
       <w>210</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>FishStrategy
+    <panel_attributes>FishingAction
 --
 -id: Long
 _-ClassAttribute: Long_
 --
-#Operation(i: int): int
-/+AbstractOperation()/</panel_attributes>
++ execute()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -175,13 +166,12 @@ _-ClassAttribute: Long_
       <w>210</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>Storm
+    <panel_attributes>StormEvent
 --
 -id: Long
 _-ClassAttribute: Long_
 --
-#Operation(i: int): int
-/+AbstractOperation()/</panel_attributes>
++ execute()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -192,13 +182,10 @@ _-ClassAttribute: Long_
       <w>210</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>EventStrategy
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Event
 --
--id: Long
-_-ClassAttribute: Long_
---
-#Operation(i: int): int
-/+AbstractOperation()/</panel_attributes>
+/+ execute()/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -209,13 +196,12 @@ _-ClassAttribute: Long_
       <w>210</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>Wind
+    <panel_attributes>WindEvent
 --
 -id: Long
 _-ClassAttribute: Long_
 --
-#Operation(i: int): int
-/+AbstractOperation()/</panel_attributes>
++ execute()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -291,25 +277,25 @@ _-ClassAttribute: Long_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>180</x>
-      <y>120</y>
-      <w>40</w>
-      <h>200</h>
+      <x>90</x>
+      <y>280</y>
+      <w>120</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>20.0;10.0;10.0;180.0</additional_attributes>
+    <additional_attributes>10.0;10.0;100.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>260</x>
-      <y>120</y>
-      <w>340</w>
-      <h>310</h>
+      <x>210</x>
+      <y>170</y>
+      <w>390</w>
+      <h>260</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m2=1..n</panel_attributes>
-    <additional_attributes>10.0;10.0;320.0;290.0</additional_attributes>
+    <additional_attributes>10.0;10.0;370.0;240.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -321,10 +307,12 @@ m2=1..n</panel_attributes>
     </coordinates>
     <panel_attributes>Context
 --
--id: informations
+
 --
-#Operation(i: int): int
-/+AbstractOperation()/</panel_attributes>
++ setEvent(Event event) : void
++ setAction(Action action) : void
++ executeEvent() : 
++ executeAction() :</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

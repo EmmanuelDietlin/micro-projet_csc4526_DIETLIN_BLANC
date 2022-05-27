@@ -27,11 +27,6 @@ endif()
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_subdirectory(mainLauncher)
-add_subdirectory(src)
-add_subdirectory(imgui)
-add_subdirectory(imgui-sfml)
-
 # Download and unpack tmxlite at configure time
 set (TMXLITE_STATIC_LIB TRUE)
 configure_file(CMakeLists_tmxlite.txt.in tmxlite-download/tmxlite/CMakeLists.txt)
@@ -59,6 +54,11 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/tmxlite-src/tmxlite
 include_directories("${CMAKE_CURRENT_BINARY_DIR}/tmxlite-src/tmxlite/include")
 
 
+
+add_subdirectory(mainLauncher)
+add_subdirectory(src)
+add_subdirectory(imgui)
+add_subdirectory(imgui-sfml)
 
 ###################################################################################################
 #
@@ -108,8 +108,6 @@ endif()
 enable_testing()
 add_executable(unitTests unitTests.cpp)
 target_link_libraries(unitTests gtest_main)
-target_link_libraries(unitTests src sfml tmxlite)
+target_link_libraries(unitTests src sfml-graphics tmxlite)
 add_test(NAME that-test-I-made COMMAND unitTests)
 
-#set_property(TARGET pugixml mainLauncher src unitTests gtest gtest_main PROPERTY
-#  MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

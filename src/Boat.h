@@ -1,7 +1,9 @@
+#pragma once
 #include "Entity.h"
+#include <string>
+
 
 class Boat : public Entity {
-private:
-
 public:
+	Boat(int const hp);
 };

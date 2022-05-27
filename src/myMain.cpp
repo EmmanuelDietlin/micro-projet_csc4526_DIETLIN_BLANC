@@ -8,6 +8,7 @@
 #include <thread>
 #include <imgui.h>
 #include <imgui-SFML.h>
+#include "SFMLOrthogonalLayer.h"
 
 const int w_height = 800;
 const int w_width = 1000;
@@ -18,10 +19,9 @@ int myMain()
 {
     sf::RenderWindow window(sf::VideoMode(w_width, w_height), "SFML ");
     sf::Clock deltaClock;
-    float color[4] = { 1.0f,1.0f,1.0f,1.0f };
-    int figure = 0;
-    float move[2] = { 0,0 };
-    bool move_unique = false;
+
+    tmx::Map map;
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))

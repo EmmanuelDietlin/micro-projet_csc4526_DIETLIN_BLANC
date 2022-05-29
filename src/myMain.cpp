@@ -15,6 +15,8 @@
 
 const int w_height = 800;
 const int w_width = 1000;
+const int days = 47;
+const int distance = 6700;
 
 
 
@@ -36,6 +38,7 @@ int myMain()
     MapLayer layerGui1(map, 3);
     MapLayer layerGui2(map, 4);
 
+    /*
     sf::RectangleShape fishMinus(sf::Vector2f(50, 25));
     fishMinus.setFillColor(sf::Color::Transparent);
     sf::RectangleShape fishPlus(sf::Vector2f(50, 25));
@@ -49,11 +52,13 @@ int myMain()
     rowMinus.setPosition(115, 403);
     fishPlus.setPosition(322, 305);
     rowPlus.setPosition(322, 403);
+    */
 
     int tokenNbr = façade.getTokenNbr();
     int fishingTokens = 0;
     int rowingTokens = 0;
 
+    /*
     sf::Text counter;
     sf::Text fishingText;
     sf::Text rowingText;
@@ -77,7 +82,10 @@ int myMain()
     rowingText.setString("Rowing : " + std::to_string(rowingTokens) + " tokens");
     rowingText.setCharacterSize(15);
     rowingText.setFillColor(sf::Color::Black);
-    rowingText.setPosition(200, 405);
+    rowingText.setPosition(200, 405);*/
+
+    int day = façade.getDayCount();
+    int remainingTokens = tokenNbr - rowingTokens - fishingTokens;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -86,7 +94,7 @@ int myMain()
             ImGui::SFML::ProcessEvent(window, event);
             if (event.type == sf::Event::Closed)
                 window.close();
-            if (event.type == sf::Event::MouseButtonPressed) {
+            /*if (event.type == sf::Event::MouseButtonPressed) {
                 if (fishMinus.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                     std::cout << "Tokens for fishing : " << façade.removeTokenToFishing() << std::endl;
                 } else if (fishPlus.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
@@ -96,8 +104,9 @@ int myMain()
                 } else if (rowPlus.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                     std::cout << "Tokens for rowing : " << façade.addTokenToRowing() << std::endl;
                 }
-            }
+            }*/
         }
+        /*
         tokenNbr = façade.getTokenNbr();
         fishingTokens = façade.getFishingTokens();
         rowingTokens = façade.getRowingTokens();
@@ -105,11 +114,33 @@ int myMain()
         counter.setString(std::to_string(tokenNbr) + " tokens left");
         fishingText.setString("Fishing : \n" + std::to_string(fishingTokens) + " tokens");
         rowingText.setString("Rowing : \n" + std::to_string(rowingTokens) + " tokens");
+        */
 
         sf::Time duration = globalClock.getElapsedTime();
         layerBackground.update(duration);
         ImGui::SFML::Update(window, deltaClock.restart());
 
+        ImGui::Begin("Journal de bord");
+        ImGui::Text("Day " + day);
+        ImGui::ProgressBar(façade.getDistanceTravelled() / distance);
+        if (ImGui::InputInt("Number of tokens for fishing", &fishingTokens, 1)) {
+            remainingTokens = tokenNbr - rowingTokens - fishingTokens;
+            if (remainingTokens < 0) {
+                fishingTokens += remainingTokens;
+                remainingTokens = 0;
+            }
+        }
+        if (ImGui::InputInt("Number of tokens for rowing", &rowingTokens, 1)) {
+            remainingTokens = tokenNbr - rowingTokens - fishingTokens;
+            if (remainingTokens < 0) {
+                rowingTokens += remainingTokens;
+                remainingTokens = 0;
+            }
+        }
+        if (ImGui::Button("Next day")) {
+            std::cout << "executer les méthodes de la façade" << std::endl;
+        }
+        ImGui::End();
 
         window.clear(sf::Color::Black);
         window.draw(layerBackground);
@@ -118,6 +149,7 @@ int myMain()
         window.draw(layerGui1);
         window.draw(layerGui2);
 
+        /*
         window.draw(fishMinus);
         window.draw(fishPlus);
         window.draw(rowMinus);
@@ -126,7 +158,7 @@ int myMain()
         window.draw(counter);
         window.draw(fishingText);
         window.draw(rowingText);
-
+        */
         ImGui::SFML::Render(window);
         window.display();
 

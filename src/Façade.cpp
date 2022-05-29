@@ -1,6 +1,6 @@
 #include "Façade.h"
 
-Façade::Façade() : action_tokens(max_tokens_nb) {
+Façade::Façade() : action_tokens(max_tokens_nb), day_count(1), distance_travelled(0) {
 	actions["fish"] = std::move(std::make_unique<FishingAction>(0));
 	actions["row"] = std::move(std::make_unique<RowingAction>(0));
 }
@@ -47,4 +47,12 @@ const int Façade::getRowingTokens() {
 
 const int Façade::getFishingTokens() {
 	return actions["fish"]->getTokenNb();
+}
+
+const int Façade::getDayCount() {
+	return day_count;
+}
+
+const int Façade::getDistanceTravelled() {
+	return distance_travelled;
 }

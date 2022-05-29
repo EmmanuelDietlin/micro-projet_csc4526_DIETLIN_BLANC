@@ -40,3 +40,11 @@ int Façade::removeTokenToRowing() {
 	}
 	return actions["row"]->getTokenNb();
 }
+
+const int Façade::getRowingTokens() {
+	return actions["row"]->getTokenNb();
+}
+
+const int Façade::getFishingTokens() {
+	return actions["fish"]->getTokenNb();
+}

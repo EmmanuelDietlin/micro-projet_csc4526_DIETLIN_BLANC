@@ -51,13 +51,33 @@ int myMain()
     rowPlus.setPosition(322, 403);
 
     int tokenNbr = façade.getTokenNbr();
+    int fishingTokens = 0;
+    int rowingTokens = 0;
+
     sf::Text counter;
+    sf::Text fishingText;
+    sf::Text rowingText;
     sf::Font font;
-    font.loadFromFile("Montserrat-Regular.ttf");
+
+    font.loadFromFile("resources/Montserrat-Regular.otf");
+
     counter.setFont(font);
-    counter.setString(std::to_string(tokenNbr));
-    counter.setCharacterSize(50);
+    counter.setString(std::to_string(tokenNbr)+" tokens left");
+    counter.setCharacterSize(30);
     counter.setFillColor(sf::Color::Black);
+    counter.setPosition(140, 200);
+
+    fishingText.setFont(font);
+    fishingText.setString("Fishing : " + std::to_string(fishingTokens) + " tokens");
+    fishingText.setCharacterSize(15);
+    fishingText.setFillColor(sf::Color::Black);
+    fishingText.setPosition(200, 310);
+
+    rowingText.setFont(font);
+    rowingText.setString("Rowing : " + std::to_string(rowingTokens) + " tokens");
+    rowingText.setCharacterSize(15);
+    rowingText.setFillColor(sf::Color::Black);
+    rowingText.setPosition(200, 405);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -78,6 +98,14 @@ int myMain()
                 }
             }
         }
+        tokenNbr = façade.getTokenNbr();
+        fishingTokens = façade.getFishingTokens();
+        rowingTokens = façade.getRowingTokens();
+
+        counter.setString(std::to_string(tokenNbr) + " tokens left");
+        fishingText.setString("Fishing : \n" + std::to_string(fishingTokens) + " tokens");
+        rowingText.setString("Rowing : \n" + std::to_string(rowingTokens) + " tokens");
+
         sf::Time duration = globalClock.getElapsedTime();
         layerBackground.update(duration);
         ImGui::SFML::Update(window, deltaClock.restart());
@@ -96,6 +124,8 @@ int myMain()
         window.draw(rowPlus);
 
         window.draw(counter);
+        window.draw(fishingText);
+        window.draw(rowingText);
 
         ImGui::SFML::Render(window);
         window.display();

@@ -24,6 +24,8 @@ public:
 	int removeTokenToFishing();
 	int removeTokenToRowing();
 	const int getTokenNbr();
+	const int getRowingTokens();
+	const int getFishingTokens();
 
 
 };

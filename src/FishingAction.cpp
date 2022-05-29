@@ -1,5 +1,5 @@
 #include "FishingAction.h"
 
-int FishingAction::execute(int const nbTokens) {
-	return nbTokens * baseFishRate;
+int FishingAction::execute() {
+	return tokenNb * baseFishRate;
 }

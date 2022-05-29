@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="left-up" width="64" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="left-up" width="64" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="1">
  <tileset firstgid="1" source="ocean.tsx"/>
  <tileset firstgid="391" source="boat.tsx"/>
  <tileset firstgid="511" source="ocean_16x8.tsx"/>
+ <tileset firstgid="1321" source="gui.tsx"/>
  <layer id="1" name="ocean" width="64" height="45">
   <data encoding="base64" compression="zlib">
    eJzt1VOUXVcABuC50cS2bduYycS2bdtWG5RJG9QIaiNsk9pGUjepG9QMvrzOyuOs6Vmd/fA93Ptw/v2ff691YnFxcelITwYykol4MpOFrGQjOznISS5yk4e85CM/BShIIQpThKIUozglKEkpSlOGssQico5ylKcCFalEZapQlWpUpwY1qUVt6lCXetSnAQ1pRGOa0JRmNL9E36icI+wf9g/7h/3D/mH/sH/YP+wf9g/7h/1T+r0nz43KOcL9T517lzz3/3D/U3rD1HheSr73lN4wNZ7Xgpa0ojVtSCCRtiTRjvZ0oCOd6EwXutKN7vSgJ73oTR/60o/+DGAggyKUO5ghDGUYwxnBSEYxmjGMZRzjmcBEJjGZKUxlGtOZwUxmMZs5zGUe81kQodyFLGIxS1jKMpazgpWsYjVrWMs6LuNy1rOBjWziCq7kKq7mGq5lM1u4jusjlLuVbWxnBzdwIzdxM7dwK7dxO3dwJzvZxW72cBd3cw/3ch/38wAP8hAP8wiPRij3MR7nCZ5kL/vYzwEOcoineJrDHOEZnuU5nucFXuQlXuYVXuU1XucN3uQt3o5Q7ju8y3u8zwd8yFGO8REf8wmf8hmf8wVfcpwTfMXXfMO3fMf3/MCPnOQUpzkTodyf+Jlf+JXf+J0/+JO/+Jt/+JeznOM8Fz+oMdKRngxkJBPxZCYLWclGdnKQMxad3Fz+y00e8pKP/BSgIIUoTBGKUozilKAkpShNGcpSjvJUoCKVqEwVqlKN6rHo5NagJrWoTR3qUo/6NKAhjWhME5rSjOa0oCWtaE0bEkikLUm0oz0d6EinCOV2pgtd6UZ3etCTXvSmD33pR38GMJBBDGYIQxnGcEYwklGMZgxjGcd4JkQodyKTmMwUpjKN6cxgJrOYzRzmMo/5LGAhi1jMEpayjOWsYCWrWM0a1rLuP8yNyjkulZka50j+O631T+v7h/6hf+gf+of+oX/oH/qH/qF/6J92+18AfRSWKQ==
@@ -10,12 +11,22 @@
  </layer>
  <layer id="2" name="boat" width="64" height="45">
   <data encoding="base64" compression="zlib">
-   eJztzzkWgkAARMHh9AqaKWImLpmCHJE+hEswVe/9vLsUAAAAAAAA+LxNU8o2talLu7Rv/r3qdw75ekx9OqUhnSv6f8nXMV3TLd3To6L/z3x9pSnN6Z2Wiv4DAADAN602MQ6t
+   eJztzzsSgkAARMHl9P7IRDQD1EwUj+icwQCC7a56+UwpAAAAAAAAsI1dU8o+HdIxnVLbbL1qPed87dIl9emabhX9H/J1TFO6p0d6VvT/la9zeqdPWtK3ov8AAADwrx8l4w6t
   </data>
  </layer>
  <layer id="3" name="ocean_foreground" width="64" height="45">
   <data encoding="base64" compression="zlib">
    eJztzskJACAQBMF5mH94XtG4QQiCVEH/OwEAAAAAAADgtt6SUc1qVbu9PgIAAIA/HHSyBE0=
+  </data>
+ </layer>
+ <layer id="4" name="gui_1" width="64" height="45">
+  <data encoding="base64" compression="zlib">
+   eJzt1l+s13Mcx/Gv/pxzKkzZlM6JzkmFarjAlE3pnOiUis45KlQ62VDn9OeclE2lQqW6wBQ6J2VTqVApF5hC56RsynCB4QJTNqVzonNS8XDX2s5vaufjfDbnsz2uvr+993xdnO0kSfNrfs1vZOskKaCQIu5mFKMZwz3cy32MZRzjuZ8JFDOVaUynjHJm8AgzmdW6qVc2/B7TNps5zOVx5jGfBTzBkzzFQhaxmKdZwlJe5CVWUkElq3iZ1ayJeP+r2tayjvW8xgY2sonXeYM32cwWtvIW29jOh3zELqqoZjcfs4e9Ee//VNs+9p/ROCkjSSZTQilTmMq0jNTfTn9H3KyhNuL9x7TVUR9gf+e0JMkkK+2/23O2r6u2bHLOaJyUkdq/2T/QzVzyIt4/WFs+QwI0TnazhNKI90/XVkZ5gMbn3VzOioj3r9RWQWWAxvfd3MHOiPfv0lZFdYDGn908wMGI9/+q7RCHAzRelJ4k7emQ3vi3G+tdoq0jnQI03uRmX/pFvP8Wbf0ZEKBxgpvFTIx4/4PaHuLhAI1L3FzKsoj3P6PtWZ4L0LjNze28HfH+d7S9y3sBGr918zu+j3j/D9p+5KcUjWfzP+/pL823dDJS/Kap3/naLuDCFI3nuv8a367luoj3X6/tBm4MsH+Ub6MZE/H+sdrGMT5A4zw357Mg4v0LtS1icYDGDW5uZFPE+zdr28LWAI2fu/kFX0a8/yttX/NNgL//E76d5FTE+1u0SZKWtGrT8G/OdX93N3vQM8Xtpn69tPWmT4D9w9wczoiI9xdoK6QoQONMN2fxaMT7Z2ubw9wAjavdXMMrEe9fq20d6wM07nFzL59EvH+ftv18FqCxxs1ajka8v05bPccDNGa2TZIsurRt/NuN9bK15dAtQGOum3kMinh/vrYhDA3QWOJmKVMi3l+mrZwZARqXu7mCFyLeX6GtklUBGne4uZMPIt5fpa2a3QEaD7h5kF8i3n9I22F+4wg11HKU3/mDY9RRz3H+5AQnOcVf/+xrlyTn0YKWtKI9Hbi4XVOvbPh11NaJS+lMJll04TIupyvZ5NCNK+hOD3pyJVdxNb3oTR/60o+bI97fX9sAbmUgueQxiNu4ncHkM4Sh3MEwhjOCO7mLkRRQSBHFTOSBiPc3v+bX/P5/72/jD98e
+  </data>
+ </layer>
+ <layer id="5" name="gui_2" width="64" height="45">
+  <data encoding="base64" compression="zlib">
+   eJzt10lKA0EYQOHfIW21MXFY6V6voOc1GuNZnD2AQ+IUV7p3ygsSFEMvlEBj8x58u2qogqaoP8LMzGy8l1rEK97wjg9EFjGFacxgFjVkmEMDzazsnU+m9T+cY5Nvtipy/osUcYkrXKOLHm5wizvc4wF9POIJz6nsnU+mLOefRkKOedSxgAaaWMQSlrGCVazlZe/czMzMzH7bNm/YFnawm75moaKZp82aPXSwX4H37wFnOMQRjtPnLLRRMNcMZ54T1pziDOcVOP/Pimah0cxjZtXJ+9/7/3ve/2ZmZmZmZmZm/68B76JB1Q==
   </data>
  </layer>
 </map>

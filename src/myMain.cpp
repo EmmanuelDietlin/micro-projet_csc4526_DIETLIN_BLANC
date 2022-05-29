@@ -25,7 +25,7 @@ int myMain()
     sf::Clock globalClock;
     sf::Clock deltaClock;
 
-    Façade f();
+    Façade façade;
 
     tmx::Map map;
     map.load("resources/game_background.tmx");
@@ -37,16 +37,27 @@ int myMain()
     MapLayer layerGui2(map, 4);
 
     sf::RectangleShape fishMinus(sf::Vector2f(50, 25));
+    fishMinus.setFillColor(sf::Color::Transparent);
     sf::RectangleShape fishPlus(sf::Vector2f(50, 25));
+    fishPlus.setFillColor(sf::Color::Transparent);
     sf::RectangleShape rowMinus(sf::Vector2f(50, 25));
+    rowMinus.setFillColor(sf::Color::Transparent);
     sf::RectangleShape rowPlus(sf::Vector2f(50, 25));
+    rowPlus.setFillColor(sf::Color::Transparent);
 
     fishMinus.setPosition(115, 305);
-    fishPlus.setPosition(115, 403);
-    rowMinus.setPosition(322, 305);
+    rowMinus.setPosition(115, 403);
+    fishPlus.setPosition(322, 305);
     rowPlus.setPosition(322, 403);
 
-    int tokenNbr;
+    int tokenNbr = façade.getTokenNbr();
+    sf::Text counter;
+    sf::Font font;
+    font.loadFromFile("Montserrat-Regular.ttf");
+    counter.setFont(font);
+    counter.setString(std::to_string(tokenNbr));
+    counter.setCharacterSize(50);
+    counter.setFillColor(sf::Color::Black);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -57,7 +68,13 @@ int myMain()
                 window.close();
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (fishMinus.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                    std::cout << "Button clicked" << std::endl;
+                    std::cout << "Tokens for fishing : " << façade.removeTokenToFishing() << std::endl;
+                } else if (fishPlus.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                    std::cout << "Tokens for fishing : " << façade.addTokenToFishing() << std::endl;
+                } else if (rowMinus.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                    std::cout << "Tokens for rowing : " << façade.removeTokenToRowing() << std::endl;
+                } else if (rowPlus.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                    std::cout << "Tokens for rowing : " << façade.addTokenToRowing() << std::endl;
                 }
             }
         }
@@ -77,6 +94,8 @@ int myMain()
         window.draw(fishPlus);
         window.draw(rowMinus);
         window.draw(rowPlus);
+
+        window.draw(counter);
 
         ImGui::SFML::Render(window);
         window.display();

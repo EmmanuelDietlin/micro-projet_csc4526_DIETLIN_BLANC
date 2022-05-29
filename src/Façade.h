@@ -1,13 +1,13 @@
+#include "FishingAction.h"
+#include "RowingAction.h"
 #include "Boat.h"
 #include "Player.h"
 #include "Context.h"
 #include "Data.h"
 #include <vector>
-#include "FishingAction.h"
-#include "RowingAction.h"
 #include <map>
 
-const int tokens_nb = 5;
+const int max_tokens_nb = 5;
 
 class Façade {
 private:
@@ -21,7 +21,9 @@ public:
 	//Définir les méthodes de la façade
 	int addTokenToFishing();
 	int addTokenToRowing();
-	int getTokenNbr();
+	int removeTokenToFishing();
+	int removeTokenToRowing();
+	const int getTokenNbr();
 
 
 };

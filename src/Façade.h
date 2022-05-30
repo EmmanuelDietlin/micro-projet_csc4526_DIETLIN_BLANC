@@ -8,27 +8,27 @@
 #include <map>
 
 const int max_tokens_nb = 5;
+const int starting_fish_number = 2;
 
 class Façade {
 private:
 	int action_tokens;
 	int day_count;
 	int distance_travelled;
+	int fishCount;
 	std::unique_ptr<Boat> boat;
 	std::unique_ptr<Player> player;
 	std::unique_ptr<Event> evnt;
 	std::map<std::string, std::unique_ptr<Action>> actions;
 public:
 	Façade();
-	int addTokenToFishing();
-	int addTokenToRowing();
-	int removeTokenToFishing();
-	int removeTokenToRowing();
 	const int getTokenNbr();
-	const int getRowingTokens();
-	const int getFishingTokens();
 	const int getDistanceTravelled();
 	const int getDayCount();
+	const int getFishCount();
+	void executeRowingAction(int const tokens);
+	void executeFishingAction(int const tokens);
+	void nextDay();
 
 
 };

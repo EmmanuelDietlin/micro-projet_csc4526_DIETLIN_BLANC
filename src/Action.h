@@ -5,8 +5,7 @@ public:
 	explicit Action(int const tokenNb);
 	virtual ~Action() = default;
 	virtual int execute() = 0;
-	void addToken();
-	void removeToken();
+	void addTokens(int const tokens);
 	void clearTokens();
 	int getTokenNb() const ;
 protected:

@@ -32,6 +32,24 @@ int myMain()
     sf::RectangleShape fader(sf::Vector2f(w_width, w_height));
     fader.setFillColor(sf::Color(0,0,0,0));
 
+    std::vector<sf::Image> sprites;
+    sf::Image i;
+    i.loadFromFile("boy_1.png");
+    sprites.push_back(i);
+    i.loadFromFile("boy_2.png");
+    sprites.push_back(i);
+    i.loadFromFile("boy_3.png");
+    sprites.push_back(i);
+    i.loadFromFile("boy_4.png");
+    sprites.push_back(i);
+
+    sf::Texture playerTexture;
+    playerTexture.create(48, 48);
+    playerTexture.update(sprites[0]);
+    int spriteIndex = 0;
+    sf::RectangleShape player(sf::Vector2f(48, 48));
+    player.setPosition(sf::Vector2f(600, 600));
+    player.setTexture(&playerTexture);
 
     tmx::Map map;
     map.load("resources/game_background.tmx");
@@ -39,8 +57,8 @@ int myMain()
     MapLayer layerBackground(map, 0);
     MapLayer layerBoat(map, 1);
     MapLayer layerForeground(map, 2);
-    MapLayer layerGui1(map, 3);
-    MapLayer layerGui2(map, 4);
+    //MapLayer layerGui1(map, 3);
+    //MapLayer layerGui2(map, 4);
 
     std::map<std::string, int> tokens;
     tokens["tokenNbr"] = façade.getTokenNbr();
@@ -57,13 +75,18 @@ int myMain()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
         sf::Time duration = globalClock.getElapsedTime();
         layerBackground.update(duration);
         ImGui::SFML::Update(window, deltaClock.restart());
 
+        ImGui::SetNextWindowPos(sf::Vector2f(41, 59));
+        ImGui::SetNextWindowSize(sf::Vector2f(425, 600));
+
         ImGui::Begin("Journal de bord");
         ImGui::Text("Day %d", façade.getDayCount());
         ImGui::Text("Distance travelled : %d km", façade.getDistanceTravelled());
+        ImGui::Text("Remaining tokens : %d", remainingTokens);
         ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)distance);
         if (ImGui::InputInt("Number of tokens\nfor fishing", &tokens["fishingTokens"], 1)) {
             remainingTokens = tokens["tokenNbr"] - tokens["rowingTokens"] - tokens["fishingTokens"];
@@ -103,8 +126,9 @@ int myMain()
         window.draw(layerBackground);
         window.draw(layerBoat);
         window.draw(layerForeground);
-        window.draw(layerGui1);
-        window.draw(layerGui2);
+        window.draw(player);
+        //window.draw(layerGui1);
+        //window.draw(layerGui2);
 
         ImGui::SFML::Render(window);
 

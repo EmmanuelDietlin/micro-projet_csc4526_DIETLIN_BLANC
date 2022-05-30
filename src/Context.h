@@ -6,8 +6,8 @@
 
 class Context {
 private:
-	std::unique_ptr<Action> action;
-	std::unique_ptr<Event> evnt;
+	std::unique_ptr<Action> action = nullptr;
+	std::unique_ptr<Event> evnt = nullptr;
 
 public:
 	explicit Context();

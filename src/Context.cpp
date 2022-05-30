@@ -2,8 +2,6 @@
 
 Context::Context()
 {
-	action = nullptr;
-	evnt = nullptr;
 }
 
 void Context::setAction(std::unique_ptr<Action> && a) {

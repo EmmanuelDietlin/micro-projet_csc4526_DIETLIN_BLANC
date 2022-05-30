@@ -1,23 +1,25 @@
 #include "Context.h"
 
-Context::Context(int const starting_tokens) : action(nullptr),
-											  evnt(nullptr)
-{}
-
-void Context::setAction(std::unique_ptr<Action> && action) {
-	action = std::move(action);
+Context::Context()
+{
+	action = nullptr;
+	evnt = nullptr;
 }
 
-void Context::setEvent(std::unique_ptr<Event>&& evnt) {
-	evnt = std::move(evnt);
+void Context::setAction(std::unique_ptr<Action> && a) {
+	action = std::move(a);
 }
 
-void Context::executeAction(int const nbTokens) {
-
+void Context::setEvent(std::unique_ptr<Event>&& e) {
+	evnt = std::move(e);
 }
 
-void Context::executeEvent() {
+int Context::executeAction() {
+	return action->execute();
+}
 
+int Context::executeEvent() {
+	return evnt->execute();
 }
 
 

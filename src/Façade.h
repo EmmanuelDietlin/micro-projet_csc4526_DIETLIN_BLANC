@@ -16,9 +16,9 @@ private:
 	int action_tokens;
 	std::unique_ptr<Boat> boat;
 	std::unique_ptr<Player> player;
-	std::unique_ptr<Event> evnt;
 	std::unique_ptr<Data> data;
-	std::map<std::string, std::unique_ptr<Action>> actions;
+	std::unique_ptr<Context> context;
+	std::map<std::string, int> actions;
 public:
 	Façade();
 	const int getTokenNbr();

@@ -31,6 +31,9 @@ void Façade::executeFishingAction(int const tokens) {
 
 void Façade::nextDay() {
 	day_count++;
+	//evnt = std::make_unique<>
+	fishCount -= fish_eating_number;
+
 }
 
 const int Façade::getFishCount() {

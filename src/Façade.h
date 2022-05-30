@@ -9,6 +9,7 @@
 
 const int max_tokens_nb = 5;
 const int starting_fish_number = 2;
+const int fish_eating_number = 2;
 
 class Façade {
 private:

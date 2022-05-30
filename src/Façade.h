@@ -14,12 +14,10 @@ const int fish_eating_number = 2;
 class Façade {
 private:
 	int action_tokens;
-	int day_count;
-	int distance_travelled;
-	int fishCount;
 	std::unique_ptr<Boat> boat;
 	std::unique_ptr<Player> player;
 	std::unique_ptr<Event> evnt;
+	std::unique_ptr<Data> data;
 	std::map<std::string, std::unique_ptr<Action>> actions;
 public:
 	Façade();

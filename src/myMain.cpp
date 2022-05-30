@@ -28,6 +28,9 @@ int myMain()
     sf::Clock deltaClock;
 
     Façade façade;
+    float opacity = 0;
+    sf::RectangleShape fader(sf::Vector2f(w_width, w_height));
+    fader.setFillColor(sf::Color(0,0,0,0));
 
 
     tmx::Map map;
@@ -61,7 +64,7 @@ int myMain()
         ImGui::Begin("Journal de bord");
         ImGui::Text("Day %d", façade.getDayCount());
         ImGui::Text("Distance travelled : %d km", façade.getDistanceTravelled());
-        ImGui::ProgressBar(façade.getDistanceTravelled() / distance);
+        ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)distance);
         if (ImGui::InputInt("Number of tokens\nfor fishing", &tokens["fishingTokens"], 1)) {
             remainingTokens = tokens["tokenNbr"] - tokens["rowingTokens"] - tokens["fishingTokens"];
             if (remainingTokens < 0) {
@@ -81,6 +84,18 @@ int myMain()
             façade.executeRowingAction(tokens["rowingTokens"]);
             façade.executeFishingAction(tokens["fishingTokens"]);
             façade.nextDay();
+            while (opacity < 1) {
+                window.draw(fader);
+                window.display();
+                fader.setFillColor(sf::Color(0, 0, 0, (int)(opacity * 255)));
+                opacity += 0.001f;
+            }
+            while (opacity > 0) {
+                window.draw(fader);
+                window.display();
+                fader.setFillColor(sf::Color(0, 0, 0, (int)(opacity * 255)));
+                opacity -= 0.001f;
+            }
         }
         ImGui::End();
 
@@ -92,6 +107,7 @@ int myMain()
         window.draw(layerGui2);
 
         ImGui::SFML::Render(window);
+
         window.display();
 
     }

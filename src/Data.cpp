@@ -1,6 +1,6 @@
 #include "Data.h"
 
-Data::Data(int const fishCount) : fishCount(fishCount) {}
+Data::Data(int const fishCount) : fishCount(fishCount), distanceTravelled(0), dayCount(0) {}
 
 void Data::addFishes(int const fishNb) {
 	fishCount += fishNb;
@@ -20,4 +20,24 @@ int Data::consumeFishes(int const fishNb) {
 		return dmg;
 	}
 	return 0;
+}
+
+const int Data::getFishCount() {
+	return fishCount;
+}
+
+void Data::travelDistance(int const distance) {
+	distanceTravelled += distance;
+}
+
+const int Data::getTravelledDistance() {
+	return distanceTravelled;
+}
+
+void Data::nextDay() {
+	dayCount++;
+}
+
+const int Data::getDayCount() {
+	return dayCount;
 }

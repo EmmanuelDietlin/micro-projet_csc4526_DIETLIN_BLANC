@@ -34,13 +34,13 @@ int myMain()
 
     std::vector<sf::Image> sprites;
     sf::Image i;
-    i.loadFromFile("resources/boy_1.png");
+    i.loadFromFile("resources/sprites/boy_1.png");
     sprites.push_back(i);
-    i.loadFromFile("resources/boy_2.png");
+    i.loadFromFile("resources/sprites/boy_2.png");
     sprites.push_back(i);
-    i.loadFromFile("resources/boy_3.png");
+    i.loadFromFile("resources/sprites/boy_3.png");
     sprites.push_back(i);
-    i.loadFromFile("resources/boy_4.png");
+    i.loadFromFile("resources/sprites/boy_4.png");
     sprites.push_back(i);
 
     sf::Texture playerTexture;

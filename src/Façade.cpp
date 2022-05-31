@@ -1,7 +1,10 @@
 #include "Façade.h"
 
-Façade::Façade() : action_tokens(max_tokens_nb) {
-	data = std::make_unique<Data>(starting_fish_number, boatBaseHp, playerBaseHp);
+Façade::Façade() : action_tokens(max_tokens_nb), 
+				fishCount(starting_fish_number)
+{
+	boat = std::make_unique<Boat>(boatBaseHp);
+	player = std::make_unique<Player>("test", playerBaseHp);
 	context = std::make_unique<Context>();
 }
 
@@ -10,30 +13,30 @@ const int Façade::getTokenNbr() {
 }
 
 const int Façade::getDayCount() {
-	return data->getDayCount();
+	return dayCount;
 }
 
 const int Façade::getDistanceTravelled() {
-	return data->getTravelledDistance();
+	return distanceTravelled;
 }
 
 void Façade::executeRowingAction(int const tokens) {
 	context->setAction(std::make_unique<RowingAction>(tokens));
-	data->travelDistance(context->executeAction());
+	distanceTravelled+= context->executeAction();
 }
 
 void Façade::executeFishingAction(int const tokens) {
 	context->setAction(std::make_unique<FishingAction>(tokens));
-	data->addFishes(context->executeAction());
+	fishCount+= context->executeAction();
 }
 
 void Façade::nextDay() {
-	data->nextDay();
+	dayCount++;
 	//data->setEvent(std::make_unique<>());
-	data->consumeFishes(fish_eating_number);
+	fishCount-= fish_eating_number;
 
 }
 
 const int Façade::getFishCount() {
-	return data->getFishCount();
+	return fishCount;
 }

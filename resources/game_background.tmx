@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="left-up" width="64" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="1">
- <tileset firstgid="1" source="ocean.tsx"/>
- <tileset firstgid="391" source="boat.tsx"/>
- <tileset firstgid="511" source="ocean_16x8.tsx"/>
- <tileset firstgid="1321" source="gui.tsx"/>
+ <tileset firstgid="1" source="map_assets/ocean.tsx"/>
+ <tileset firstgid="391" source="map_assets/boat.tsx"/>
+ <tileset firstgid="511" source="map_assets/ocean_16x8.tsx"/>
+ <tileset firstgid="1321" source="map_assets/gui.tsx"/>
  <layer id="1" name="ocean" width="64" height="45">
   <data encoding="base64" compression="zlib">
    eJzt1VOUXVcABuC50cS2bduYycS2bdtWG5RJG9QIaiNsk9pGUjepG9QMvrzOyuOs6Vmd/fA93Ptw/v2ff691YnFxcelITwYykol4MpOFrGQjOznISS5yk4e85CM/BShIIQpThKIUozglKEkpSlOGssQico5ylKcCFalEZapQlWpUpwY1qUVt6lCXetSnAQ1pRGOa0JRmNL9E36icI+wf9g/7h/3D/mH/sH/YP+wf9g/7h/1T+r0nz43KOcL9T517lzz3/3D/U3rD1HheSr73lN4wNZ7Xgpa0ojVtSCCRtiTRjvZ0oCOd6EwXutKN7vSgJ73oTR/60o/+DGAggyKUO5ghDGUYwxnBSEYxmjGMZRzjmcBEJjGZKUxlGtOZwUxmMZs5zGUe81kQodyFLGIxS1jKMpazgpWsYjVrWMs6LuNy1rOBjWziCq7kKq7mGq5lM1u4jusjlLuVbWxnBzdwIzdxM7dwK7dxO3dwJzvZxW72cBd3cw/3ch/38wAP8hAP8wiPRij3MR7nCZ5kL/vYzwEOcoineJrDHOEZnuU5nucFXuQlXuYVXuU1XucN3uQt3o5Q7ju8y3u8zwd8yFGO8REf8wmf8hmf8wVfcpwTfMXXfMO3fMf3/MCPnOQUpzkTodyf+Jlf+JXf+J0/+JO/+Jt/+JeznOM8Fz+oMdKRngxkJBPxZCYLWclGdnKQMxad3Fz+y00e8pKP/BSgIIUoTBGKUozilKAkpShNGcpSjvJUoCKVqEwVqlKN6rHo5NagJrWoTR3qUo/6NKAhjWhME5rSjOa0oCWtaE0bEkikLUm0oz0d6EinCOV2pgtd6UZ3etCTXvSmD33pR38GMJBBDGYIQxnGcEYwklGMZgxjGcd4JkQodyKTmMwUpjKN6cxgJrOYzRzmMo/5LGAhi1jMEpayjOWsYCWrWM0a1rLuP8yNyjkulZka50j+O631T+v7h/6hf+gf+of+oX/oH/qH/qF/6J92+18AfRSWKQ==

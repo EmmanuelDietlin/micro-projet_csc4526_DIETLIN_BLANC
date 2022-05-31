@@ -3,7 +3,6 @@
 #include "Boat.h"
 #include "Player.h"
 #include "Context.h"
-#include "Data.h"
 #include <vector>
 #include <map>
 
@@ -16,7 +15,11 @@ const int boatBaseHp = 200;
 class Façade {
 private:
 	int action_tokens;
-	std::unique_ptr<Data> data;
+	int fishCount;
+	int distanceTravelled = 0;
+	int dayCount = 1;
+	std::unique_ptr<Boat> boat;
+	std::unique_ptr<Player> player;
 	std::unique_ptr<Context> context;
 public:
 	Façade();

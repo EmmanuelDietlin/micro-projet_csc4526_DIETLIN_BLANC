@@ -34,22 +34,24 @@ int myMain()
 
     std::vector<sf::Image> sprites;
     sf::Image i;
-    i.loadFromFile("boy_1.png");
+    i.loadFromFile("resources/boy_1.png");
     sprites.push_back(i);
-    i.loadFromFile("boy_2.png");
+    i.loadFromFile("resources/boy_2.png");
     sprites.push_back(i);
-    i.loadFromFile("boy_3.png");
+    i.loadFromFile("resources/boy_3.png");
     sprites.push_back(i);
-    i.loadFromFile("boy_4.png");
+    i.loadFromFile("resources/boy_4.png");
     sprites.push_back(i);
 
     sf::Texture playerTexture;
-    playerTexture.create(48, 48);
-    playerTexture.update(sprites[0]);
+    playerTexture.loadFromImage(sprites[0]);
     int spriteIndex = 0;
-    sf::RectangleShape player(sf::Vector2f(48, 48));
-    player.setPosition(sf::Vector2f(600, 600));
+    sf::RectangleShape player(sf::Vector2f(70, 70));
+    player.setPosition(sf::Vector2f(710, 390));
     player.setTexture(&playerTexture);
+
+    sf::Time spriteClock;
+    spriteClock = globalClock.getElapsedTime();
 
     tmx::Map map;
     map.load("resources/game_background.tmx");
@@ -57,8 +59,6 @@ int myMain()
     MapLayer layerBackground(map, 0);
     MapLayer layerBoat(map, 1);
     MapLayer layerForeground(map, 2);
-    //MapLayer layerGui1(map, 3);
-    //MapLayer layerGui2(map, 4);
 
     std::map<std::string, int> tokens;
     tokens["tokenNbr"] = façade.getTokenNbr();
@@ -122,13 +122,18 @@ int myMain()
         }
         ImGui::End();
 
+        if (globalClock.getElapsedTime() - spriteClock > sf::seconds(0.5f)) {
+            spriteClock = globalClock.getElapsedTime();
+            spriteIndex = (spriteIndex + 1) % 4;
+            playerTexture.loadFromImage(sprites[spriteIndex]);
+        }
+       
+
         window.clear(sf::Color::Black);
         window.draw(layerBackground);
         window.draw(layerBoat);
         window.draw(layerForeground);
         window.draw(player);
-        //window.draw(layerGui1);
-        //window.draw(layerGui2);
 
         ImGui::SFML::Render(window);
 

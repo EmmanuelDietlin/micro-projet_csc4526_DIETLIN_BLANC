@@ -1,9 +1,7 @@
 #include "Façade.h"
 
 Façade::Façade() : action_tokens(max_tokens_nb) {
-	actions["fish"] = 0;
-	actions["row"] = 0;
-	data = std::make_unique<Data>(starting_fish_number);
+	data = std::make_unique<Data>(starting_fish_number, boatBaseHp, playerBaseHp);
 	context = std::make_unique<Context>();
 }
 
@@ -22,13 +20,11 @@ const int Façade::getDistanceTravelled() {
 void Façade::executeRowingAction(int const tokens) {
 	context->setAction(std::make_unique<RowingAction>(tokens));
 	data->travelDistance(context->executeAction());
-	actions["row"] = 0;
 }
 
 void Façade::executeFishingAction(int const tokens) {
 	context->setAction(std::make_unique<FishingAction>(tokens));
 	data->addFishes(context->executeAction());
-	actions["fish"] = 0;
 }
 
 void Façade::nextDay() {

@@ -10,15 +10,14 @@
 const int max_tokens_nb = 5;
 const int starting_fish_number = 2;
 const int fish_eating_number = 2;
+const int playerBaseHp = 100;
+const int boatBaseHp = 200;
 
 class Façade {
 private:
 	int action_tokens;
-	std::unique_ptr<Boat> boat;
-	std::unique_ptr<Player> player;
 	std::unique_ptr<Data> data;
 	std::unique_ptr<Context> context;
-	std::map<std::string, int> actions;
 public:
 	Façade();
 	const int getTokenNbr();

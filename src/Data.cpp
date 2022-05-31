@@ -2,7 +2,7 @@
 
 Data::Data(int const fishCount, int const boatBaseHp, int const playerBaseHp) : fishCount(fishCount) {
 	boat = std::make_unique<Boat>(boatBaseHp);
-	player = std::make_unique<Player>(playerBaseHp);
+	player = std::make_unique<Player>("test", playerBaseHp);
 }
 
 void Data::addFishes(int const fishNb) {

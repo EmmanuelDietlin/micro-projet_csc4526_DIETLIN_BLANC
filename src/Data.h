@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Boat.h"
+#include <memory>
 
 
 class Data {

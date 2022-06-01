@@ -9,4 +9,5 @@ public:
 	explicit Entity(int const hp);
 	void takeDamage(int const dmg);
 	void heal(int const heal);
+	int getHp();
 };

@@ -15,8 +15,10 @@
 
 const int w_height = 800;
 const int w_width = 1000;
-const int days = 47;
-const int distance = 6700;
+const int maxDay = 47;
+const int maxDistance = 6700;
+const int playerBaseHp = 100;
+const int boatBaseHp = 200;
 
 
 
@@ -27,7 +29,7 @@ int myMain()
     sf::Clock globalClock;
     sf::Clock deltaClock;
 
-    Façade façade;
+    Façade façade(maxDay, maxDistance, playerBaseHp, boatBaseHp);
     float opacity = 0;
     sf::RectangleShape fader(sf::Vector2f(w_width, w_height));
     fader.setFillColor(sf::Color(0,0,0,0));
@@ -83,11 +85,11 @@ int myMain()
         ImGui::SetNextWindowPos(sf::Vector2f(41, 59));
         ImGui::SetNextWindowSize(sf::Vector2f(425, 600));
 
-        ImGui::Begin("Journal de bord");
+        ImGui::Begin("Logs");
         ImGui::Text("Day %d", façade.getDayCount());
         ImGui::Text("Distance travelled : %d km", façade.getDistanceTravelled());
         ImGui::Text("Remaining tokens : %d", remainingTokens);
-        ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)distance);
+        ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)maxDistance);
         if (ImGui::InputInt("Number of tokens\nfor fishing", &tokens["fishingTokens"], 1)) {
             remainingTokens = tokens["tokenNbr"] - tokens["rowingTokens"] - tokens["fishingTokens"];
             if (remainingTokens < 0) {
@@ -120,6 +122,13 @@ int myMain()
                 opacity -= 0.001f;
             }
         }
+        ImGui::End();
+
+        ImGui::SetNextWindowPos(sf::Vector2f(650, 300));
+        ImGui::SetNextWindowSize(sf::Vector2f(150, 80));
+        ImGui::Begin("Player");
+        ImGui::Text("Hp : %d/%d", façade.getPlayerHp(), playerBaseHp);
+        ImGui::ProgressBar((float)façade.getPlayerHp() / (float)playerBaseHp);
         ImGui::End();
 
         if (globalClock.getElapsedTime() - spriteClock > sf::seconds(0.5f)) {

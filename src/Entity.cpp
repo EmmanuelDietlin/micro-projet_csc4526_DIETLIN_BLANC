@@ -14,3 +14,7 @@ void Entity::takeDamage(int const dmg) {
 void Entity::heal(int const heal) {
 	hp = std::min(hp + heal, MaxHP);
 }
+
+int Entity::getHp() {
+	return hp;
+}

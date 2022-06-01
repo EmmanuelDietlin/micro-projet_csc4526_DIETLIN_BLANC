@@ -9,3 +9,6 @@ Tempest in the Aether and Ryzom Core :https://opengameart.org/content/lpc-interf
 
 Character:
 Craftpix.net : https://craftpix.net/file-licenses/
+
+Flare:
+leeor_net https://opengameart.org/content/flare-effect

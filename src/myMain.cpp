@@ -29,6 +29,7 @@ int myMain()
     sf::Clock globalClock;
     sf::Clock deltaClock;
     sf::Clock faderClock;
+    int menu_nbr = 0;
 
     Façade façade(maxDay, maxDistance, playerBaseHp, boatBaseHp);
     int fade_counter = 512;
@@ -78,84 +79,109 @@ int myMain()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
-        sf::Time duration = globalClock.getElapsedTime();
-        layerBackground.update(duration);
         ImGui::SFML::Update(window, deltaClock.restart());
 
-        ImGui::SetNextWindowPos(sf::Vector2f(41, 59));
-        ImGui::SetNextWindowSize(sf::Vector2f(425, 600));
-
-        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
-        ImGui::Begin("Logs");
-        ImGui::Text("Day %d", façade.getDayCount());
-        ImGui::Text("Distance travelled : %d km", façade.getDistanceTravelled());
-        ImGui::Text("Remaining tokens : %d", remainingTokens);
-        ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)maxDistance);
-        if (ImGui::InputInt("Number of tokens\nfor fishing", &tokens["fishingTokens"], 1)) {
-            remainingTokens = tokens["tokenNbr"] - tokens["rowingTokens"] - tokens["fishingTokens"];
-            if (remainingTokens < 0) {
-                tokens["fishingTokens"] += remainingTokens;
-                remainingTokens = 0;
+        if (menu_nbr == 0) {
+            ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
+            ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
+            ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
+            ImGui::Begin("Main Menu");
+            ImGui::SetCursorPos(sf::Vector2f(w_width/2-100,w_height/2-50));
+            if (ImGui::Button("Start game", sf::Vector2f(200,100))) {
+                menu_nbr = 1;
             }
+            ImGui::End();
+            ImGui::PopStyleColor(1);
+
+            window.clear(sf::Color::Black);
+            ImGui::SFML::Render(window);
         }
-        if (ImGui::InputInt("Number of tokens\nfor rowing", &tokens["rowingTokens"], 1)) {
-            remainingTokens = tokens["tokenNbr"] - tokens["rowingTokens"] - tokens["fishingTokens"];
-            if (remainingTokens < 0) {
-                tokens["rowingTokens"] += remainingTokens;
-                remainingTokens = 0;
+        else {
+            ImGui::SetNextWindowPos(sf::Vector2f(41, 59));
+            ImGui::SetNextWindowSize(sf::Vector2f(425, 600));
+
+            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
+            ImGui::Begin("Logs");
+            if (menu_nbr == 1) {
+                ImGui::Text("Texte decrivant les evenements s'etant \nderoules la journee precedente");
+                if (ImGui::Button("Next page")) {
+                    menu_nbr = 2;
+                }
+            } 
+            else if (menu_nbr == 2) {
+                ImGui::Text("Day %d", façade.getDayCount());
+                ImGui::Text("Distance travelled : %d km", façade.getDistanceTravelled());
+                ImGui::Text("Remaining tokens : %d", remainingTokens);
+                ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)maxDistance);
+                if (ImGui::InputInt("Number of tokens\nfor fishing", &tokens["fishingTokens"], 1)) {
+                    remainingTokens = tokens["tokenNbr"] - tokens["rowingTokens"] - tokens["fishingTokens"];
+                    if (remainingTokens < 0) {
+                        tokens["fishingTokens"] += remainingTokens;
+                        remainingTokens = 0;
+                    }
+                }
+                if (ImGui::InputInt("Number of tokens\nfor rowing", &tokens["rowingTokens"], 1)) {
+                    remainingTokens = tokens["tokenNbr"] - tokens["rowingTokens"] - tokens["fishingTokens"];
+                    if (remainingTokens < 0) {
+                        tokens["rowingTokens"] += remainingTokens;
+                        remainingTokens = 0;
+                    }
+                }
+                ImGui::Text("Fishes : %d", façade.getFishCount());
+                if (ImGui::Button("Next day")) {
+                    façade.executeRowingAction(tokens["rowingTokens"]);
+                    façade.executeFishingAction(tokens["fishingTokens"]);
+                    façade.nextDay();
+                    fade_counter = 0;
+                }
+                if (ImGui::Button("Previous page")) {
+                    menu_nbr = 1;
+                }
             }
+            ImGui::PopStyleColor(1);
+            ImGui::End();
+            
+
+
+            ImGui::SetNextWindowPos(sf::Vector2f(650, 300));
+            ImGui::SetNextWindowSize(sf::Vector2f(150, 80));
+            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
+
+            ImGui::Begin("Player");
+            //ImGui::Text("Hp : %d/%d", façade.getPlayerHp(), playerBaseHp);
+            ImGui::ProgressBar((float)façade.getPlayerHp() / (float)playerBaseHp);
+            ImGui::End();
+            ImGui::PopStyleColor(1);
+
+
+
+            if (globalClock.getElapsedTime() - spriteClock > sf::seconds(0.5f)) {
+                spriteClock = globalClock.getElapsedTime();
+                spriteIndex = (spriteIndex + 1) % 4;
+                playerTexture.loadFromImage(sprites[spriteIndex]);
+            }
+
+            if (faderClock.getElapsedTime() > sf::seconds(0.001f) && fade_counter < 512) {
+                if (fade_counter < 256)
+                    fader.setFillColor(sf::Color(0, 0, 0, fade_counter));
+                else
+                    fader.setFillColor(sf::Color(0, 0, 0, 511 - fade_counter));
+                fade_counter++;
+                faderClock.restart();
+            }
+
+
+
+
+            window.clear(sf::Color::Black);
+            window.draw(layerBackground);
+            window.draw(layerBoat);
+            window.draw(layerForeground);
+            window.draw(player);
+
+            ImGui::SFML::Render(window);
+            window.draw(fader);
         }
-        ImGui::Text("Fishes : %d", façade.getFishCount());
-        if (ImGui::Button("Next day")) {
-            façade.executeRowingAction(tokens["rowingTokens"]);
-            façade.executeFishingAction(tokens["fishingTokens"]);
-            façade.nextDay();
-            fade_counter = 0;
-        }
-        ImGui::End();
-        ImGui::PopStyleColor(1);
-
-
-
-        ImGui::SetNextWindowPos(sf::Vector2f(650, 300));
-        ImGui::SetNextWindowSize(sf::Vector2f(150, 80));
-        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
-
-        ImGui::Begin("Player");
-        //ImGui::Text("Hp : %d/%d", façade.getPlayerHp(), playerBaseHp);
-        ImGui::ProgressBar((float)façade.getPlayerHp() / (float)playerBaseHp);
-        ImGui::End();
-        ImGui::PopStyleColor(1);
-
-
-
-        if (globalClock.getElapsedTime() - spriteClock > sf::seconds(0.5f)) {
-            spriteClock = globalClock.getElapsedTime();
-            spriteIndex = (spriteIndex + 1) % 4;
-            playerTexture.loadFromImage(sprites[spriteIndex]);
-        }
-
-        if (faderClock.getElapsedTime() > sf::seconds(0.001f) && fade_counter < 512) {
-            if (fade_counter < 256)
-                fader.setFillColor(sf::Color(0, 0, 0, fade_counter));
-            else
-                fader.setFillColor(sf::Color(0, 0, 0, 511 - fade_counter));
-            fade_counter++;
-            faderClock.restart();
-        }
-
-
-        
-
-        window.clear(sf::Color::Black);
-        window.draw(layerBackground);
-        window.draw(layerBoat);
-        window.draw(layerForeground);
-        window.draw(player);
-
-        ImGui::SFML::Render(window);
-        window.draw(fader);
 
 
         window.display();

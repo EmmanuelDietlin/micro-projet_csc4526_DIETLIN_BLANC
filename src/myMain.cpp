@@ -28,9 +28,10 @@ int myMain()
     ImGui::SFML::Init(window);
     sf::Clock globalClock;
     sf::Clock deltaClock;
+    sf::Clock faderClock;
 
     Façade façade(maxDay, maxDistance, playerBaseHp, boatBaseHp);
-    float opacity = 0;
+    int fade_counter = 512;
     sf::RectangleShape fader(sf::Vector2f(w_width, w_height));
     fader.setFillColor(sf::Color(0,0,0,0));
 
@@ -109,18 +110,7 @@ int myMain()
             façade.executeRowingAction(tokens["rowingTokens"]);
             façade.executeFishingAction(tokens["fishingTokens"]);
             façade.nextDay();
-            while (opacity < 1) {
-                window.draw(fader);
-                window.display();
-                fader.setFillColor(sf::Color(0, 0, 0, (int)(opacity * 255)));
-                opacity += 0.001f;
-            }
-            while (opacity > 0) {
-                window.draw(fader);
-                window.display();
-                fader.setFillColor(sf::Color(0, 0, 0, (int)(opacity * 255)));
-                opacity -= 0.001f;
-            }
+            fade_counter = 0;
         }
         ImGui::End();
 
@@ -136,7 +126,16 @@ int myMain()
             spriteIndex = (spriteIndex + 1) % 4;
             playerTexture.loadFromImage(sprites[spriteIndex]);
         }
-       
+
+        if (faderClock.getElapsedTime() > sf::seconds(0.001f) && fade_counter < 512) {
+            if (fade_counter < 256)
+                fader.setFillColor(sf::Color(0, 0, 0, fade_counter));
+            else
+                fader.setFillColor(sf::Color(0, 0, 0, 511 - fade_counter));
+            fade_counter++;
+            faderClock.restart();
+        }
+        
 
         window.clear(sf::Color::Black);
         window.draw(layerBackground);
@@ -145,8 +144,11 @@ int myMain()
         window.draw(player);
 
         ImGui::SFML::Render(window);
+        window.draw(fader);
+
 
         window.display();
+
 
     }
     ImGui::SFML::Shutdown();

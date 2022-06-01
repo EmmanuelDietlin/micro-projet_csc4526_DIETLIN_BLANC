@@ -86,6 +86,7 @@ int myMain()
         ImGui::SetNextWindowPos(sf::Vector2f(41, 59));
         ImGui::SetNextWindowSize(sf::Vector2f(425, 600));
 
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
         ImGui::Begin("Logs");
         ImGui::Text("Day %d", façade.getDayCount());
         ImGui::Text("Distance travelled : %d km", façade.getDistanceTravelled());
@@ -113,13 +114,21 @@ int myMain()
             fade_counter = 0;
         }
         ImGui::End();
+        ImGui::PopStyleColor(1);
+
+
 
         ImGui::SetNextWindowPos(sf::Vector2f(650, 300));
         ImGui::SetNextWindowSize(sf::Vector2f(150, 80));
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
+
         ImGui::Begin("Player");
-        ImGui::Text("Hp : %d/%d", façade.getPlayerHp(), playerBaseHp);
+        //ImGui::Text("Hp : %d/%d", façade.getPlayerHp(), playerBaseHp);
         ImGui::ProgressBar((float)façade.getPlayerHp() / (float)playerBaseHp);
         ImGui::End();
+        ImGui::PopStyleColor(1);
+
+
 
         if (globalClock.getElapsedTime() - spriteClock > sf::seconds(0.5f)) {
             spriteClock = globalClock.getElapsedTime();
@@ -135,6 +144,8 @@ int myMain()
             fade_counter++;
             faderClock.restart();
         }
+
+
         
 
         window.clear(sf::Color::Black);

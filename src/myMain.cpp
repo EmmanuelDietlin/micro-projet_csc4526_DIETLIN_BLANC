@@ -20,12 +20,24 @@ const int maxDistance = 6700;
 const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 
-enum class ImGuiWindows { mainMenu, gameWindow1, gameWindow2, victory, defeat};
-
 void textCentered(std::string const& s) {
     auto textWidth = ImGui::CalcTextSize(s.c_str()).x;
     ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
     ImGui::Text(s.c_str());
+}
+
+void remainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
+    int r = t[TokensType::tokenNbr];
+    for (auto it : t) {
+        if (it.first != TokensType::tokenNbr && it.first != TokensType::remainingTokens) {
+            r -= it.second;
+        }
+    }
+    if (r < 0) {
+        t[type] += r;
+        r = 0;
+    }
+    t[TokensType::remainingTokens] = r;
 }
 
 
@@ -36,7 +48,7 @@ int myMain()
     sf::Clock globalClock;
     sf::Clock deltaClock;
     sf::Clock faderClock;
-    ImGuiWindows imguiWindow = ImGuiWindows::mainMenu;
+    ImGuiWindow imguiWindow = ImGuiWindow::mainMenu;
 
     Façade façade(maxDay, maxDistance, playerBaseHp, boatBaseHp);
     int fade_counter = 512;
@@ -74,12 +86,13 @@ int myMain()
     MapLayer layerBoat(map, 1);
     MapLayer layerForeground(map, 2);
 
-    std::map<std::string, int> tokens;
-    tokens["tokenNbr"] = façade.getTokenNbr();
-    tokens["fishingTokens"] = 0;
-    tokens["rowingTokens"] = 0;
-
-    int remainingTokens = tokens["tokenNbr"] - tokens["fishingTokens"] - tokens["rowingTokens"];
+    std::map<TokensType, int> tokens;
+    tokens[TokensType::tokenNbr] = façade.getTokenNbr();
+    tokens[TokensType::fishingsTokens] = 0;
+    tokens[TokensType::rowingTokens] = 0;
+    tokens[TokensType::healingTokens] = 0;
+    tokens[TokensType::repairTokens] = 0;
+    tokens[TokensType::remainingTokens] = 0;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -91,7 +104,7 @@ int myMain()
         }
         ImGui::SFML::Update(window, deltaClock.restart());
 
-        if (imguiWindow == ImGuiWindows::mainMenu) {
+        if (imguiWindow == ImGuiWindow::mainMenu) {
             ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0.5f, 0.5f));
             ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
@@ -106,7 +119,7 @@ int myMain()
             ImGui::SetWindowFontScale(1.3f);
             ImGui::SetCursorPos(sf::Vector2f(w_width/2-100,w_height/2-50));
             if (ImGui::Button("Commencer la partie", sf::Vector2f(200,100))) {
-                imguiWindow = ImGuiWindows::gameWindow1;
+                imguiWindow = ImGuiWindow::gameWindow1;
             }
             ImGui::End();
             ImGui::PopStyleColor(2);
@@ -115,47 +128,47 @@ int myMain()
 
 
         }
-        else if (imguiWindow == ImGuiWindows::gameWindow1 || imguiWindow == ImGuiWindows::gameWindow2) {
+        else if (imguiWindow == ImGuiWindow::gameWindow1 || imguiWindow == ImGuiWindow::gameWindow2) {
             ImGui::SetNextWindowPos(sf::Vector2f(41, 59));
             ImGui::SetNextWindowSize(sf::Vector2f(425, 600));
 
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
             ImGui::Begin("Logs", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
                 | ImGuiWindowFlags_NoResize);
-            if (imguiWindow == ImGuiWindows::gameWindow1) {
+            if (imguiWindow == ImGuiWindow::gameWindow1) {
                 ImGui::Text("Texte decrivant les evenements s'etant \nderoules la journee precedente");
                 if (ImGui::Button("Page suivante")) {
-                    imguiWindow = ImGuiWindows::gameWindow2;
+                    imguiWindow = ImGuiWindow::gameWindow2;
                 }
             } 
-            else if (imguiWindow == ImGuiWindows::gameWindow2) {
+            else if (imguiWindow == ImGuiWindow::gameWindow2) {
                 ImGui::Text("Jour %d", façade.getDayCount());
                 ImGui::Text("Distance parcourue : %d km", façade.getDistanceTravelled());
                 ImGui::Text("Jetons restants : %d", remainingTokens);
                 ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)maxDistance);
-                if (ImGui::InputInt("Nombre de jetons\npour pêcher", &tokens["fishingTokens"], 1)) {
-                    remainingTokens = tokens["tokenNbr"] - tokens["rowingTokens"] - tokens["fishingTokens"];
-                    if (remainingTokens < 0) {
-                        tokens["fishingTokens"] += remainingTokens;
-                        remainingTokens = 0;
-                    }
+                if (ImGui::InputInt("Nombre de jetons\npour pecher", &tokens[TokensType::fishingsTokens], 1)) {
+                    remainingTokens(tokens, TokensType::fishingsTokens);
                 }
-                if (ImGui::InputInt("Nombre de jetons\npour ramer", &tokens["rowingTokens"], 1)) {
-                    remainingTokens = tokens["tokenNbr"] - tokens["rowingTokens"] - tokens["fishingTokens"];
-                    if (remainingTokens < 0) {
-                        tokens["rowingTokens"] += remainingTokens;
-                        remainingTokens = 0;
-                    }
+                if (ImGui::InputInt("Nombre de jetons\npour ramer", &tokens[TokensType::rowingTokens], 1)) {
+                    remainingTokens(tokens, TokensType::rowingTokens);
+                }
+                if (ImGui::InputInt("Nombre de jetons\npour se soigner", &tokens[TokensType::healingTokens], 1)) {
+                    remainingTokens(tokens, TokensType::healingTokens);
+                }
+                if (ImGui::InputInt("Nombre de jetons\npour reparer", &tokens[TokensType::repairTokens], 1)) {
+                    remainingTokens(tokens, TokensType::repairTokens);
                 }
                 ImGui::Text("Poissons : %d", façade.getFishCount());
                 if (ImGui::Button("Jour suivant")) {
-                    façade.executeRowingAction(tokens["rowingTokens"]);
-                    façade.executeFishingAction(tokens["fishingTokens"]);
+                    façade.executeFishingAction(tokens[TokensType::fishingsTokens]);
+                    façade.executeRowingAction(tokens[TokensType::rowingTokens]);
+                    façade.executeHealingAction(tokens[TokensType::healingTokens]);
+                    façade.executeRepairAction(tokens[TokensType::repairTokens]);
                     façade.nextDay();
                     fade_counter = 0;
                 }
                 if (ImGui::Button("Page precedente")) {
-                    imguiWindow = ImGuiWindows::gameWindow1;
+                    imguiWindow = ImGuiWindow::gameWindow1;
                 }
             }
             ImGui::PopStyleColor(1);
@@ -205,7 +218,7 @@ int myMain()
             ImGui::SFML::Render(window);
             window.draw(fader);
         }
-        else if (imguiWindow == ImGuiWindows::victory) {
+        else if (imguiWindow == ImGuiWindow::victory) {
 
         }
         window.display();

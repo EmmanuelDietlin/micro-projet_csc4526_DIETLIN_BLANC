@@ -159,7 +159,7 @@ int myMain()
             ImGui::PopStyleColor(1);
 
 
-
+            
             if (globalClock.getElapsedTime() - spriteClock > sf::seconds(0.5f)) {
                 spriteClock = globalClock.getElapsedTime();
                 spriteIndex = (spriteIndex + 1) % 4;

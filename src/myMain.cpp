@@ -27,7 +27,8 @@ void textCentered(std::string const& s) {
 }
 
 void remainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
-    int r = t[TokensType::tokenNbr];
+    int r;
+    r = t[TokensType::tokenNbr];
     for (auto it : t) {
         if (it.first != TokensType::tokenNbr && it.first != TokensType::remainingTokens) {
             r -= it.second;
@@ -126,7 +127,6 @@ int myMain()
             window.draw(mainMenuLayer1);
             ImGui::SFML::Render(window);
 
-
         }
         else if (imguiWindow == ImGuiWindow::gameWindow1 || imguiWindow == ImGuiWindow::gameWindow2) {
             ImGui::SetNextWindowPos(sf::Vector2f(41, 59));
@@ -144,8 +144,8 @@ int myMain()
             else if (imguiWindow == ImGuiWindow::gameWindow2) {
                 ImGui::Text("Jour %d", façade.getDayCount());
                 ImGui::Text("Distance parcourue : %d km", façade.getDistanceTravelled());
-                ImGui::Text("Jetons restants : %d", remainingTokens);
                 ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)maxDistance);
+                ImGui::Text("Jetons restants : %d", tokens[TokensType::remainingTokens]);
                 if (ImGui::InputInt("Nombre de jetons\npour pecher", &tokens[TokensType::fishingsTokens], 1)) {
                     remainingTokens(tokens, TokensType::fishingsTokens);
                 }
@@ -206,9 +206,6 @@ int myMain()
                 faderClock.restart();
             }
 
-
-
-
             window.clear(sf::Color::Black);
             window.draw(layerBackground);
             window.draw(layerBoat);
@@ -219,7 +216,23 @@ int myMain()
             window.draw(fader);
         }
         else if (imguiWindow == ImGuiWindow::victory) {
-
+            ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
+            ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
+            ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
+            ImGui::Begin("Victory screen", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
+                | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
+            ImGui::SetCursorPosY(w_height * 0.2f);
+            ImGui::SetWindowFontScale(5);
+            textCentered("Vous avez");
+            textCentered("gagne !");
+            ImGui::SetWindowFontScale(1.3f);
+            ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 50));
+            if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+                imguiWindow = ImGuiWindow::mainMenu;
+            }
+            ImGui::End();
+            ImGui::PopStyleColor(1);
+            ImGui::SFML::Render(window);
         }
         window.display();
     }

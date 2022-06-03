@@ -20,6 +20,8 @@ const int maxDistance = 6700;
 const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 
+enum Windows { mainMenu, gameWindow1, gameWindow2, victory, defeat};
+
 
 
 int myMain()
@@ -29,7 +31,7 @@ int myMain()
     sf::Clock globalClock;
     sf::Clock deltaClock;
     sf::Clock faderClock;
-    int menu_nbr = 0;
+    int menu_nbr = mainMenu;
 
     Façade façade(maxDay, maxDistance, playerBaseHp, boatBaseHp);
     int fade_counter = 512;
@@ -81,11 +83,12 @@ int myMain()
         }
         ImGui::SFML::Update(window, deltaClock.restart());
 
-        if (menu_nbr == 0) {
+        if (menu_nbr == mainMenu) {
             ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
             ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
             ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
-            ImGui::Begin("Main Menu");
+            ImGui::Begin("Main Menu", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
+                | ImGuiWindowFlags_NoResize);
             ImGui::SetCursorPos(sf::Vector2f(w_width/2-100,w_height/2-50));
             if (ImGui::Button("Start game", sf::Vector2f(200,100))) {
                 menu_nbr = 1;
@@ -93,22 +96,24 @@ int myMain()
             ImGui::End();
             ImGui::PopStyleColor(1);
 
-            window.clear(sf::Color::Black);
             ImGui::SFML::Render(window);
+
+
         }
-        else {
+        else if (menu_nbr == gameWindow2 || menu_nbr == gameWindow1) {
             ImGui::SetNextWindowPos(sf::Vector2f(41, 59));
             ImGui::SetNextWindowSize(sf::Vector2f(425, 600));
 
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
-            ImGui::Begin("Logs");
-            if (menu_nbr == 1) {
+            ImGui::Begin("Logs", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
+                | ImGuiWindowFlags_NoResize);
+            if (menu_nbr == gameWindow1) {
                 ImGui::Text("Texte decrivant les evenements s'etant \nderoules la journee precedente");
                 if (ImGui::Button("Next page")) {
-                    menu_nbr = 2;
+                    menu_nbr = gameWindow2;
                 }
             } 
-            else if (menu_nbr == 2) {
+            else if (menu_nbr == gameWindow2) {
                 ImGui::Text("Day %d", façade.getDayCount());
                 ImGui::Text("Distance travelled : %d km", façade.getDistanceTravelled());
                 ImGui::Text("Remaining tokens : %d", remainingTokens);
@@ -135,7 +140,7 @@ int myMain()
                     fade_counter = 0;
                 }
                 if (ImGui::Button("Previous page")) {
-                    menu_nbr = 1;
+                    menu_nbr = gameWindow1;
                 }
             }
             ImGui::PopStyleColor(1);
@@ -147,7 +152,7 @@ int myMain()
             ImGui::SetNextWindowSize(sf::Vector2f(150, 80));
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
 
-            ImGui::Begin("Player");
+            ImGui::Begin("Player", NULL, ImGuiWindowFlags_NoResize);
             //ImGui::Text("Hp : %d/%d", façade.getPlayerHp(), playerBaseHp);
             ImGui::ProgressBar((float)façade.getPlayerHp() / (float)playerBaseHp);
             ImGui::End();
@@ -182,11 +187,10 @@ int myMain()
             ImGui::SFML::Render(window);
             window.draw(fader);
         }
+        else if (menu_nbr == victory) {
 
-
+        }
         window.display();
-
-
     }
     ImGui::SFML::Shutdown();
     return 0;

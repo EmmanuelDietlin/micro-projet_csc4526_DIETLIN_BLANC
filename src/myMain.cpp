@@ -50,6 +50,29 @@ void FadeToBlack(int& f) {
     f = 0;
 }
 
+bool SetMenuWindow(std::string const& title, std::string const& txt1, std::string const& txt2,
+    std::string const &b_label) {
+    ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0.5f, 0.5f));
+    ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
+    ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
+    ImGui::Begin(title.c_str(), NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
+        | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
+
+    ImGui::SetCursorPosY(w_height * 0.2f);
+    ImGui::SetWindowFontScale(5);
+    TextCentered(txt1);
+    TextCentered(txt2);
+    ImGui::SetWindowFontScale(1.3f);
+    ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 50));
+    if (ImGui::Button(b_label.c_str(), sf::Vector2f(200, 100))) {
+        return true;
+    }
+    
+    return false;
+}
+
+
 
 int myMain()
 {
@@ -115,20 +138,8 @@ int myMain()
         ImGui::SFML::Update(window, deltaClock.restart());
 
         if (imguiWindow == ImGuiWindow::mainMenu) {
-            ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0.5f, 0.5f));
-            ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
-            ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
-            ImGui::Begin("Main Menu", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
-                | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
-            
-            ImGui::SetCursorPosY(w_height*0.2f);
-            ImGui::SetWindowFontScale(5);
-            TextCentered("Les revoltes");
-            TextCentered("de la Bounty");
-            ImGui::SetWindowFontScale(1.3f);
-            ImGui::SetCursorPos(sf::Vector2f(w_width/2-100,w_height/2-50));
-            if (ImGui::Button("Commencer la partie", sf::Vector2f(200,100))) {
+            if (SetMenuWindow("Main menu", "Les revoltes", "de la Bounty",
+                "Commencer la partie")) {
                 FadeToBlack(fade_counter);
                 imguiWindow = ImGuiWindow::gameWindow1;
             }
@@ -227,44 +238,27 @@ int myMain()
             ImGui::SFML::Render(window);
         }
         else if (imguiWindow == ImGuiWindow::victory) {
-            ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
-            ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
-            ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
-            ImGui::Begin("Victory screen", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
-                | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
-            ImGui::SetCursorPosY(w_height * 0.2f);
-            ImGui::SetWindowFontScale(5);
-            TextCentered("Vous avez");
-            TextCentered("gagne !");
-            ImGui::SetWindowFontScale(1.3f);
-            ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 50));
-            if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+            if (SetMenuWindow("Victory screen", "Vous avez", "gagne !",
+                "Retour au menu")) {
                 FadeToBlack(fade_counter);
                 imguiWindow = ImGuiWindow::mainMenu;
             }
             ImGui::End();
-            ImGui::PopStyleColor(1);
+            ImGui::PopStyleColor(2);
             ImGui::SFML::Render(window);
         }
         else if (imguiWindow == ImGuiWindow::defeat) {
-            ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
-            ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
-            ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
-            ImGui::Begin("Defeat screen", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
-                | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
-            ImGui::SetCursorPosY(w_height * 0.2f);
-            ImGui::SetWindowFontScale(5);
-            TextCentered("Vous avez");
-            TextCentered("echoue !");
-            ImGui::SetWindowFontScale(1.3f);
-            ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 50));
-            if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+            if (SetMenuWindow("Defeat screen", "Vous avez", "perdu !",
+                "Retour au menu")) {
                 FadeToBlack(fade_counter);
                 imguiWindow = ImGuiWindow::mainMenu;
             }
             ImGui::End();
-            ImGui::PopStyleColor(1);
+            ImGui::PopStyleColor(2);
             ImGui::SFML::Render(window);
+        }
+        else if (imguiWindow == ImGuiWindow::informations) {
+            //A implémenter
         }
 
         if (faderClock.getElapsedTime() > sf::seconds(0.005f) && fade_counter < 256) {

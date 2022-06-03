@@ -31,6 +31,8 @@ public:
 	int getBoatHp();
 	void executeRowingAction(int const tokens);
 	void executeFishingAction(int const tokens);
+	void executeHealingAction(int const tokens);
+	void executeRepairAction(int const tokens);
 	void nextDay();
 
 

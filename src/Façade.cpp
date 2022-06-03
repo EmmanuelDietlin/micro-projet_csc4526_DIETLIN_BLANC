@@ -1,4 +1,8 @@
 #include "Façade.h"
+#include "FishingAction.h"
+#include "RowingAction.h"
+#include "HealPlayerAction.h"
+#include "RepairBoatAction.h"
 
 /*
 Constructeur de la façade. Prend en paramètres le nombre maximal de jours pour parcourir
@@ -41,6 +45,22 @@ Execute l'action de pêcher, avec le nombre de jetons passé en paramètres
 void Façade::executeFishingAction(int const tokens) {
 	context->setAction(std::make_unique<FishingAction>(tokens));
 	fishCount+= context->executeAction();
+}
+
+/*
+Execute l'action de se soigner, avec le nombre de jetons passé en paramètres
+*/
+void Façade::executeHealingAction(int const tokens) {
+	context->setAction(std::make_unique<HealPlayerAction>(tokens));
+	player->heal(context->executeAction());
+}
+
+/*
+Execute l'action de réparer le bateau, avec le nombre de jetons passé en paramètres
+*/
+void Façade::executeRepairAction(int const tokens) {
+	context->setAction(std::make_unique<RepairBoatAction>(tokens));
+	boat->heal(context->executeAction());
 }
 
 /*

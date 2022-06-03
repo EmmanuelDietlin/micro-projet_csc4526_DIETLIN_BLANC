@@ -234,6 +234,25 @@ int myMain()
             ImGui::PopStyleColor(1);
             ImGui::SFML::Render(window);
         }
+        else if (imguiWindow == ImGuiWindow::defeat) {
+            ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
+            ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
+            ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
+            ImGui::Begin("Defeat screen", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
+                | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
+            ImGui::SetCursorPosY(w_height * 0.2f);
+            ImGui::SetWindowFontScale(5);
+            textCentered("Vous avez");
+            textCentered("echoue !");
+            ImGui::SetWindowFontScale(1.3f);
+            ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 50));
+            if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+                imguiWindow = ImGuiWindow::mainMenu;
+            }
+            ImGui::End();
+            ImGui::PopStyleColor(1);
+            ImGui::SFML::Render(window);
+        }
         window.display();
     }
     ImGui::SFML::Shutdown();

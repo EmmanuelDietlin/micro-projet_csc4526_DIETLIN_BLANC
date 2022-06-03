@@ -19,14 +19,15 @@ const int maxDay = 47;
 const int maxDistance = 6700;
 const int playerBaseHp = 100;
 const int boatBaseHp = 200;
+const int spacing = 10;
 
-void textCentered(std::string const& s) {
+void TextCentered(std::string const& s) {
     auto textWidth = ImGui::CalcTextSize(s.c_str()).x;
     ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
     ImGui::Text(s.c_str());
 }
 
-void remainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
+void RemainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
     int r;
     r = t[TokensType::tokenNbr];
     for (auto it : t) {
@@ -41,6 +42,14 @@ void remainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
     t[TokensType::remainingTokens] = r;
 }
 
+void ImGuiYSpacing() {
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + spacing);
+}
+
+void FadeToBlack(int& f) {
+    f = 0;
+}
+
 
 int myMain()
 {
@@ -52,7 +61,7 @@ int myMain()
     ImGuiWindow imguiWindow = ImGuiWindow::mainMenu;
 
     Façade façade(maxDay, maxDistance, playerBaseHp, boatBaseHp);
-    int fade_counter = 512;
+    int fade_counter = 256;
     sf::RectangleShape fader(sf::Vector2f(w_width, w_height));
     fader.setFillColor(sf::Color(0,0,0,0));
 
@@ -93,7 +102,7 @@ int myMain()
     tokens[TokensType::rowingTokens] = 0;
     tokens[TokensType::healingTokens] = 0;
     tokens[TokensType::repairTokens] = 0;
-    tokens[TokensType::remainingTokens] = 0;
+    tokens[TokensType::remainingTokens] = façade.getTokenNbr();
 
     while (window.isOpen()) {
         sf::Event event;
@@ -115,11 +124,12 @@ int myMain()
             
             ImGui::SetCursorPosY(w_height*0.2f);
             ImGui::SetWindowFontScale(5);
-            textCentered("Les revoltes");
-            textCentered("de la Bounty");
+            TextCentered("Les revoltes");
+            TextCentered("de la Bounty");
             ImGui::SetWindowFontScale(1.3f);
             ImGui::SetCursorPos(sf::Vector2f(w_width/2-100,w_height/2-50));
             if (ImGui::Button("Commencer la partie", sf::Vector2f(200,100))) {
+                FadeToBlack(fade_counter);
                 imguiWindow = ImGuiWindow::gameWindow1;
             }
             ImGui::End();
@@ -135,38 +145,49 @@ int myMain()
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
             ImGui::Begin("Logs", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
                 | ImGuiWindowFlags_NoResize);
+            ImGui::SetWindowFontScale(3);
+            TextCentered("Jour " + std::to_string(façade.getDayCount()));
+            ImGui::SetWindowFontScale(1.3f);
+            ImGuiYSpacing();
+
             if (imguiWindow == ImGuiWindow::gameWindow1) {
-                ImGui::Text("Texte decrivant les evenements s'etant \nderoules la journee precedente");
+                ImGui::TextWrapped("Texte decrivant les evenements s'etant deroules la journee precedente");
+                ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);
                 if (ImGui::Button("Page suivante")) {
                     imguiWindow = ImGuiWindow::gameWindow2;
                 }
             } 
             else if (imguiWindow == ImGuiWindow::gameWindow2) {
-                ImGui::Text("Jour %d", façade.getDayCount());
                 ImGui::Text("Distance parcourue : %d km", façade.getDistanceTravelled());
                 ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)maxDistance);
+                ImGuiYSpacing();
                 ImGui::Text("Jetons restants : %d", tokens[TokensType::remainingTokens]);
-                if (ImGui::InputInt("Nombre de jetons\npour pecher", &tokens[TokensType::fishingsTokens], 1)) {
-                    remainingTokens(tokens, TokensType::fishingsTokens);
+                if (ImGui::InputInt("Pecher", &tokens[TokensType::fishingsTokens], 1)) {
+                    RemainingTokens(tokens, TokensType::fishingsTokens);
                 }
-                if (ImGui::InputInt("Nombre de jetons\npour ramer", &tokens[TokensType::rowingTokens], 1)) {
-                    remainingTokens(tokens, TokensType::rowingTokens);
+                if (ImGui::InputInt("Ramer", &tokens[TokensType::rowingTokens], 1)) {
+                    RemainingTokens(tokens, TokensType::rowingTokens);
                 }
-                if (ImGui::InputInt("Nombre de jetons\npour se soigner", &tokens[TokensType::healingTokens], 1)) {
-                    remainingTokens(tokens, TokensType::healingTokens);
+                if (ImGui::InputInt("Se soigner", &tokens[TokensType::healingTokens], 1)) {
+                    RemainingTokens(tokens, TokensType::healingTokens);
                 }
-                if (ImGui::InputInt("Nombre de jetons\npour reparer", &tokens[TokensType::repairTokens], 1)) {
-                    remainingTokens(tokens, TokensType::repairTokens);
+                if (ImGui::InputInt("Reparer", &tokens[TokensType::repairTokens], 1)) {
+                    RemainingTokens(tokens, TokensType::repairTokens);
                 }
+                ImGuiYSpacing();
                 ImGui::Text("Poissons : %d", façade.getFishCount());
-                if (ImGui::Button("Jour suivant")) {
+                ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
+                ImGui::SetCursorPosY((ImGui::GetWindowHeight() - 180));
+                if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
                     façade.executeFishingAction(tokens[TokensType::fishingsTokens]);
                     façade.executeRowingAction(tokens[TokensType::rowingTokens]);
                     façade.executeHealingAction(tokens[TokensType::healingTokens]);
                     façade.executeRepairAction(tokens[TokensType::repairTokens]);
                     façade.nextDay();
-                    fade_counter = 0;
+                    FadeToBlack(fade_counter);
+                    imguiWindow = ImGuiWindow::gameWindow1;
                 }
+                ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);
                 if (ImGui::Button("Page precedente")) {
                     imguiWindow = ImGuiWindow::gameWindow1;
                 }
@@ -197,15 +218,6 @@ int myMain()
                 playerTexture.loadFromImage(sprites[spriteIndex]);
             }
 
-            if (faderClock.getElapsedTime() > sf::seconds(0.001f) && fade_counter < 512) {
-                if (fade_counter < 256)
-                    fader.setFillColor(sf::Color(0, 0, 0, fade_counter));
-                else
-                    fader.setFillColor(sf::Color(0, 0, 0, 511 - fade_counter));
-                fade_counter++;
-                faderClock.restart();
-            }
-
             window.clear(sf::Color::Black);
             window.draw(layerBackground);
             window.draw(layerBoat);
@@ -213,7 +225,6 @@ int myMain()
             window.draw(player);
 
             ImGui::SFML::Render(window);
-            window.draw(fader);
         }
         else if (imguiWindow == ImGuiWindow::victory) {
             ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
@@ -223,11 +234,12 @@ int myMain()
                 | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
             ImGui::SetCursorPosY(w_height * 0.2f);
             ImGui::SetWindowFontScale(5);
-            textCentered("Vous avez");
-            textCentered("gagne !");
+            TextCentered("Vous avez");
+            TextCentered("gagne !");
             ImGui::SetWindowFontScale(1.3f);
             ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 50));
             if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+                FadeToBlack(fade_counter);
                 imguiWindow = ImGuiWindow::mainMenu;
             }
             ImGui::End();
@@ -242,17 +254,26 @@ int myMain()
                 | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
             ImGui::SetCursorPosY(w_height * 0.2f);
             ImGui::SetWindowFontScale(5);
-            textCentered("Vous avez");
-            textCentered("echoue !");
+            TextCentered("Vous avez");
+            TextCentered("echoue !");
             ImGui::SetWindowFontScale(1.3f);
             ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 50));
             if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+                FadeToBlack(fade_counter);
                 imguiWindow = ImGuiWindow::mainMenu;
             }
             ImGui::End();
             ImGui::PopStyleColor(1);
             ImGui::SFML::Render(window);
         }
+
+        if (faderClock.getElapsedTime() > sf::seconds(0.005f) && fade_counter < 256) {
+            fader.setFillColor(sf::Color(0, 0, 0, 255-fade_counter));
+            fade_counter++;
+            faderClock.restart();
+        }
+
+        window.draw(fader);
         window.display();
     }
     ImGui::SFML::Shutdown();

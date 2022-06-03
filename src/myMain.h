@@ -8,5 +8,7 @@ enum class ImGuiWindow { mainMenu, gameWindow1, gameWindow2, victory, defeat };
 enum class TokensType { tokenNbr, fishingsTokens, rowingTokens, healingTokens, repairTokens, remainingTokens };
 
 int myMain();
-void textCentered(std::string const &s);
-void remainingTokens(std::map<TokensType, int>& t, TokensType const &type);
+void TextCentered(std::string const &s);
+void RemainingTokens(std::map<TokensType, int>& t, TokensType const &type);
+void ImGuiYSpacing();
+void FadeToBlack(int &f);

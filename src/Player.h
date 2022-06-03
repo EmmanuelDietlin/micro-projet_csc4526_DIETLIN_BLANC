@@ -6,5 +6,5 @@ class Player : public Entity {
 private:
 	const std::string name;
 public:
-	Player(std::string const& name, int const hp);
+	Player(std::string const& name, int const hp, int const maxHp);
 };

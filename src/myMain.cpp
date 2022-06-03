@@ -83,7 +83,7 @@ int myMain()
     sf::Clock faderClock;
     ImGuiWindow imguiWindow = ImGuiWindow::mainMenu;
 
-    Façade façade(maxDay, maxDistance, playerBaseHp, boatBaseHp);
+    Façade façade(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp);
     int fade_counter = 256;
     sf::RectangleShape fader(sf::Vector2f(w_width, w_height));
     fader.setFillColor(sf::Color(0,0,0,0));
@@ -188,7 +188,7 @@ int myMain()
                 ImGuiYSpacing();
                 ImGui::Text("Poissons : %d", façade.getFishCount());
                 ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
-                ImGui::SetCursorPosY((ImGui::GetWindowHeight() - 180));
+                ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
                 if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
                     façade.executeFishingAction(tokens[TokensType::fishingsTokens]);
                     façade.executeRowingAction(tokens[TokensType::rowingTokens]);

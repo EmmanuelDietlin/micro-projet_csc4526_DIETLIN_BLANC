@@ -9,12 +9,13 @@ Constructeur de la façade. Prend en paramètres le nombre maximal de jours pour p
 la distance, la distance à parcourir dans le délai imparti, les points de vie de départ
 du joueur, les points de vie de départ de l'embarcation.
 */
-Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int const boatHp)
+Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int const playerMaxHp,
+	int const boatHp, int const boatMaxHp)
 	: action_tokens(max_tokens_nb), fishCount(starting_fish_number), 
 	maxDay(maxDay), maxDistance(maxDistance)
 {
-	boat = std::make_unique<Boat>(boatHp);
-	player = std::make_unique<Player>("test", playerHp);
+	boat = std::make_unique<Boat>(boatHp, boatMaxHp);
+	player = std::make_unique<Player>("Player1", playerHp, playerMaxHp);
 	context = std::make_unique<Context>();
 }
 

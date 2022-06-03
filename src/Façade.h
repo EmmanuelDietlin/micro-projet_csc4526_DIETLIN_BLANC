@@ -20,7 +20,8 @@ private:
 	std::unique_ptr<Player> player;
 	std::unique_ptr<Context> context;
 public:
-	Façade(int const maxDay, int const MaxDistance, int const playerHp, int const boatHp);
+	Façade(int const maxDay, int const MaxDistance, int const playerHp, 
+		int const playerMaxHp, int const boatHp, int const boatMaxHp);
 	int getTokenNbr();
 	int getDistanceTravelled();
 	int getDayCount();

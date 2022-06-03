@@ -5,5 +5,5 @@
 
 class Boat : public Entity {
 public:
-	Boat(int const hp);
+	explicit Boat(int const hp, int const maxHp);
 };

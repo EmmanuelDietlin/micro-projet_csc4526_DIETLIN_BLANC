@@ -1,7 +1,7 @@
 #include "Entity.h"
 #include <algorithm>
 
-Entity::Entity(int const hp) : hp(hp) 
+Entity::Entity(int const hp, int const maxHp) : hp(hp), maxHp(maxHp)
 {}
 
 void Entity::takeDamage(int const dmg) {
@@ -12,7 +12,7 @@ void Entity::takeDamage(int const dmg) {
 }
 
 void Entity::heal(int const heal) {
-	hp = std::min(hp + heal, MaxHP);
+	hp = std::min(hp + heal, maxHp);
 }
 
 int Entity::getHp() {

@@ -71,7 +71,7 @@ void Façade::executeFishingAction(int const tokens) {
 			<< " poissons ont mordu a l'appat. Il va sans doute falloir vous rationner..." << std::endl;
 		}
 	else {
-		recapText << "La chance vous a sourit : vous n'avez eu qu'a lancer votre ligne dans l'eau, et aussitôt de nombreux"
+		recapText << "La chance vous a sourit : vous n'avez eu qu'a lancer votre ligne dans l'eau, et aussitot de nombreux"
 			<< " poissons se sont jetes dessus ! Sacre festin en perspective !" << std::endl;
 	}
 	recapText << std::endl << "Poissons peches : " << f << std::endl << std::endl;
@@ -82,7 +82,13 @@ Execute l'action de se soigner, avec le nombre de jetons passé en paramètres
 */
 void Façade::executeHealingAction(int const tokens) {
 	context->setAction(std::make_unique<HealPlayerAction>(tokens));
-	player->heal(context->executeAction());
+	int p = context->executeAction();
+	player->heal(p);
+	if (p > 0) {
+		recapText << "Un peu de repos ne fait pas de mal ! En vous reposant, vous avez pu recuperer"
+			<< " une partie de votre energie" << std::endl;
+		recapText << std::endl << "Vie : +" << p << std::endl << std::endl;
+	}
 }
 
 /*
@@ -90,7 +96,13 @@ Execute l'action de réparer le bateau, avec le nombre de jetons passé en paramèt
 */
 void Façade::executeRepairAction(int const tokens) {
 	context->setAction(std::make_unique<RepairBoatAction>(tokens));
-	boat->heal(context->executeAction());
+	int p = context->executeAction();
+	boat->heal(p);
+	if (p > 0) {
+		recapText << "Reparer l'embarcation est une sage idee pour eviter de se retrouver au milieu"
+			<< " de l'ocean accroche a une planche pour tenter de se maintenir a flot." << std::endl;
+		recapText << std::endl << "Reparation : " << p << std::endl << std::endl;
+	}
 }
 
 /*

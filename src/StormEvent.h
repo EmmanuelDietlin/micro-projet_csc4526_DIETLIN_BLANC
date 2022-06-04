@@ -1,8 +1,12 @@
+#pragma once
 #include "Event.h"
 
 class StormEvent : public Event {
-public:
-	const int damage = 20;
 private:
-	int execute() override;
+	const int damageBoat = 20;
+	const int foodLost = 2;
+public:
+	vdk::signal<void(int const)> damageBoatSignal;
+	vdk::signal<void(int const)> foodLostSignal;
+	void execute() override;
 };

@@ -1,6 +1,9 @@
+#pragma once
+#include "signals.h"
 
 class Event {
 public:
+	explicit Event();
 	virtual ~Event() = default;
-	virtual int execute() = 0;
+	virtual void execute() = 0;
 };

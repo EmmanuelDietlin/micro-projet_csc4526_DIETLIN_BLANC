@@ -1,5 +1,6 @@
 #include "StormEvent.h"
 
-int StormEvent::execute() {
-	return damage;
+void StormEvent::execute() {
+	foodLostSignal.emit(foodLost);
+	damageBoatSignal.emit(damageBoat);
 }

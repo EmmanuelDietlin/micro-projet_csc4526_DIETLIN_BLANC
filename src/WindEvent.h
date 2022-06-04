@@ -1,8 +1,10 @@
+#pragma once
 #include "Event.h"
 
 class WindEvent : public Event {
 private:
-	const int distance = 50;
+	const int moveBackDistance = 50;
 public:
-	int execute() override;
+	vdk::signal<void(int const)> moveBackSignal;
+	void execute() override;
 };

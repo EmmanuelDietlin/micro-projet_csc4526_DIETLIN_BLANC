@@ -6,8 +6,8 @@ Entity::Entity(int const hp, int const maxHp) : hp(hp), maxHp(maxHp)
 
 void Entity::takeDamage(int const dmg) {
 	hp -= dmg;
-	if (dmg < 0) {
-		//indiquer que le joueur est mort
+	if (hp <= 0) {
+		deathSignal.emit();
 	}
 }
 

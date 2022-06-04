@@ -33,7 +33,6 @@ public:
 	void executeHealingAction(int const tokens);
 	void executeRepairAction(int const tokens);
 	void nextDay();
-	void newGame();
 
 
 };

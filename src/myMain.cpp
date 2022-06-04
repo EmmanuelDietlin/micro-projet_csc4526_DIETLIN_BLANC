@@ -9,6 +9,7 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <iostream>
+#include <memory>
 #include "SFMLOrthogonalLayer.h"
 #include "Façade.h"
 
@@ -83,7 +84,7 @@ int myMain()
     sf::Clock faderClock;
     ImGuiWindow imguiWindow = ImGuiWindow::mainMenu;
 
-    Façade façade(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp);
+    std::unique_ptr<Façade> façade;
     int fade_counter = 256;
     sf::RectangleShape fader(sf::Vector2f(w_width, w_height));
     fader.setFillColor(sf::Color(0,0,0,0));
@@ -120,12 +121,12 @@ int myMain()
     MapLayer layerForeground(map, 2);
 
     std::map<TokensType, int> tokens;
-    tokens[TokensType::tokenNbr] = façade.getTokenNbr();
+    tokens[TokensType::tokenNbr] = 0;
     tokens[TokensType::fishingsTokens] = 0;
     tokens[TokensType::rowingTokens] = 0;
     tokens[TokensType::healingTokens] = 0;
     tokens[TokensType::repairTokens] = 0;
-    tokens[TokensType::remainingTokens] = façade.getTokenNbr();
+    tokens[TokensType::remainingTokens] = 0;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -134,6 +135,13 @@ int myMain()
             ImGui::SFML::ProcessEvent(window, event);
             if (event.type == sf::Event::Closed)
                 window.close();
+            
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            if (imguiWindow != ImGuiWindow::mainMenu) {
+                FadeToBlack(fade_counter);
+                imguiWindow = ImGuiWindow::mainMenu;
+            }
         }
         ImGui::SFML::Update(window, deltaClock.restart());
 
@@ -141,7 +149,23 @@ int myMain()
             if (SetMenuWindow("Main menu", "Les revoltes", "de la Bounty",
                 "Commencer la partie")) {
                 FadeToBlack(fade_counter);
+                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp);
+                tokens[TokensType::tokenNbr] = façade->getTokenNbr();
+                tokens[TokensType::remainingTokens] = façade->getTokenNbr();
                 imguiWindow = ImGuiWindow::gameWindow1;
+            }
+            ImGuiYSpacing();
+            ImGui::SetCursorPosX(w_width / 2 - 100);
+            if (façade) {
+                if (ImGui::Button("Continuer la partie", sf::Vector2f(200, 100))) {
+                    FadeToBlack(fade_counter);
+                    imguiWindow = ImGuiWindow::gameWindow1;
+                }
+            }
+            ImGuiYSpacing();
+            ImGui::SetCursorPosX(w_width / 2 - 100);
+            if (ImGui::Button("Quitter le jeu", sf::Vector2f(200, 100))) {
+                window.close();
             }
             ImGui::End();
             ImGui::PopStyleColor(2);
@@ -157,7 +181,7 @@ int myMain()
             ImGui::Begin("Logs", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
                 | ImGuiWindowFlags_NoResize);
             ImGui::SetWindowFontScale(3);
-            TextCentered("Jour " + std::to_string(façade.getDayCount()));
+            TextCentered("Jour " + std::to_string(façade->getDayCount()));
             ImGui::SetWindowFontScale(1.3f);
             ImGuiYSpacing();
 
@@ -169,8 +193,8 @@ int myMain()
                 }
             } 
             else if (imguiWindow == ImGuiWindow::gameWindow2) {
-                ImGui::Text("Distance parcourue : %d km", façade.getDistanceTravelled());
-                ImGui::ProgressBar((float)façade.getDistanceTravelled() / (float)maxDistance);
+                ImGui::Text("Distance parcourue : %d km", façade->getDistanceTravelled());
+                ImGui::ProgressBar((float)façade->getDistanceTravelled() / (float)maxDistance);
                 ImGuiYSpacing();
                 ImGui::Text("Jetons restants : %d", tokens[TokensType::remainingTokens]);
                 if (ImGui::InputInt("Pecher", &tokens[TokensType::fishingsTokens], 1)) {
@@ -186,15 +210,15 @@ int myMain()
                     RemainingTokens(tokens, TokensType::repairTokens);
                 }
                 ImGuiYSpacing();
-                ImGui::Text("Poissons : %d", façade.getFishCount());
+                ImGui::Text("Poissons : %d", façade->getFishCount());
                 ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
                 ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
                 if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
-                    façade.executeFishingAction(tokens[TokensType::fishingsTokens]);
-                    façade.executeRowingAction(tokens[TokensType::rowingTokens]);
-                    façade.executeHealingAction(tokens[TokensType::healingTokens]);
-                    façade.executeRepairAction(tokens[TokensType::repairTokens]);
-                    façade.nextDay();
+                    façade->executeFishingAction(tokens[TokensType::fishingsTokens]);
+                    façade->executeRowingAction(tokens[TokensType::rowingTokens]);
+                    façade->executeHealingAction(tokens[TokensType::healingTokens]);
+                    façade->executeRepairAction(tokens[TokensType::repairTokens]);
+                    façade->nextDay();
                     FadeToBlack(fade_counter);
                     imguiWindow = ImGuiWindow::gameWindow1;
                 }
@@ -215,9 +239,9 @@ int myMain()
             ImGui::Begin("Player", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
             //ImGui::Text("Hp : %d/%d", façade.getPlayerHp(), playerBaseHp);
             ImGui::Text("Pv joueur");
-            ImGui::ProgressBar((float)façade.getPlayerHp() / (float)playerBaseHp);
+            ImGui::ProgressBar((float)façade->getPlayerHp() / (float)playerBaseHp);
             ImGui::Text("Pv bateau");
-            ImGui::ProgressBar((float)façade.getBoatHp() / (float)boatBaseHp);
+            ImGui::ProgressBar((float)façade->getBoatHp() / (float)boatBaseHp);
             ImGui::End();
             ImGui::PopStyleColor(1);
 
@@ -241,6 +265,7 @@ int myMain()
             if (SetMenuWindow("Victory screen", "Vous avez", "gagne !",
                 "Retour au menu")) {
                 FadeToBlack(fade_counter);
+                façade.reset();
                 imguiWindow = ImGuiWindow::mainMenu;
             }
             ImGui::End();
@@ -251,6 +276,7 @@ int myMain()
             if (SetMenuWindow("Defeat screen", "Vous avez", "perdu !",
                 "Retour au menu")) {
                 FadeToBlack(fade_counter);
+                façade.reset();
                 imguiWindow = ImGuiWindow::mainMenu;
             }
             ImGui::End();

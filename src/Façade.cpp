@@ -87,6 +87,3 @@ int Façade::getBoatHp() {
 	return boat->getHp();
 }
 
-void newGame() {
-	//à implémenter
-}

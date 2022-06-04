@@ -12,6 +12,13 @@ int myMain();
 void TextCentered(std::string const& s);
 void RemainingTokens(std::map<TokensType, int>& t, TokensType const& type);
 void ImGuiYSpacing();
+<<<<<<< HEAD
 void FadeToBlack(int& f);
 bool SetMenuWindow(std::string const& title, std::string const& txt1, std::string const& txt2,
 	std::string const& b_label);
+=======
+void FadeToBlack(int &f);
+bool SetMenuWindow(std::string const& title, std::string const& txt1, std::string const& txt2, 
+	std::string const &b_label);
+void readRecap(std::stringstream& s);
+>>>>>>> cad0fbbbc6883c8a8f040c13c1f73a3cf4cd82c6

@@ -4,11 +4,14 @@
 #include "Context.h"
 #include <vector>
 #include <map>
-#include <sstream>
+<<<<<<< HEAD
 #include "signals.h"
 #include "myMain.h"
 #include "StormEvent.h"
 #include "WindEvent.h"
+=======
+#include <sstream>
+>>>>>>> cad0fbbbc6883c8a8f040c13c1f73a3cf4cd82c6
 
 const int max_tokens_nb = 5;
 const int starting_fish_number = 2;
@@ -27,9 +30,12 @@ private:
 	std::unique_ptr<Boat> boat;
 	std::unique_ptr<Player> player;
 	std::unique_ptr<Context> context;
+<<<<<<< HEAD
 	ImGuiWindow* imguiWindow;
 	std::vector<std::unique_ptr<Event>> eventVector;
+=======
 	std::stringstream recapText;
+>>>>>>> cad0fbbbc6883c8a8f040c13c1f73a3cf4cd82c6
 public:
 	Façade(int const maxDay, int const MaxDistance, int const playerHp, 
 		int const playerMaxHp, int const boatHp, int const boatMaxHp, ImGuiWindow* imguiWindow);
@@ -43,6 +49,7 @@ public:
 	void executeFishingAction(int const tokens);
 	void executeHealingAction(int const tokens);
 	void executeRepairAction(int const tokens);
+<<<<<<< HEAD
 	void nextDay(std::map<TokensType, int>& tokens);
 	void newGame();
 	void deathPlayer();
@@ -57,4 +64,9 @@ public:
 	void moveBack(int const distance);
 	void loseFood(int const food);
 	int random_n_to_m(int const nbMin, int const nbMax);
+=======
+	void nextDay();
+
+
+>>>>>>> cad0fbbbc6883c8a8f040c13c1f73a3cf4cd82c6
 };

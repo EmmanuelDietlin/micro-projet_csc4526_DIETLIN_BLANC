@@ -14,3 +14,13 @@ void Action::clearTokens() {
 int Action::getTokenNb() const {
 	return tokenNb;
 }
+
+/*
+Generates a random int between start and end, chosen using a uniform distribution.
+*/
+int random_int(int const start, int const end) {
+	static std::random_device rd;
+	static std::default_random_engine engine(rd());
+	std::uniform_int_distribution<> distribution(start, end);
+	return distribution(engine);
+}

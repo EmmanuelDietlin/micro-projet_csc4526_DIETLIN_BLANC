@@ -3,10 +3,15 @@
 #include "RowingAction.h"
 #include "HealPlayerAction.h"
 #include "RepairBoatAction.h"
+<<<<<<< HEAD
 #include "StormEvent.h"
 #include "WindEvent.h"
 #include <random>
+
+// à enlever après les tests de signals
+=======
 #include <fstream>
+>>>>>>> cad0fbbbc6883c8a8f040c13c1f73a3cf4cd82c6
 #include <iostream>
 
 /*
@@ -25,19 +30,22 @@ Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int 
 	boat = std::make_unique<Boat>(boatHp, boatMaxHp);
 	player = std::make_unique<Player>("Player1", playerHp, playerMaxHp);
 	context = std::make_unique<Context>();
-std::ofstream recap("resources/recap.txt", std::ios::trunc);
-	recapText << "Votre equipage s'est mutine, et vous voila maintenant abandonne sur une barque," <<
-		"en plein milieu de l'ocean. Vous devez tenter de rejoindre l'ile de Timor, situee a" <<
-		" 6700km de votre point de depart, en moins de 47 jours.\n Bonne chance..." << std::endl;
-	recap << recapText.str();
-	recap.close();
-	recapText.str(std::string());
+<<<<<<< HEAD
 	connectDeathBoatToFaçade(boat.get());
 	connectDeathPlayerToFaçade(player.get());
 	eventVector.push_back(std::make_unique<StormEvent>());
 	eventVector.push_back(std::make_unique<WindEvent>());
 	connectStormEventToFaçade((StormEvent *) eventVector[0].get());
 	connectWindEventToFaçade((WindEvent *) eventVector[1].get());
+=======
+	std::ofstream recap("resources/recap.txt", std::ios::trunc);
+	recapText << "Votre equipage s'est mutine, et vous voila maintenant abandonne sur une barque," <<
+		"en plein milieu de l'ocean. Vous devez tenter de rejoindre l'ile de Timor, situee a" <<
+		" 6700km de votre point de depart, en moins de 47 jours.\n Bonne chance..." << std::endl;
+	recap << recapText.str();
+	recap.close();
+	recapText.str(std::string());
+>>>>>>> cad0fbbbc6883c8a8f040c13c1f73a3cf4cd82c6
 }
 
 
@@ -124,17 +132,13 @@ Ecrit également dans un fichier recap.txt le récapitulatif des actions et évènem
 */
 void Façade::nextDay(std::map<TokensType, int>& tokens) {
 	dayCount++;
+<<<<<<< HEAD
 	executeFishingAction(tokens[TokensType::fishingsTokens]);
 	executeRowingAction(tokens[TokensType::rowingTokens]);
 	executeHealingAction(tokens[TokensType::healingTokens]);
 	executeRepairAction(tokens[TokensType::repairTokens]);
 	dailyEvent();
 	fishCount-= fish_eating_number;
-	std::ofstream recap("resources/recap.txt", std::ios::trunc);
-	recap << recapText.str() << std::endl;
-	//Ajouter l'écriture concernant les évents
-	recap.close();
-	recapText.str(std::string());
 	if (fishCount < 0) {
 		player->takeDamage(fishCount * damage_starvation * -1);
 		fishCount = 0;
@@ -142,6 +146,15 @@ void Façade::nextDay(std::map<TokensType, int>& tokens) {
 	if (distanceTravelled >= maxDistance) {
 		victory();
 	}
+=======
+	fishCount-= fish_eating_number;
+	std::ofstream recap("resources/recap.txt", std::ios::trunc);
+	recap << recapText.str() << std::endl;
+	//Ajouter l'écriture concernant les évents
+	recap.close();
+	recapText.str(std::string());
+
+>>>>>>> cad0fbbbc6883c8a8f040c13c1f73a3cf4cd82c6
 }
 
 int Façade::getFishCount() {
@@ -156,6 +169,67 @@ int Façade::getBoatHp() {
 	return boat->getHp();
 }
 
-void newGame() {
+<<<<<<< HEAD
+void Façade::newGame() {
 	//à implémenter
 }
+
+void Façade::deathPlayer() {
+	Façade::defeat();
+}
+
+void Façade::connectDeathPlayerToFaçade(Player* player) {
+	player->deathSignal.connect(this, &Façade::deathPlayer);
+}
+
+void Façade::deathBoat() {
+	Façade::defeat();
+}
+
+void Façade::connectDeathBoatToFaçade(Boat* boat) {
+	boat->deathSignal.connect(this, &Façade::deathBoat);
+}
+
+void Façade::defeat() {
+	*imguiWindow = ImGuiWindow::defeat;
+}
+
+void Façade::victory() {
+	*imguiWindow = ImGuiWindow::victory;
+}
+
+void Façade::dailyEvent() {
+	int probaDailyEvent = random_n_to_m(1, 100);
+	std::cout << probaDailyEvent << std::endl;
+	if (probaDailyEvent <= proba_event) {
+		size_t size = eventVector.size();
+		eventVector[random_n_to_m(0, size - 1)]->execute();
+	}
+}
+
+void Façade::connectStormEventToFaçade(StormEvent* stormEvent) {
+	stormEvent->damageBoatSignal.connect(boat.get(), &Entity::takeDamage);
+	stormEvent->foodLostSignal.connect(this, &Façade::loseFood);
+}
+
+void Façade::connectWindEventToFaçade(WindEvent* windEvent) {
+	windEvent->moveBackSignal.connect(this, &Façade::moveBack);
+}
+
+void Façade::moveBack(int const distance) {
+	distanceTravelled -= distance;
+}
+
+void Façade::loseFood(int const food) {
+	fishCount -= food;
+}
+
+int Façade::random_n_to_m(int const nbMin, int const nbMax)
+{
+	static std::random_device rd;
+	static std::default_random_engine engine(rd());
+	std::uniform_int_distribution<> distribution(nbMin, nbMax);
+	return distribution(engine);
+}
+=======
+>>>>>>> cad0fbbbc6883c8a8f040c13c1f73a3cf4cd82c6

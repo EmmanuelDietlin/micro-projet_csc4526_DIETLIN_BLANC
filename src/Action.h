@@ -1,4 +1,5 @@
 #pragma once
+#include <random>
 
 class Action {
 public:
@@ -9,5 +10,6 @@ public:
 	void clearTokens();
 	int getTokenNb() const ;
 protected:
+	int random_int(int const start, int const end);
 	int tokenNb;
 };

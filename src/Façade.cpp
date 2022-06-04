@@ -159,3 +159,61 @@ int Façade::getBoatHp() {
 void newGame() {
 	//à implémenter
 }
+
+void Façade::deathPlayer() {
+	Façade::defeat();
+}
+
+void Façade::connectDeathPlayerToFaçade(Player* player) {
+	player->deathSignal.connect(this, &Façade::deathPlayer);
+}
+
+void Façade::deathBoat() {
+	Façade::defeat();
+}
+
+void Façade::connectDeathBoatToFaçade(Boat* boat) {
+	boat->deathSignal.connect(this, &Façade::deathBoat);
+}
+
+void Façade::defeat() {
+	*imguiWindow = ImGuiWindow::defeat;
+}
+
+void Façade::victory() {
+	*imguiWindow = ImGuiWindow::victory;
+}
+
+void Façade::dailyEvent() {
+	int probaDailyEvent = random_n_to_m(1, 100);
+	std::cout << probaDailyEvent << std::endl;
+	if (probaDailyEvent <= proba_event) {
+		size_t size = eventVector.size();
+		eventVector[random_n_to_m(0, size - 1)]->execute();
+	}
+}
+
+void Façade::connectStormEventToFaçade(StormEvent* stormEvent) {
+	stormEvent->damageBoatSignal.connect(boat.get(), &Entity::takeDamage);
+	stormEvent->foodLostSignal.connect(this, &Façade::loseFood);
+}
+
+void Façade::connectWindEventToFaçade(WindEvent* windEvent) {
+	windEvent->moveBackSignal.connect(this, &Façade::moveBack);
+}
+
+void Façade::moveBack(int const distance) {
+	distanceTravelled -= distance;
+}
+
+void Façade::loseFood(int const food) {
+	fishCount -= food;
+}
+
+int Façade::random_n_to_m(int const nbMin, int const nbMax)
+{
+	static std::random_device rd;
+	static std::default_random_engine engine(rd());
+	std::uniform_int_distribution<> distribution(nbMin, nbMax);
+	return distribution(engine);
+}

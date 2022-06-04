@@ -157,7 +157,7 @@ int myMain()
             if (SetMenuWindow("Main menu", "Les revoltes", "de la Bounty",
                 "Commencer la partie")) {
                 FadeToBlack(fade_counter);
-                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp);
+                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, &imguiWindow);
                 tokens[TokensType::tokenNbr] = façade->getTokenNbr();
                 tokens[TokensType::remainingTokens] = façade->getTokenNbr();
                 readRecap(recapText);

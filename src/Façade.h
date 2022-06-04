@@ -3,6 +3,7 @@
 #include "Context.h"
 #include <vector>
 #include <map>
+#include <sstream>
 
 const int max_tokens_nb = 5;
 const int starting_fish_number = 2;
@@ -19,6 +20,7 @@ private:
 	std::unique_ptr<Boat> boat;
 	std::unique_ptr<Player> player;
 	std::unique_ptr<Context> context;
+	std::stringstream recapText;
 public:
 	Façade(int const maxDay, int const MaxDistance, int const playerHp, 
 		int const playerMaxHp, int const boatHp, int const boatMaxHp);

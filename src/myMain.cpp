@@ -73,6 +73,13 @@ bool SetMenuWindow(std::string const& title, std::string const& txt1, std::strin
     return false;
 }
 
+void readRecap(std::stringstream& s) {
+    s.str(std::string());   
+    std::ifstream recapFile("resources/recap.txt");
+    s << recapFile.rdbuf();
+    recapFile.close();
+}
+
 
 
 int myMain()
@@ -83,6 +90,8 @@ int myMain()
     sf::Clock deltaClock;
     sf::Clock faderClock;
     ImGuiWindow imguiWindow = ImGuiWindow::mainMenu;
+
+    std::stringstream recapText;
 
     std::unique_ptr<Façade> façade;
     int fade_counter = 256;
@@ -152,6 +161,7 @@ int myMain()
                 façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp);
                 tokens[TokensType::tokenNbr] = façade->getTokenNbr();
                 tokens[TokensType::remainingTokens] = façade->getTokenNbr();
+                readRecap(recapText);
                 imguiWindow = ImGuiWindow::gameWindow1;
             }
             ImGuiYSpacing();
@@ -186,7 +196,7 @@ int myMain()
             ImGuiYSpacing();
 
             if (imguiWindow == ImGuiWindow::gameWindow1) {
-                ImGui::TextWrapped("Texte decrivant les evenements s'etant deroules la journee precedente");
+                ImGui::TextWrapped(recapText.str().c_str());
                 ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);
                 if (ImGui::Button("Page suivante")) {
                     imguiWindow = ImGuiWindow::gameWindow2;
@@ -220,6 +230,8 @@ int myMain()
                     façade->executeRepairAction(tokens[TokensType::repairTokens]);
                     façade->nextDay();
                     FadeToBlack(fade_counter);
+                    readRecap(recapText);
+                    std::cout << recapText.str();
                     imguiWindow = ImGuiWindow::gameWindow1;
                 }
                 ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);

@@ -30,10 +30,10 @@ private:
 	ImGuiWindow* imguiWindow;
 	std::vector<std::shared_ptr<Event>> eventVector;
 	std::stringstream recapText;
-	void connectDeathBoatToFaçade(Boat* boat);
+	void connectDeathBoatToFaçade();
 	void connectStormEventToFaçade(StormEvent* stormEvent);
 	void connectWindEventToFaçade(WindEvent* windEvent);
-	void connectDeathPlayerToFaçade(Player* player);
+	void connectDeathPlayerToFaçade();
 	int random_n_to_m(int const nbMin, int const nbMax);
 public:
 	Façade(int const maxDay, int const MaxDistance, int const playerHp, 
@@ -56,4 +56,6 @@ public:
 	void dailyEvent();
 	void moveBack(int const distance);
 	void loseFood(int const food);
+	vdk::signal<void(void)> victorySignal;
+	vdk::signal<void(void)> defeatSignal;
 };

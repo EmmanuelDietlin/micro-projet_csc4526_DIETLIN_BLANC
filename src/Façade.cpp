@@ -32,12 +32,13 @@ Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int 
 	recap << recapText.str();
 	recap.close();
 	recapText.str(std::string());
-	connectDeathBoatToFaçade(boat.get());
-	connectDeathPlayerToFaçade(player.get());
+	connectDeathBoatToFaçade();
+	connectDeathPlayerToFaçade();
 	eventVector.push_back(std::make_shared<StormEvent>());
-	eventVector.push_back(std::make_shared<WindEvent>());
-	connectStormEventToFaçade((StormEvent *) eventVector[0].get());
-	connectWindEventToFaçade((WindEvent *) eventVector[1].get());
+	eventVector.push_back(std::make_shared<WindEvent>());	
+	connectStormEventToFaçade((StormEvent*)eventVector[0].get());
+	connectWindEventToFaçade((WindEvent*)eventVector[1].get()); 
+
 }
 
 
@@ -169,7 +170,7 @@ void Façade::deathPlayer() {
 	Façade::defeat();
 }
 
-void Façade::connectDeathPlayerToFaçade(Player* player) {
+void Façade::connectDeathPlayerToFaçade() {
 	player->deathSignal.connect(this, &Façade::deathPlayer);
 }
 
@@ -177,7 +178,7 @@ void Façade::deathBoat() {
 	Façade::defeat();
 }
 
-void Façade::connectDeathBoatToFaçade(Boat* boat) {
+void Façade::connectDeathBoatToFaçade() {
 	boat->deathSignal.connect(this, &Façade::deathBoat);
 }
 
@@ -199,13 +200,13 @@ void Façade::dailyEvent() {
 	}
 }
 
-void Façade::connectStormEventToFaçade(StormEvent* stormEvent) {
-	stormEvent->damageBoatSignal.connect(boat.get(), &Entity::takeDamage);
-	stormEvent->foodLostSignal.connect(this, &Façade::loseFood);
+void Façade::connectStormEventToFaçade(StormEvent* s) {
+	s->damageBoatSignal.connect(boat.get(), &Entity::takeDamage);
+	s->foodLostSignal.connect(this, &Façade::loseFood);
 }
 
-void Façade::connectWindEventToFaçade(WindEvent* windEvent) {
-	windEvent->moveBackSignal.connect(this, &Façade::moveBack);
+void Façade::connectWindEventToFaçade(WindEvent* w) {
+	w->moveBackSignal.connect(this, &Façade::moveBack);
 }
 
 void Façade::moveBack(int const distance) {

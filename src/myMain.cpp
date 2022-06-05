@@ -39,7 +39,7 @@ void RemainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
         }
     }
     if (t[type] < 0) {
-        r += (-1) * t[type];
+        r += t[type];
         t[type] = 0;
     }
     if (r < 0) {
@@ -231,12 +231,15 @@ int myMain()
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
 				if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
 					FadeToBlack(fade_counter);
-                    façade->nextDay(tokens);
+                    int ret = façade->nextDay(tokens);
+                    std::cout << ret << std::endl;
 					readRecap(recapText);
-                    if (imguiWindow == ImGuiWindow::gameWindow2) {
+                    if (ret == 0)
                         imguiWindow = ImGuiWindow::gameWindow1;
-                        std::cout << façade->getPlayerHp() << std::endl;
-                    }
+                    else if (ret == 1)
+                        imguiWindow = ImGuiWindow::victory;
+                    else if (ret == -1)
+                        imguiWindow = ImGuiWindow::defeat;
 				}
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);
 				if (ImGui::Button("Page precedente")) {

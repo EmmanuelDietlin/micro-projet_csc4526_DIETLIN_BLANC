@@ -31,8 +31,6 @@ Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int 
 	recap << recapText.str();
 	recap.close();
 	recapText.str(std::string());
-	connectDeathBoatToFaçade();
-	connectDeathPlayerToFaçade();
 	eventVector.push_back(std::make_shared<StormEvent>());
 	eventVector.push_back(std::make_shared<WindEvent>());	
 	connectStormEventToFaçade((StormEvent*)eventVector[0].get());
@@ -128,7 +126,8 @@ Passe au jour suivant. Peut déclencher un évènement choisi de manière aléatoire,
 consomme un certain nombre de poissons.
 Ecrit également dans un fichier recap.txt le récapitulatif des actions et évènements.
 */
-void Façade::nextDay(std::map<TokensType, int>& tokens) {
+int Façade::nextDay(std::map<TokensType, int>& tokens) {
+	int ret_val = 0;
 	recapText.str(std::string());
 	dayCount++;
 	executeFishingAction(tokens[TokensType::fishingsTokens]);
@@ -141,16 +140,18 @@ void Façade::nextDay(std::map<TokensType, int>& tokens) {
 		player->takeDamage(fishCount * damage_starvation * -1);
 		fishCount = 0;
 	}
-	if (distanceTravelled >= maxDistance) {
-		victory();
-	}
+	if (distanceTravelled >= maxDistance)
+		ret_val = 1;
 	if (dayCount > maxDay) {
-		defeat();
+		ret_val = -1;
 	}
+	if (player->getHp() <= 0 || boat->getHp() <= 0)
+		ret_val = -1;
 	std::ofstream recap("resources/recap.txt", std::ios::trunc);
 	recap << recapText.str() << std::endl;
 	std::cout << recapText.str() << std::endl;
 	recap.close();
+	return ret_val;
 }
 
 int Façade::getFishCount() {
@@ -165,29 +166,6 @@ int Façade::getBoatHp() {
 	return boat->getHp();
 }
 
-void Façade::deathPlayer() {
-	Façade::defeat();
-}
-
-void Façade::connectDeathPlayerToFaçade() {
-	player->deathSignal.connect(this, &Façade::deathPlayer);
-}
-
-void Façade::deathBoat() {
-	Façade::defeat();
-}
-
-void Façade::connectDeathBoatToFaçade() {
-	boat->deathSignal.connect(this, &Façade::deathBoat);
-}
-
-void Façade::defeat() {
-	defeatSignal.emit();
-}
-
-void Façade::victory() {
-	victorySignal.emit();
-}
 
 void Façade::dailyEvent() {
 	int probaDailyEvent = random_n_to_m(1, 100);

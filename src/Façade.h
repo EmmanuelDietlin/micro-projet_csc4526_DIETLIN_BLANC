@@ -30,10 +30,8 @@ private:
 	std::unique_ptr<Context> context;
 	std::vector<std::shared_ptr<Event>> eventVector;
 	std::stringstream recapText;
-	void connectDeathBoatToFaçade();
 	void connectStormEventToFaçade(StormEvent* stormEvent);
 	void connectWindEventToFaçade(WindEvent* windEvent);
-	void connectDeathPlayerToFaçade();
 	int random_n_to_m(int const nbMin, int const nbMax);
 public:
 	Façade(int const maxDay, int const MaxDistance, int const playerHp, 
@@ -48,11 +46,7 @@ public:
 	void executeFishingAction(int const tokens);
 	void executeHealingAction(int const tokens);
 	void executeRepairAction(int const tokens);
-	void nextDay(std::map<TokensType, int>& tokens);
-	void deathPlayer();
-	void deathBoat();
-	void defeat();
-	void victory();
+	int nextDay(std::map<TokensType, int>& tokens);
 	void dailyEvent();
 	void moveBack(int const distance);
 	void loseFood(int const food);

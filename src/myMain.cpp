@@ -22,7 +22,7 @@ const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 const int spacing = 10;
 
-ImGuiWindow imguiWindow;
+
 
 void TextCentered(std::string const& s) {
     auto textWidth = ImGui::CalcTextSize(s.c_str()).x;
@@ -37,6 +37,10 @@ void RemainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
         if (it.first != TokensType::tokenNbr && it.first != TokensType::remainingTokens) {
             r -= it.second;
         }
+    }
+    if (t[type] < 0) {
+        r += (-1) * t[type];
+        t[type] = 0;
     }
     if (r < 0) {
         t[type] += r;
@@ -81,13 +85,6 @@ void readRecap(std::stringstream& s) {
     recapFile.close();
 }
 
-void defeat() {
-    imguiWindow = ImGuiWindow::defeat;
-}
-
-void victory() {
-    imguiWindow = ImGuiWindow::victory;
-}
 
 
 
@@ -98,7 +95,7 @@ int myMain()
     sf::Clock globalClock;
     sf::Clock deltaClock;
     sf::Clock faderClock;
-    imguiWindow = ImGuiWindow::mainMenu;
+    auto imguiWindow = ImGuiWindow::mainMenu;
 
     std::stringstream recapText;
 
@@ -171,8 +168,6 @@ int myMain()
                 tokens[TokensType::tokenNbr] = façade->getTokenNbr();
                 tokens[TokensType::remainingTokens] = façade->getTokenNbr();
                 readRecap(recapText);
-                façade->victorySignal.connect(&victory);
-                façade->defeatSignal.connect(&defeat);
                 imguiWindow = ImGuiWindow::gameWindow1;
             }
             ImGuiYSpacing();

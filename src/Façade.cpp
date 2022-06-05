@@ -34,8 +34,8 @@ Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int 
 	recapText.str(std::string());
 	connectDeathBoatToFaçade(boat.get());
 	connectDeathPlayerToFaçade(player.get());
-	eventVector.push_back(std::make_unique<StormEvent>());
-	eventVector.push_back(std::make_unique<WindEvent>());
+	eventVector.push_back(std::make_shared<StormEvent>());
+	eventVector.push_back(std::make_shared<WindEvent>());
 	connectStormEventToFaçade((StormEvent *) eventVector[0].get());
 	connectWindEventToFaçade((WindEvent *) eventVector[1].get());
 }
@@ -194,7 +194,8 @@ void Façade::dailyEvent() {
 	std::cout << probaDailyEvent << std::endl;
 	if (probaDailyEvent <= proba_event) {
 		size_t size = eventVector.size();
-		eventVector[random_n_to_m(0, size - 1)]->execute();
+		context->setEvent(eventVector[random_n_to_m(0, size - 1)]);
+		context->executeEvent();
 	}
 }
 

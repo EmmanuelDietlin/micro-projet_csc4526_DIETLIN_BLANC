@@ -28,7 +28,7 @@ private:
 	std::unique_ptr<Player> player;
 	std::unique_ptr<Context> context;
 	ImGuiWindow* imguiWindow;
-	std::vector<std::unique_ptr<Event>> eventVector;
+	std::vector<std::shared_ptr<Event>> eventVector;
 	std::stringstream recapText;
 public:
 	Façade(int const maxDay, int const MaxDistance, int const playerHp, 

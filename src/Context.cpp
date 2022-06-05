@@ -8,8 +8,8 @@ void Context::setAction(std::unique_ptr<Action> && a) {
 	action = std::move(a);
 }
 
-void Context::setEvent(std::unique_ptr<Event>&& e) {
-	evnt = std::move(e);
+void Context::setEvent(std::shared_ptr<Event> const& e) {
+	evnt = e;
 }
 
 int Context::executeAction() {
@@ -17,5 +17,5 @@ int Context::executeAction() {
 }
 
 void Context::executeEvent() {
-	evnt->execute();
+	evnt.lock()->execute();
 }

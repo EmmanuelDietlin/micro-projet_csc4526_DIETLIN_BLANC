@@ -8,12 +8,16 @@
 #include "signals.h"
 #include "StormEvent.h"
 #include "WindEvent.h"
+#include "UpgradeFishingAction.h"
+#include "UpgradeRowingAction.h"
 
 const int max_tokens_nb = 5;
 const int starting_fish_number = 2;
 const int fish_eating_number = 2;
 const int damage_starvation = 10;
 const int proba_event = 100;
+const int rod_materials_required = 20;
+const int boat_materials_required = 40;
 
 enum class TokensType { tokenNbr, fishingsTokens, rowingTokens, healingTokens, repairTokens, 
 	upgradeFishingToken, upgradeRowingToken, remainingTokens };
@@ -27,7 +31,7 @@ private:
 	int dayCount = 1;
 	int maxDay;
 	int maxDistance;
-	int materials = 0;
+	int materials = 100;
 	int fishingBonus = 0;
 	int rowingBonus = 0;
 	std::unique_ptr<Boat> boat;

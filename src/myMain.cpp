@@ -102,6 +102,7 @@ int myMain()
     bool upgradeFishing = false;
     bool upgradeRowing = false;
 
+
     std::unique_ptr<Façade> façade;
     int fade_counter = 256;
     sf::RectangleShape fader(sf::Vector2f(w_width, w_height));
@@ -237,25 +238,32 @@ int myMain()
                 ImGuiYSpacing();
                 float cursor_y = ImGui::GetCursorPosY();
                 if (ImGui::Checkbox("Ameliorer peche", &upgradeFishing)) {
+                    if ((upgradeRowing && façade->getMaterials() - rod_materials_required - boat_materials_required < 0) ||
+                        (!upgradeRowing && façade->getMaterials() < rod_materials_required)) {
+                        upgradeFishing = false;
+                    }
                     upgradeFishing ? tokens[TokensType::upgradeFishingToken] = 1 : tokens[TokensType::upgradeFishingToken] = 0;
                     RemainingTokens(tokens, TokensType::upgradeFishingToken);
                 }
-                ImGui::Text("Cout : ");
+                ImGui::Text("Cout : %d", rod_materials_required);
                 ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.5f);
                 ImGui::SetCursorPosY(cursor_y);
-                if (ImGui::Checkbox("Améliorer bateau", &upgradeRowing)) {
+                if (ImGui::Checkbox("Ameliorer bateau", &upgradeRowing)) {
+                    if ((upgradeFishing && façade->getMaterials() - rod_materials_required - boat_materials_required < 0) ||
+                        (!upgradeFishing && façade->getMaterials() < boat_materials_required)) {
+                        upgradeRowing = false;
+                    }
                     upgradeRowing ? tokens[TokensType::upgradeRowingToken] = 1 : tokens[TokensType::upgradeRowingToken] = 0;
                     RemainingTokens(tokens, TokensType::upgradeRowingToken);
                 }
                 ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.5f);
-                ImGui::Text("Cout : ");
+                ImGui::Text("Cout : %d", boat_materials_required);
 
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
 				if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
 					FadeToBlack(fade_counter);
                     auto ret = façade->nextDay(tokens);
-                    //std::cout << ret << std::endl;
 					readRecap(recapText);
                     if (ret == Status::onGoing)
                         imguiWindow = ImGuiWindow::gameWindow1;

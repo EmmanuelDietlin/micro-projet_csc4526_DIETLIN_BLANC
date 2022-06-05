@@ -39,7 +39,7 @@ void RemainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
         }
     }
     if (t[type] < 0) {
-        r += (-1) * t[type];
+        r += t[type];
         t[type] = 0;
     }
     if (r < 0) {

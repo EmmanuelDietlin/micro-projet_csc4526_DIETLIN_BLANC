@@ -209,14 +209,14 @@ void Façade::connectWindEventToFaçade(WindEvent* w) {
 }
 
 void Façade::moveBack(int const distance) {
-	distanceTravelled > distance ?  distanceTravelled - distance : 0;
+	distanceTravelled > distance ?  distanceTravelled -= distance : distanceTravelled = 0;
 	recapText << "Un vent violent souffle pendant toute la journee, vous faisant perdre une partie de "
 		<< "votre progression !" << std::endl;
 	recapText << std::endl << "Distance parcourue : -" << distance << "km" << std::endl << std::endl;
 }
 
 void Façade::loseFood(int const food) {
-	fishCount > food ? fishCount - food : 0;
+	fishCount > food ? fishCount -= food : fishCount = 0;
 	recapText << "La tempete fait bringuebaler votre embarcation dans tous les sens, et "
 		<< " une partie de vos provisions tombe par dessus bord !" << std::endl;
 	recapText << std::endl << "Poissons : -" << food << std::endl << std::endl;

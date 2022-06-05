@@ -15,7 +15,8 @@ const int fish_eating_number = 2;
 const int damage_starvation = 10;
 const int proba_event = 100;
 
-enum class TokensType { tokenNbr, fishingsTokens, rowingTokens, healingTokens, repairTokens, remainingTokens };
+enum class TokensType { tokenNbr, fishingsTokens, rowingTokens, healingTokens, repairTokens, 
+	upgradeFishingToken, upgradeRowingToken, remainingTokens };
 enum class Status { onGoing, victory, defeat };
 
 class Façade {
@@ -26,6 +27,9 @@ private:
 	int dayCount = 1;
 	int maxDay;
 	int maxDistance;
+	int materials = 0;
+	int fishingBonus = 0;
+	int rowingBonus = 0;
 	std::unique_ptr<Boat> boat;
 	std::unique_ptr<Player> player;
 	std::unique_ptr<Context> context;
@@ -43,10 +47,13 @@ public:
 	int getFishCount();
 	int getPlayerHp();
 	int getBoatHp();
+	int getMaterials();
 	void executeRowingAction(int const tokens);
 	void executeFishingAction(int const tokens);
 	void executeHealingAction(int const tokens);
 	void executeRepairAction(int const tokens);
+	void executeUpgradeFishingAction(int const tokens);
+	void executeUpgradeRowingAction(int const tokens);
 	Status nextDay(std::map<TokensType, int>& tokens);
 	void dailyEvent();
 	void moveBack(int const distance);

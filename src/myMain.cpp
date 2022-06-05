@@ -99,6 +99,8 @@ int myMain()
     auto imguiWindow = ImGuiWindow::mainMenu;
 
     std::stringstream recapText;
+    bool upgradeFishing = false;
+    bool upgradeRowing = false;
 
     std::unique_ptr<Façade> façade;
     int fade_counter = 256;
@@ -143,6 +145,8 @@ int myMain()
     tokens[TokensType::healingTokens] = 0;
     tokens[TokensType::repairTokens] = 0;
     tokens[TokensType::remainingTokens] = 0;
+    tokens[TokensType::upgradeFishingToken] = 0;
+    tokens[TokensType::upgradeRowingToken] = 0;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -228,6 +232,24 @@ int myMain()
 				}
 				ImGuiYSpacing();
 				ImGui::Text("Poissons : %d", façade->getFishCount());
+                ImGuiYSpacing();
+                ImGui::Text("Materiaux : %d", 0);
+                ImGuiYSpacing();
+                float cursor_y = ImGui::GetCursorPosY();
+                if (ImGui::Checkbox("Ameliorer peche", &upgradeFishing)) {
+                    upgradeFishing ? tokens[TokensType::upgradeFishingToken] = 1 : tokens[TokensType::upgradeFishingToken] = 0;
+                    RemainingTokens(tokens, TokensType::upgradeFishingToken);
+                }
+                ImGui::Text("Cout : ");
+                ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.5f);
+                ImGui::SetCursorPosY(cursor_y);
+                if (ImGui::Checkbox("Améliorer bateau", &upgradeRowing)) {
+                    upgradeRowing ? tokens[TokensType::upgradeRowingToken] = 1 : tokens[TokensType::upgradeRowingToken] = 0;
+                    RemainingTokens(tokens, TokensType::upgradeRowingToken);
+                }
+                ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.5f);
+                ImGui::Text("Cout : ");
+
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
 				if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {

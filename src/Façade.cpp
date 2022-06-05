@@ -168,6 +168,10 @@ int Façade::getBoatHp() {
 	return boat->getHp();
 }
 
+int Façade::getMaterials() {
+	return materials;
+}
+
 
 void Façade::dailyEvent() {
 	int probaDailyEvent = random_n_to_m(1, 100);

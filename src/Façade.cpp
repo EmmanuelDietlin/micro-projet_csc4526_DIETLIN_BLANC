@@ -15,12 +15,11 @@ la distance, la distance à parcourir dans le délai imparti, les points de vie de
 du joueur, les points de vie de départ de l'embarcation.
 */
 Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int const playerMaxHp,
-	int const boatHp, int const boatMaxHp, ImGuiWindow* imguiWindow)
+	int const boatHp, int const boatMaxHp)
 	: action_tokens(max_tokens_nb),
 	fishCount(starting_fish_number), 
 	maxDay(maxDay),
-	maxDistance(maxDistance),
-	imguiWindow(imguiWindow)
+	maxDistance(maxDistance)
 {
 	boat = std::make_unique<Boat>(boatHp, boatMaxHp);
 	player = std::make_unique<Player>("Player1", playerHp, playerMaxHp);
@@ -183,11 +182,11 @@ void Façade::connectDeathBoatToFaçade() {
 }
 
 void Façade::defeat() {
-	*imguiWindow = ImGuiWindow::defeat;
+	defeatSignal.emit();
 }
 
 void Façade::victory() {
-	*imguiWindow = ImGuiWindow::victory;
+	victorySignal.emit();
 }
 
 void Façade::dailyEvent() {

@@ -11,7 +11,7 @@
 #include <iostream>
 #include <memory>
 #include "SFMLOrthogonalLayer.h"
-#include "Façade.h"
+#include "signals.h"
 
 
 const int w_height = 800;
@@ -21,6 +21,8 @@ const int maxDistance = 6700;
 const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 const int spacing = 10;
+
+ImGuiWindow imguiWindow;
 
 void TextCentered(std::string const& s) {
     auto textWidth = ImGui::CalcTextSize(s.c_str()).x;
@@ -79,6 +81,14 @@ void readRecap(std::stringstream& s) {
     recapFile.close();
 }
 
+void defeat() {
+    imguiWindow = ImGuiWindow::defeat;
+}
+
+void victory() {
+    imguiWindow = ImGuiWindow::victory;
+}
+
 
 
 int myMain()
@@ -88,7 +98,7 @@ int myMain()
     sf::Clock globalClock;
     sf::Clock deltaClock;
     sf::Clock faderClock;
-    ImGuiWindow imguiWindow = ImGuiWindow::mainMenu;
+    imguiWindow = ImGuiWindow::mainMenu;
 
     std::stringstream recapText;
 
@@ -157,10 +167,12 @@ int myMain()
             if (SetMenuWindow("Main menu", "Les revoltes", "de la Bounty",
                 "Commencer la partie")) {
                 FadeToBlack(fade_counter);
-                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, &imguiWindow);
+                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp);
                 tokens[TokensType::tokenNbr] = façade->getTokenNbr();
                 tokens[TokensType::remainingTokens] = façade->getTokenNbr();
                 readRecap(recapText);
+                façade->victorySignal.connect(&victory);
+                façade->defeatSignal.connect(&defeat);
                 imguiWindow = ImGuiWindow::gameWindow1;
             }
             ImGuiYSpacing();
@@ -226,8 +238,10 @@ int myMain()
 					FadeToBlack(fade_counter);
                     façade->nextDay(tokens);
 					readRecap(recapText);
-                    imguiWindow = ImGuiWindow::gameWindow1;
-                    std::cout << façade->getPlayerHp() << std::endl;
+                    if (imguiWindow == ImGuiWindow::gameWindow2) {
+                        imguiWindow = ImGuiWindow::gameWindow1;
+                        std::cout << façade->getPlayerHp() << std::endl;
+                    }
 				}
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);
 				if (ImGui::Button("Page precedente")) {
@@ -257,7 +271,6 @@ int myMain()
                 spriteIndex = (spriteIndex + 1) % 4;
                 playerTexture.loadFromImage(sprites[spriteIndex]);
             }
-
             window.clear(sf::Color::Black);
             window.draw(layerBackground);
             window.draw(layerBoat);

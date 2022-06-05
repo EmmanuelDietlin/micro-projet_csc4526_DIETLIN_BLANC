@@ -4,9 +4,9 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include "Façade.h"
 
 enum class ImGuiWindow { mainMenu, gameWindow1, gameWindow2, victory, defeat, informations };
-enum class TokensType { tokenNbr, fishingsTokens, rowingTokens, healingTokens, repairTokens, remainingTokens };
 
 int myMain();
 void TextCentered(std::string const& s);

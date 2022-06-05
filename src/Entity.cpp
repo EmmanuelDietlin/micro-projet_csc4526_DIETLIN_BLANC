@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include <algorithm>
+#include <iostream>
 
 Entity::Entity(int const hp, int const maxHp) : hp(hp), maxHp(maxHp)
 {}

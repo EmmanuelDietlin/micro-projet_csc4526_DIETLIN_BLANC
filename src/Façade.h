@@ -14,7 +14,7 @@ const int max_tokens_nb = 5;
 const int starting_fish_number = 2;
 const int fish_eating_number = 2;
 const int damage_starvation = 10;
-const int proba_event = 100;
+const int proba_event = 20;
 
 class Façade {
 private:
@@ -44,7 +44,6 @@ public:
 	void executeHealingAction(int const tokens);
 	void executeRepairAction(int const tokens);
 	void nextDay(std::map<TokensType, int>& tokens);
-	void newGame();
 	void deathPlayer();
 	void connectDeathPlayerToFaçade(Player* player);
 	void deathBoat();

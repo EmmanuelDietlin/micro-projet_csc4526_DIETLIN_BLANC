@@ -224,10 +224,10 @@ int myMain()
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
 				if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
 					FadeToBlack(fade_counter);
+                    façade->nextDay(tokens);
 					readRecap(recapText);
-					std::cout << recapText.str();
-					imguiWindow = ImGuiWindow::gameWindow1;
-					façade->nextDay(tokens);
+                    imguiWindow = ImGuiWindow::gameWindow1;
+                    std::cout << façade->getPlayerHp() << std::endl;
 				}
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);
 				if (ImGui::Button("Page precedente")) {
@@ -243,7 +243,6 @@ int myMain()
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
 
             ImGui::Begin("Player", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-            //ImGui::Text("Hp : %d/%d", façade.getPlayerHp(), playerBaseHp);
             ImGui::Text("Pv joueur");
             ImGui::ProgressBar((float)façade->getPlayerHp() / (float)playerBaseHp);
             ImGui::Text("Pv bateau");

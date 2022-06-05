@@ -25,7 +25,7 @@ Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int 
 	boat = std::make_unique<Boat>(boatHp, boatMaxHp);
 	player = std::make_unique<Player>("Player1", playerHp, playerMaxHp);
 	context = std::make_unique<Context>();
-std::ofstream recap("resources/recap.txt", std::ios::trunc);
+	std::ofstream recap("resources/recap.txt", std::ios::trunc);
 	recapText << "Votre equipage s'est mutine, et vous voila maintenant abandonne sur une barque," <<
 		"en plein milieu de l'ocean. Vous devez tenter de rejoindre l'ile de Timor, situee a" <<
 		" 6700km de votre point de depart, en moins de 47 jours.\n Bonne chance..." << std::endl;
@@ -60,15 +60,18 @@ void Façade::executeRowingAction(int const tokens) {
 	context->setAction(std::make_unique<RowingAction>(tokens));
 	int d = context->executeAction();
 	distanceTravelled+= d;
-	if (d < 200) {
-		recapText << "Une combinaison de vents defavorables et de mer calme vous ont conduit a ne parcourir qu'une"
-			<< " courte distance, diminuant donc vos chances de parvenir a votre objectif dans le temps imparti..." << std::endl;
+	if (d > 0) {
+		if (d < 200) {
+			recapText << "Une combinaison de vents defavorables et de mer calme vous ont conduit a ne parcourir qu'une"
+				<< " courte distance, diminuant donc vos chances de parvenir a votre objectif dans le temps imparti..." << std::endl;
 		}
-	else {
-		recapText << "Des vents favorables et de bonnes decisions de votre part vous permettent de parcourir une grande distance."
-			<< " A ce rythme, l'objectif sera surement atteint rapidement !" << std::endl;
+		else {
+			recapText << "Des vents favorables et de bonnes decisions de votre part vous permettent de parcourir une grande distance."
+				<< " A ce rythme, l'objectif sera surement atteint rapidement !" << std::endl;
+		}
+		recapText << std::endl << "Distance parcourue : " << d << " km" << std::endl << std::endl;
+
 	}
-	recapText << std::endl << "Distance parcourue : " << d << " km" << std::endl << std::endl;
 }
 
 /*
@@ -78,15 +81,18 @@ void Façade::executeFishingAction(int const tokens) {
 	context->setAction(std::make_unique<FishingAction>(tokens));
 	int f = context->executeAction();
 	fishCount+= f;
-	if (f < 3) {
-		recapText << "Vous avez lance votre ligne dans l'eau, mais la chance ne vous a pas sourit : seuls quelques malheureux"
-			<< " poissons ont mordu a l'appat. Il va sans doute falloir vous rationner..." << std::endl;
+	if (f > 0) {
+		if (f < 3) {
+			recapText << "Vous avez lance votre ligne dans l'eau, mais la chance ne vous a pas sourit : seuls quelques malheureux"
+				<< " poissons ont mordu a l'appat. Il va sans doute falloir vous rationner..." << std::endl;
 		}
-	else {
-		recapText << "La chance vous a sourit : vous n'avez eu qu'a lancer votre ligne dans l'eau, et aussitot de nombreux"
-			<< " poissons se sont jetes dessus ! Sacre festin en perspective !" << std::endl;
+		else {
+			recapText << "La chance vous a sourit : vous n'avez eu qu'a lancer votre ligne dans l'eau, et aussitot de nombreux"
+				<< " poissons se sont jetes dessus ! Sacre festin en perspective !" << std::endl;
+		}
+		recapText << std::endl << "Poissons peches : " << f << std::endl << std::endl;
 	}
-	recapText << std::endl << "Poissons peches : " << f << std::endl << std::endl;
+	
 }
 
 /*
@@ -123,18 +129,14 @@ consomme un certain nombre de poissons.
 Ecrit également dans un fichier recap.txt le récapitulatif des actions et évènements.
 */
 void Façade::nextDay(std::map<TokensType, int>& tokens) {
+	recapText.str(std::string());
 	dayCount++;
 	executeFishingAction(tokens[TokensType::fishingsTokens]);
 	executeRowingAction(tokens[TokensType::rowingTokens]);
 	executeHealingAction(tokens[TokensType::healingTokens]);
 	executeRepairAction(tokens[TokensType::repairTokens]);
 	dailyEvent();
-	fishCount-= fish_eating_number;
-	std::ofstream recap("resources/recap.txt", std::ios::trunc);
-	recap << recapText.str() << std::endl;
-	//Ajouter l'écriture concernant les évents
-	recap.close();
-	recapText.str(std::string());
+	fishCount -= fish_eating_number;
 	if (fishCount < 0) {
 		player->takeDamage(fishCount * damage_starvation * -1);
 		fishCount = 0;
@@ -142,6 +144,13 @@ void Façade::nextDay(std::map<TokensType, int>& tokens) {
 	if (distanceTravelled >= maxDistance) {
 		victory();
 	}
+	if (dayCount > maxDay) {
+		defeat();
+	}
+	std::ofstream recap("resources/recap.txt", std::ios::trunc);
+	recap << recapText.str() << std::endl;
+	std::cout << recapText.str() << std::endl;
+	recap.close();
 }
 
 int Façade::getFishCount() {
@@ -154,10 +163,6 @@ int Façade::getPlayerHp() {
 
 int Façade::getBoatHp() {
 	return boat->getHp();
-}
-
-void newGame() {
-	//à implémenter
 }
 
 void Façade::deathPlayer() {
@@ -203,11 +208,17 @@ void Façade::connectWindEventToFaçade(WindEvent* windEvent) {
 }
 
 void Façade::moveBack(int const distance) {
-	distanceTravelled -= distance;
+	distanceTravelled > distance ?  distanceTravelled - distance : 0;
+	recapText << "Un vent violent souffle pendant toute la journee, vous faisant perdre une partie de "
+		<< "votre progression !" << std::endl;
+	recapText << std::endl << "Distance parcourue : -" << distance << "km" << std::endl << std::endl;
 }
 
 void Façade::loseFood(int const food) {
-	fishCount -= food;
+	fishCount > food ? fishCount - food : 0;
+	recapText << "La tempete fait bringuebaler votre embarcation dans tous les sens, et "
+		<< " une partie de vos provisions tombe par dessus bord !" << std::endl;
+	recapText << std::endl << "Poissons : -" << food << std::endl << std::endl;
 }
 
 int Façade::random_n_to_m(int const nbMin, int const nbMax)

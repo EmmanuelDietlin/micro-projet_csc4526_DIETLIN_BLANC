@@ -127,8 +127,8 @@ Passe au jour suivant. Peut déclencher un évènement choisi de manière aléatoire,
 consomme un certain nombre de poissons.
 Ecrit également dans un fichier recap.txt le récapitulatif des actions et évènements.
 */
-int Façade::nextDay(std::map<TokensType, int>& tokens) {
-	int ret_val = 0;
+Status Façade::nextDay(std::map<TokensType, int>& tokens) {
+	auto status = Status::onGoing;
 	recapText.str(std::string());
 	dayCount++;
 	executeFishingAction(tokens[TokensType::fishingsTokens]);
@@ -143,17 +143,17 @@ int Façade::nextDay(std::map<TokensType, int>& tokens) {
 		fishCount = 0;
 	}
 	if (distanceTravelled >= maxDistance)
-		ret_val = 1;
+		status = Status::victory;
 	if (dayCount > maxDay) {
-		ret_val = -1;
+		status = Status::defeat;
 	}
 	if (player->getHp() <= 0 || boat->getHp() <= 0)
-		ret_val = -1;
+		status = Status::defeat;
 	std::ofstream recap("resources/recap.txt", std::ios::trunc);
 	recap << recapText.str() << std::endl;
 	std::cout << recapText.str() << std::endl;
 	recap.close();
-	return ret_val;
+	return status;
 }
 
 int Façade::getFishCount() {

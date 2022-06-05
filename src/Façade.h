@@ -16,6 +16,7 @@ const int damage_starvation = 10;
 const int proba_event = 100;
 
 enum class TokensType { tokenNbr, fishingsTokens, rowingTokens, healingTokens, repairTokens, remainingTokens };
+enum class Status { onGoing, victory, defeat };
 
 class Façade {
 private:
@@ -46,10 +47,8 @@ public:
 	void executeFishingAction(int const tokens);
 	void executeHealingAction(int const tokens);
 	void executeRepairAction(int const tokens);
-	int nextDay(std::map<TokensType, int>& tokens);
+	Status nextDay(std::map<TokensType, int>& tokens);
 	void dailyEvent();
 	void moveBack(int const distance);
 	void loseFood(int const food);
-	vdk::signal<void(void)> victorySignal;
-	vdk::signal<void(void)> defeatSignal;
 };

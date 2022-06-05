@@ -88,6 +88,7 @@ void readRecap(std::stringstream& s) {
 
 
 
+
 int myMain()
 {
     sf::RenderWindow window(sf::VideoMode(w_width, w_height), "SFML ");
@@ -231,14 +232,14 @@ int myMain()
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
 				if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
 					FadeToBlack(fade_counter);
-                    int ret = façade->nextDay(tokens);
-                    std::cout << ret << std::endl;
+                    auto ret = façade->nextDay(tokens);
+                    //std::cout << ret << std::endl;
 					readRecap(recapText);
-                    if (ret == 0)
+                    if (ret == Status::onGoing)
                         imguiWindow = ImGuiWindow::gameWindow1;
-                    else if (ret == 1)
+                    else if (ret == Status::victory)
                         imguiWindow = ImGuiWindow::victory;
-                    else if (ret == -1)
+                    else if (ret == Status::defeat)
                         imguiWindow = ImGuiWindow::defeat;
 				}
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);

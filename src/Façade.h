@@ -30,6 +30,11 @@ private:
 	ImGuiWindow* imguiWindow;
 	std::vector<std::shared_ptr<Event>> eventVector;
 	std::stringstream recapText;
+	void connectDeathBoatToFaçade(Boat* boat);
+	void connectStormEventToFaçade(StormEvent* stormEvent);
+	void connectWindEventToFaçade(WindEvent* windEvent);
+	void connectDeathPlayerToFaçade(Player* player);
+	int random_n_to_m(int const nbMin, int const nbMax);
 public:
 	Façade(int const maxDay, int const MaxDistance, int const playerHp, 
 		int const playerMaxHp, int const boatHp, int const boatMaxHp, ImGuiWindow* imguiWindow);
@@ -45,15 +50,10 @@ public:
 	void executeRepairAction(int const tokens);
 	void nextDay(std::map<TokensType, int>& tokens);
 	void deathPlayer();
-	void connectDeathPlayerToFaçade(Player* player);
 	void deathBoat();
-	void connectDeathBoatToFaçade(Boat* boat);
 	void defeat();
 	void victory();
 	void dailyEvent();
-	void connectStormEventToFaçade(StormEvent* stormEvent);
-	void connectWindEventToFaçade(WindEvent* windEvent);
 	void moveBack(int const distance);
 	void loseFood(int const food);
-	int random_n_to_m(int const nbMin, int const nbMax);
 };

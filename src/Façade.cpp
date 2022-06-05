@@ -79,6 +79,7 @@ void Façade::executeFishingAction(int const tokens) {
 	context->setAction(std::make_unique<FishingAction>(tokens));
 	int f = context->executeAction();
 	fishCount+= f;
+	std::cout << fishCount << std::endl;
 	if (f > 0) {
 		if (f < 3) {
 			recapText << "Vous avez lance votre ligne dans l'eau, mais la chance ne vous a pas sourit : seuls quelques malheureux"
@@ -136,6 +137,7 @@ int Façade::nextDay(std::map<TokensType, int>& tokens) {
 	executeRepairAction(tokens[TokensType::repairTokens]);
 	dailyEvent();
 	fishCount -= fish_eating_number;
+	std::cout << fishCount << std::endl;
 	if (fishCount < 0) {
 		player->takeDamage(fishCount * damage_starvation * -1);
 		fishCount = 0;
@@ -195,6 +197,7 @@ void Façade::moveBack(int const distance) {
 
 void Façade::loseFood(int const food) {
 	fishCount > food ? fishCount - food : 0;
+	std::cout << fishCount << std::endl;
 	recapText << "La tempete fait bringuebaler votre embarcation dans tous les sens, et "
 		<< " une partie de vos provisions tombe par dessus bord !" << std::endl;
 	recapText << std::endl << "Poissons : -" << food << std::endl << std::endl;

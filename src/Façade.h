@@ -32,7 +32,7 @@ private:
 	int dayCount = 1;
 	int maxDay;
 	int maxDistance;
-	std::atomic<int> materials = 10;
+	std::atomic<int> materials;
 	int fishingBonus = 0;
 	int rowingBonus = 0;
 	std::unique_ptr<Boat> boat;
@@ -45,7 +45,7 @@ private:
 	int random_n_to_m(int const nbMin, int const nbMax);
 public:
 	Façade(int const maxDay, int const MaxDistance, int const playerHp, 
-		int const playerMaxHp, int const boatHp, int const boatMaxHp);
+		int const playerMaxHp, int const boatHp, int const boatMaxHp, int const materials);
 	int getTokenNbr();
 	int getDistanceTravelled();
 	int getDayCount();
@@ -65,4 +65,5 @@ public:
 	void dailyEvent();
 	void moveBack(int const distance);
 	void loseFood(int const food);
+	
 };

@@ -21,6 +21,7 @@ const int maxDistance = 6700;
 const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 const int spacing = 10;
+const int baseMaterialNbr = 10;
 
 
 
@@ -185,7 +186,7 @@ int myMain()
             if (SetMenuWindow("Main menu", "Les revoltes", "de la Bounty",
                 "Commencer la partie")) {
                 FadeToBlack(fade_counter);
-                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp);
+                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterialNbr);
                 tokens[TokensType::tokenNbr] = façade->getTokenNbr();
                 tokens[TokensType::remainingTokens] = façade->getTokenNbr();
                 readRecap(recapText);

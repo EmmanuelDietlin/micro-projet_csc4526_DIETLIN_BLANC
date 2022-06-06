@@ -15,11 +15,12 @@ la distance, la distance à parcourir dans le délai imparti, les points de vie de
 du joueur, les points de vie de départ de l'embarcation.
 */
 Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int const playerMaxHp,
-	int const boatHp, int const boatMaxHp)
+	int const boatHp, int const boatMaxHp, int const materials)
 	: action_tokens(max_tokens_nb),
 	fishCount(starting_fish_number), 
 	maxDay(maxDay),
-	maxDistance(maxDistance)
+	maxDistance(maxDistance),
+	materials(materials)
 {
 	boat = std::make_unique<Boat>(boatHp, boatMaxHp);
 	player = std::make_unique<Player>("Player1", playerHp, playerMaxHp);
@@ -35,7 +36,6 @@ Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int 
 	eventVector.push_back(std::make_shared<WindEvent>());	
 	connectStormEventToFaçade((StormEvent*)eventVector[0].get());
 	connectWindEventToFaçade((WindEvent*)eventVector[1].get()); 
-
 }
 
 
@@ -136,12 +136,12 @@ Status Façade::nextDay(std::map<TokensType, int>& tokens) {
 	auto status = Status::onGoing;
 	recapText.str(std::string());
 	dayCount++;
-	executeFishingAction(tokens[TokensType::fishingsTokens]);
-	executeRowingAction(tokens[TokensType::rowingTokens]);
-	executeHealingAction(tokens[TokensType::healingTokens]);
-	executeRepairAction(tokens[TokensType::repairTokens]);
-	executeUpgradeFishingAction(tokens[TokensType::upgradeFishingToken]);
-	executeUpgradeRowingAction(tokens[TokensType::upgradeRowingToken]);
+	if (tokens[TokensType::fishingsTokens]) executeFishingAction(tokens[TokensType::fishingsTokens]);
+	if (tokens[TokensType::rowingTokens]) executeRowingAction(tokens[TokensType::rowingTokens]);
+	if (tokens[TokensType::healingTokens]) executeHealingAction(tokens[TokensType::healingTokens]);
+	if (tokens[TokensType::repairTokens]) executeRepairAction(tokens[TokensType::repairTokens]);
+	if (tokens[TokensType::upgradeFishingToken]) executeUpgradeFishingAction(tokens[TokensType::upgradeFishingToken]);
+	if (tokens[TokensType::upgradeRowingToken]) executeUpgradeRowingAction(tokens[TokensType::upgradeRowingToken]);
 	dailyEvent();
 	fishCount.fetch_sub(fish_eating_number);
 	std::cout << fishCount << std::endl;

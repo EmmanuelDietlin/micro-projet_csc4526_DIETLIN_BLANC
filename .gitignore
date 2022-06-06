@@ -6,6 +6,8 @@ build
 .idea
 cmake-build-debug
 
+*.orig
+
 # User-specific files
 *.rsuser
 *.suo

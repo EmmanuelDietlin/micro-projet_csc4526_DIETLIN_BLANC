@@ -135,7 +135,7 @@ int myMain()
     playerTexture.loadFromImage(sprites[0]);
     int spriteIndex = 0;
     sf::RectangleShape player(sf::Vector2f(70, 70));
-    player.setPosition(sf::Vector2f(710, 390));
+    player.setPosition(sf::Vector2f(720, 390));
     player.setTexture(&playerTexture);
 
     auto spriteClock = globalClock.getElapsedTime();
@@ -146,6 +146,8 @@ int myMain()
     MapLayer layerBackground(map, 0);
     MapLayer layerBoat(map, 1);
     MapLayer layerForeground(map, 2);
+    MapLayer layerRowingUpgrade(map, 4);
+    MapLayer layerFishingUpgrade(map, 5);
 
     std::map<TokensType, int> tokens;
     tokens[TokensType::tokenNbr] = 0;
@@ -270,10 +272,14 @@ int myMain()
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
 				if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
+                    std::cout << "upgradeRowing : " << tokens[TokensType::upgradeRowingToken] << std::endl;
+                    std::cout << "upgradeFishing : " << tokens[TokensType::upgradeFishingToken] << std::endl;
 					FadeToBlack(fade_counter);
                     auto ret = façade->nextDay(tokens);
 					readRecap(recapText);
                     resetTokens(tokens);
+                    upgradeFishing = false;
+                    upgradeRowing = false;
                     if (ret == Status::onGoing)
                         imguiWindow = ImGuiWindow::gameWindow1;
                     else if (ret == Status::victory)
@@ -290,7 +296,7 @@ int myMain()
 			ImGui::End();
 
 
-            ImGui::SetNextWindowPos(sf::Vector2f(650, 300));
+            ImGui::SetNextWindowPos(sf::Vector2f(650, 290));
             ImGui::SetNextWindowSize(sf::Vector2f(150, 100));
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
 
@@ -313,6 +319,8 @@ int myMain()
             window.draw(layerBackground);
             window.draw(layerBoat);
             window.draw(layerForeground);
+            if (façade->getFishingUpgradeStatus()) window.draw(layerFishingUpgrade);
+            if (façade->getRowingUpgradeStatus()) window.draw(layerRowingUpgrade);
             window.draw(player);
 
             ImGui::SFML::Render(window);

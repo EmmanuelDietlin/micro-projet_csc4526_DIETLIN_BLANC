@@ -10,12 +10,13 @@
 #include "WindEvent.h"
 #include "UpgradeFishingAction.h"
 #include "UpgradeRowingAction.h"
+#include <atomic>
 
 const int max_tokens_nb = 5;
 const int starting_fish_number = 2;
 const int fish_eating_number = 2;
 const int damage_starvation = 10;
-const int proba_event = 30;
+const int proba_event = 100;
 const int rod_materials_required = 20;
 const int boat_materials_required = 40;
 
@@ -26,12 +27,12 @@ enum class Status { onGoing, victory, defeat };
 class Façade {
 private:
 	int action_tokens;
-	int fishCount;
-	int distanceTravelled = 0;
+	std::atomic<int> fishCount;
+	std::atomic<int> distanceTravelled = 0;
 	int dayCount = 1;
 	int maxDay;
 	int maxDistance;
-	int materials = 5;
+	std::atomic<int> materials = 100;
 	int fishingBonus = 0;
 	int rowingBonus = 0;
 	std::unique_ptr<Boat> boat;
@@ -52,6 +53,8 @@ public:
 	int getPlayerHp();
 	int getBoatHp();
 	int getMaterials();
+	bool getRowingUpgradeStatus();
+	bool getFishingUpgradeStatus();
 	void executeRowingAction(int const tokens);
 	void executeFishingAction(int const tokens);
 	void executeHealingAction(int const tokens);

@@ -15,3 +15,9 @@ leeor_net https://opengameart.org/content/flare-effect
 
 Beach :
 sraye : https://sraye.itch.io/distant-places-background-pack
+
+Raft:
+Sevarihk : https://opengameart.org/content/animated-pixel-art-raft-sprite
+
+Fish Rod:
+Craftpix.net : https://opengameart.org/content/fishing-game-assets-pixel-art

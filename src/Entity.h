@@ -1,9 +1,10 @@
 #pragma once
 #include "signals.h"
+#include <atomic>
 
 class Entity {
 private:
-	int hp;
+	std::atomic<int> hp;
 	int maxHp;
 public:
 	explicit Entity(int const hp, int const maxHp);

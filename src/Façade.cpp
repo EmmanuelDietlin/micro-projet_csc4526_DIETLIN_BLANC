@@ -60,7 +60,7 @@ void Façade::executeRowingAction(int const tokens) {
 		context->setAction(std::make_unique<RowingAction>(tokens));
 		d += context->executeAction();
 	}
-	distanceTravelled+= d;
+	distanceTravelled.fetch_add(d);
 	if (d > 0) {
 		if (d < 200) {
 			recapText << "Une combinaison de vents defavorables et de mer calme vous ont conduit a ne parcourir qu'une"
@@ -84,7 +84,7 @@ void Façade::executeFishingAction(int const tokens) {
 		context->setAction(std::make_unique<FishingAction>(tokens));
 		f = context->executeAction();
 	}
-	fishCount+= f;
+	fishCount.fetch_add(f);
 	if (f > 0) {
 		if (f < 3) {
 			recapText << "Vous avez lance votre ligne dans l'eau, mais la chance ne vous a pas sourit : seuls quelques malheureux"
@@ -143,7 +143,7 @@ Status Façade::nextDay(std::map<TokensType, int>& tokens) {
 	executeUpgradeFishingAction(tokens[TokensType::upgradeFishingToken]);
 	executeUpgradeRowingAction(tokens[TokensType::upgradeRowingToken]);
 	dailyEvent();
-	fishCount -= fish_eating_number;
+	fishCount.fetch_sub(fish_eating_number);
 	std::cout << fishCount << std::endl;
 	if (fishCount < 0) {
 		player->takeDamage(fishCount * damage_starvation * -1);
@@ -200,14 +200,14 @@ void Façade::connectWindEventToFaçade(WindEvent* w) {
 }
 
 void Façade::moveBack(int const distance) {
-	distanceTravelled > distance ?  distanceTravelled - distance : 0;
+	distanceTravelled > distance ?  distanceTravelled.fetch_sub(distance) : 0;
 	recapText << "Un vent violent souffle pendant toute la journee, vous faisant perdre une partie de "
 		<< "votre progression !" << std::endl;
 	recapText << std::endl << "Distance parcourue : -" << distance << "km" << std::endl << std::endl;
 }
 
 void Façade::loseFood(int const food) {
-	fishCount > food ? fishCount - food : 0;
+	fishCount > food ? fishCount.fetch_sub(food) : 0;
 	std::cout << fishCount << std::endl;
 	recapText << "La tempete fait bringuebaler votre embarcation dans tous les sens, et "
 		<< " une partie de vos provisions tombe par dessus bord !" << std::endl;
@@ -223,19 +223,19 @@ int Façade::random_n_to_m(int const nbMin, int const nbMax)
 }
 
 void Façade::executeUpgradeFishingAction(int const tokens) {
-	if (tokens > 0 || materials >= rod_materials_required) {
-		materials -= rod_materials_required;
+	if (tokens > 0 && materials >= rod_materials_required) {
+		materials.fetch_sub(rod_materials_required);
 		context->setAction(std::make_unique<UpgradeFishingAction>(tokens));
 		fishingBonus += context->executeAction();
-		recapText << "Avec les materiaux que vous avez recuperes, vous avez pu fabriquer un filet"
-			<< " de peche. Cela vous permettra de recolter plus de poisson !" << std::endl;
-		recapText << std::endl << "Filet + 1" << std::endl << std::endl;
+		recapText << "Avec les materiaux que vous avez recuperes, vous avez pu fabriquer une canne "
+			<< " a peche. Cela vous permettra de recolter plus de poisson !" << std::endl;
+		recapText << std::endl << "Canne a peche + 1" << std::endl << std::endl;
 	}
 }
 
 void Façade::executeUpgradeRowingAction(int const tokens) {
 	if (tokens > 0 && materials >= boat_materials_required) {
-		materials -= boat_materials_required;
+		materials.fetch_sub(boat_materials_required);
 		context->setAction(std::make_unique<UpgradeRowingAction>(tokens));
 		rowingBonus += context->executeAction();
 		std::cout << rowingBonus << std::endl;
@@ -243,4 +243,12 @@ void Façade::executeUpgradeRowingAction(int const tokens) {
 			<< " naviguer. Vous pourrez parcourir plus de distance avec votre barque !" << std::endl;
 		recapText << std::endl << "Bateau ameliore" << std::endl << std::endl;
 	}
+}
+
+bool Façade::getRowingUpgradeStatus() {
+	return rowingBonus > 0;
+}
+
+bool Façade::getFishingUpgradeStatus() {
+	return fishingBonus > 0;
 }

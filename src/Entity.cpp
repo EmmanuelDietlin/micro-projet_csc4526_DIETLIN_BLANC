@@ -6,11 +6,11 @@ Entity::Entity(int const hp, int const maxHp) : hp(hp), maxHp(maxHp)
 {}
 
 void Entity::takeDamage(int const dmg) {
-	hp -= dmg;
+	hp.fetch_sub(dmg);
 }
 
 void Entity::heal(int const heal) {
-	hp = std::min(hp + heal, maxHp);
+	hp > (maxHp - heal) ? hp = maxHp : hp.fetch_add(heal);
 }
 
 int Entity::getHp() {

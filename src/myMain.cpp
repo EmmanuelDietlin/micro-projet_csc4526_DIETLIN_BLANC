@@ -85,6 +85,14 @@ void readRecap(std::stringstream& s) {
     recapFile.close();
 }
 
+void resetTokens(std::map<TokensType, int>& t) {
+    for (auto it = t.begin(); it != t.end(); it++) {
+        if (it->first != TokensType::tokenNbr && it->first != TokensType::remainingTokens)
+            it->second = 0;
+    }
+    t[TokensType::remainingTokens] = t[TokensType::tokenNbr];
+}
+
 
 
 
@@ -234,30 +242,30 @@ int myMain()
 				ImGuiYSpacing();
 				ImGui::Text("Poissons : %d", façade->getFishCount());
                 ImGuiYSpacing();
-                ImGui::Text("Materiaux : %d", 0);
+                ImGui::Text("Materiaux : %d", façade->getMaterials());
                 ImGuiYSpacing();
                 float cursor_y = ImGui::GetCursorPosY();
                 if (ImGui::Checkbox("Ameliorer peche", &upgradeFishing)) {
                     if ((upgradeRowing && façade->getMaterials() - rod_materials_required - boat_materials_required < 0) ||
-                        (!upgradeRowing && façade->getMaterials() < rod_materials_required)) {
+                        (!upgradeRowing && façade->getMaterials() < rod_materials_required) || (tokens[TokensType::remainingTokens] == 0)) {
                         upgradeFishing = false;
                     }
                     upgradeFishing ? tokens[TokensType::upgradeFishingToken] = 1 : tokens[TokensType::upgradeFishingToken] = 0;
                     RemainingTokens(tokens, TokensType::upgradeFishingToken);
                 }
-                ImGui::Text("Cout : %d", rod_materials_required);
+                ImGui::Text("%d materiaux + \n1 jeton", rod_materials_required);
                 ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.5f);
                 ImGui::SetCursorPosY(cursor_y);
                 if (ImGui::Checkbox("Ameliorer bateau", &upgradeRowing)) {
                     if ((upgradeFishing && façade->getMaterials() - rod_materials_required - boat_materials_required < 0) ||
-                        (!upgradeFishing && façade->getMaterials() < boat_materials_required)) {
+                        (!upgradeFishing && façade->getMaterials() < boat_materials_required) || (tokens[TokensType::remainingTokens] == 0)) {
                         upgradeRowing = false;
                     }
                     upgradeRowing ? tokens[TokensType::upgradeRowingToken] = 1 : tokens[TokensType::upgradeRowingToken] = 0;
                     RemainingTokens(tokens, TokensType::upgradeRowingToken);
                 }
                 ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.5f);
-                ImGui::Text("Cout : %d", boat_materials_required);
+                ImGui::Text("%d materiaux + \n1 jeton", boat_materials_required);
 
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
@@ -265,6 +273,7 @@ int myMain()
 					FadeToBlack(fade_counter);
                     auto ret = façade->nextDay(tokens);
 					readRecap(recapText);
+                    resetTokens(tokens);
                     if (ret == Status::onGoing)
                         imguiWindow = ImGuiWindow::gameWindow1;
                     else if (ret == Status::victory)

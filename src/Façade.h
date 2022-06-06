@@ -32,7 +32,7 @@ private:
 	int dayCount = 1;
 	int maxDay;
 	int maxDistance;
-	std::atomic<int> materials = 100;
+	std::atomic<int> materials = 10;
 	int fishingBonus = 0;
 	int rowingBonus = 0;
 	std::unique_ptr<Boat> boat;

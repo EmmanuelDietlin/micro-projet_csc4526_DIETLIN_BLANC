@@ -8,6 +8,8 @@
 
 enum class ImGuiWindow { mainMenu, gameWindow1, gameWindow2, victory, defeat, informations };
 
+
+
 int myMain();
 void TextCentered(std::string const& s);
 void RemainingTokens(std::map<TokensType, int>& t, TokensType const& type);

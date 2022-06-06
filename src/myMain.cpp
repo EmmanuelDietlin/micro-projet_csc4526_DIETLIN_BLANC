@@ -66,12 +66,12 @@ bool SetMenuWindow(std::string const& title, std::string const& txt1, std::strin
 	ImGui::Begin(title.c_str(), NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
 		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
 
-	ImGui::SetCursorPosY(w_height * 0.2f);
+	ImGui::SetCursorPosY(w_height * 0.1f);
 	ImGui::SetWindowFontScale(5);
 	TextCentered(txt1);
 	TextCentered(txt2);
 	ImGui::SetWindowFontScale(1.3f);
-	ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 50));
+	ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 100));
 	if (ImGui::Button(b_label.c_str(), sf::Vector2f(200, 100))) {
 		return true;
 	}
@@ -109,6 +109,11 @@ int myMain()
     std::stringstream recapText;
     bool upgradeFishing = false;
     bool upgradeRowing = false;
+
+    std::stringstream infos;
+    std::ifstream infoFile("resources/readme.txt");
+    infos << infoFile.rdbuf();
+    infoFile.close();
 
 
     std::unique_ptr<Façade> façade;
@@ -196,9 +201,16 @@ int myMain()
             }
             ImGuiYSpacing();
             ImGui::SetCursorPosX(w_width / 2 - 100);
+            if (ImGui::Button("Informations", sf::Vector2f(200, 100))) {
+                FadeToBlack(fade_counter);
+                imguiWindow = ImGuiWindow::informations;
+            }
+            ImGuiYSpacing();
+            ImGui::SetCursorPosX(w_width / 2 - 100);
             if (ImGui::Button("Quitter le jeu", sf::Vector2f(200, 100))) {
                 window.close();
             }
+            
             ImGui::End();
             ImGui::PopStyleColor(2);
             window.draw(mainMenuLayer1);
@@ -348,7 +360,27 @@ int myMain()
             ImGui::SFML::Render(window);
         }
         else if (imguiWindow == ImGuiWindow::informations) {
-            //A implémenter
+            ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0.5f, 0.5f));
+            ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
+            ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
+            ImGui::Begin("Informations", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
+                | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
+
+            ImGui::SetCursorPosY(w_height * 0.1f);
+            ImGui::SetWindowFontScale(5);
+            ImGuiYSpacing();
+            TextCentered("Informations");
+            ImGui::SetWindowFontScale(1.3f);
+            ImGui::TextWrapped(infos.str().c_str());
+            ImGuiYSpacing();
+            ImGui::SetCursorPosX(w_width / 2 - 100);
+            if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+                imguiWindow = ImGuiWindow::mainMenu;
+            }
+            ImGui::End();
+            ImGui::PopStyleColor(2);
+            ImGui::SFML::Render(window);
         }
 
         if (faderClock.getElapsedTime() > sf::seconds(0.005f) && fade_counter < 256) {

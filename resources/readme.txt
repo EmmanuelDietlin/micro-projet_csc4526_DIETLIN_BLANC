@@ -1,8 +1,13 @@
-Rowboat :
-Created by Daniel Eddeland: https://opengameart.org/node/11117
+Jeu developpe par Emmanuel DIETLIN et Ludovic BLANC. Il s'inspire de l'oeuvre de Jules Verne
+"Les revoltes de la Bounty". 
 
-Ocean background :
-Created by KnoblePersona https://opengameart.org/content/ocean-background
+Credits:
+
+Rowboat : 
+Daniel Eddeland: https://opengameart.org/node/11117
+
+Ocean background : 
+KnoblePersona https://opengameart.org/content/ocean-background
 
 Character:
 Craftpix.net : https://craftpix.net/file-licenses/

@@ -6,7 +6,7 @@ class Entity {
 private:
 	std::atomic<int> hp;
 	int maxHp;
-public:
+protected:
 	explicit Entity(int const hp, int const maxHp);
 	void takeDamage(int const dmg);
 	void heal(int const heal);

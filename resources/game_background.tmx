@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="left-up" width="64" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="1">
+<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="left-up" width="64" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="1">
  <tileset firstgid="1" source="map_assets/ocean.tsx"/>
  <tileset firstgid="391" source="map_assets/boat.tsx"/>
  <tileset firstgid="511" source="map_assets/ocean_16x8.tsx"/>
@@ -8,6 +8,8 @@
  <tileset firstgid="3011" source="map_assets/flare.tsx"/>
  <tileset firstgid="3075" source="map_assets/sail.tsx"/>
  <tileset firstgid="3156" source="map_assets/fish_rod.tsx"/>
+ <tileset firstgid="3157" source="map_assets/sail_boat.tsx"/>
+ <tileset firstgid="3237" source="map_assets/islands.tsx"/>
  <layer id="1" name="ocean" width="64" height="45">
   <data encoding="base64" compression="zlib">
    eJzt1VOUXVcABuC50cS2bduYycS2bdtWG5RJG9QIaiNsk9pGUjepG9QMvrzOyuOs6Vmd/fA93Ptw/v2ff691YnFxcelITwYykol4MpOFrGQjOznISS5yk4e85CM/BShIIQpThKIUozglKEkpSlOGssQico5ylKcCFalEZapQlWpUpwY1qUVt6lCXetSnAQ1pRGOa0JRmNL9E36icI+wf9g/7h/3D/mH/sH/YP+wf9g/7h/1T+r0nz43KOcL9T517lzz3/3D/U3rD1HheSr73lN4wNZ7Xgpa0ojVtSCCRtiTRjvZ0oCOd6EwXutKN7vSgJ73oTR/60o/+DGAggyKUO5ghDGUYwxnBSEYxmjGMZRzjmcBEJjGZKUxlGtOZwUxmMZs5zGUe81kQodyFLGIxS1jKMpazgpWsYjVrWMs6LuNy1rOBjWziCq7kKq7mGq5lM1u4jusjlLuVbWxnBzdwIzdxM7dwK7dxO3dwJzvZxW72cBd3cw/3ch/38wAP8hAP8wiPRij3MR7nCZ5kL/vYzwEOcoineJrDHOEZnuU5nucFXuQlXuYVXuU1XucN3uQt3o5Q7ju8y3u8zwd8yFGO8REf8wmf8hmf8wVfcpwTfMXXfMO3fMf3/MCPnOQUpzkTodyf+Jlf+JXf+J0/+JO/+Jt/+JeznOM8Fz+oMdKRngxkJBPxZCYLWclGdnKQMxad3Fz+y00e8pKP/BSgIIUoTBGKUozilKAkpShNGcpSjvJUoCKVqEwVqlKN6rHo5NagJrWoTR3qUo/6NKAhjWhME5rSjOa0oCWtaE0bEkikLUm0oz0d6EinCOV2pgtd6UZ3etCTXvSmD33pR38GMJBBDGYIQxnGcEYwklGMZgxjGcd4JkQodyKTmMwUpjKN6cxgJrOYzRzmMo/5LGAhi1jMEpayjOWsYCWrWM0a1rLuP8yNyjkulZka50j+O631T+v7h/6hf+gf+of+oX/oH/qH/qF/6J92+18AfRSWKQ==
@@ -28,14 +30,24 @@
    eJztmUsOwjAMRNlz/8sAbUpPRheNZEVpEnsmqPksZgFSS549GSN5ez4e30O70FZJi1IvQO9Dn4ArptKzeIawVhrVrldJ7Xxd3Cn5XYmQM2nrx/RayOl/Q+snlhBvp85Xck53UZ8ctwMUvhfxUaqvJYp5q0YGpXiZmboqe7FH+lIjg3K8SJbKjEDeoz1zqVg+YWWshcG/5ypDatxv9D74M/se5LJB3gXtHUr5CD0/c9bk5hBjtqVYkLlRW6x8Z+XZvzXyf//R+d3g/KP3fwH4e6nb5J/8k3/yT/7Jr+XooQYWhqUjfguH9bnJ3wf/6P7fwOfuxG/pZU/+t7D05H8kA0p0dVc0qlkvy2/sZ9162Btb6qvx1t33xlb+3F1rZW+M5hYrg1LzKZYnjExdAX6ZnYzMzuWnFHtvzOw72iOWTzT5z/JU2J8W9sbI3B5hb5zLz9b3xta5zcp3Vp5Z1erc1nhMZly4F2t1bmszR362zrW7zW2rpDd+vWHY9Q==
   </data>
  </layer>
- <layer id="7" name="rowingUpgrade" width="64" height="45">
+ <layer id="7" name="rowingUpgrade" width="64" height="45" visible="0">
   <data encoding="base64" compression="zlib">
    eJztzzkOgmAUReG/cEwQh0JQC0EpnCgUZf9L8+zBRIp3vuT096YkSZIkSZIkSZI0jFGW0pgmNKUZzbOhV/3Pgq85LWlFa9oE+r/la0El7WhPh0D/j3ytqKYTnakJ9P/C1yvd6E4PagP9f/L1RR296UN9oP+SJEmSJP3iCyYxBcU=
   </data>
  </layer>
- <layer id="8" name="fishingUpgrade" width="64" height="45">
+ <layer id="8" name="fishingUpgrade" width="64" height="45" visible="0">
   <data encoding="base64" compression="zlib">
    eJztzsEAAAAIBLADCC+g0MOox0awBAAAAAAAAPiiK3N9AAAAAPhsAURVAOE=
+  </data>
+ </layer>
+ <layer id="9" name="far_boat" width="64" height="45">
+  <data encoding="base64" compression="zlib">
+   eJztz9cNwkAABNErwO2RMybnZHKGwpkmEBI3T5r/3RAkSZIkSZIkxSKXhJCnAhWpRGWqUDX59brvq/GxTg1qUovalFIngv9dPvaoTwMa0ojGNIng/5SPM5rTgpa0ojVtIvif8XFLO9rTgY50onME/y98vNKN7vSgJ73oHcF/SZIkSZIk6Z98AJpbFpk=
+  </data>
+ </layer>
+ <layer id="10" name="far_island" width="64" height="45">
+  <data encoding="base64" compression="zlib">
+   eJztz8kRglAUBdEXwM8/DURcCMjCcYEDC8dw7Cikytenqvf3RkiSJEmSJEnSf6pKxKLMveJ3ar4uqaEVralN9L/ja08bGmhLu0T/93w90JFONNI50f8LX690o4nu9Ej0/8nXF73pk+i3JEmSJEmScvoCbEsYUg==
   </data>
  </layer>
 </map>

@@ -24,6 +24,10 @@ enum class TokensType { tokenNbr, fishingsTokens, rowingTokens, healingTokens, r
 	upgradeFishingToken, upgradeRowingToken, remainingTokens };
 enum class Status { onGoing, victory, defeat };
 
+/**
+Classe faisant l'interface vers le système de jeu. 
+Fournit les méthodes permettant le déroulement du jeu jusqu'à la victoire ou la défaite du joueur.
+*/
 class Façade {
 private:
 	int action_tokens;

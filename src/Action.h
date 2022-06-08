@@ -1,15 +1,22 @@
 #pragma once
 #include <random>
 
+/**
+Classe abstraite Action.
+
+Peut être exécutée en appelant execute(). 
+Est utilisée comme classe parente pour toutes les différentes actions du jeu.
+
+*/
 class Action {
 public:
-	explicit Action(int const tokenNb);
 	virtual ~Action() = default;
 	virtual int execute() = 0;
 	void addTokens(int const tokens);
 	void clearTokens();
 	int getTokenNb() const ;
 protected:
+	explicit Action(int const tokenNb);
 	int random_int(int const start, int const end);
 	int tokenNb;
 };

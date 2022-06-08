@@ -103,7 +103,7 @@ void Façade::executeFishingAction(int const tokens) {
 		f = context->executeAction();
 	}
 	fishCount.fetch_add(f);
-	if (f > 0) {
+	//if (f > 0) {
 		if (f < 3) {
 			recapText << "Vous avez lance votre ligne dans l'eau, mais la chance ne vous a pas sourit : seuls quelques malheureux"
 				<< " poissons ont mordu a l'appat. Il va sans doute falloir vous rationner..." << std::endl;
@@ -113,7 +113,7 @@ void Façade::executeFishingAction(int const tokens) {
 				<< " poissons se sont jetes dessus ! Sacre festin en perspective !" << std::endl;
 		}
 		recapText << std::endl << "Poissons peches : " << f << std::endl << std::endl;
-	}
+	//}
 	
 }
 
@@ -169,6 +169,8 @@ Status Façade::nextDay(std::map<TokensType, int>& tokens) {
 	fishCount.fetch_sub(fish_eating_number);
 	std::cout << fishCount << std::endl;
 	if (fishCount < 0) {
+		recapText << "Le manque de nourriture vous affaiblit !" << std::endl <<
+			"pv " << fishCount * damage_starvation << std::endl << std::endl;
 		player->takeDamage(fishCount * damage_starvation * -1);
 		fishCount = 0;
 	}

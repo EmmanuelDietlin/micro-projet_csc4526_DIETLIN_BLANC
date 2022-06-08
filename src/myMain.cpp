@@ -21,6 +21,7 @@ const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 const int spacing = 10;
 const int baseMaterialNbr = 10;
+const int sleep_delay = 17; //nbr de ms pour avoir 60FPS
 
 /// <summary>
 /// Choisit un entier aléatoirement entre deux entiers, selon une distribution uniforme
@@ -151,6 +152,9 @@ int myMain()
     sf::Clock globalClock;
     sf::Clock deltaClock;
     sf::Clock faderClock;
+    
+    
+
     auto imguiWindow = ImGuiWindow::mainMenu;
 
     std::stringstream recapText;
@@ -434,10 +438,12 @@ int myMain()
             ImGuiYSpacing();
             TextCentered("Informations");
             ImGui::SetWindowFontScale(1.3f);
+            ImGuiYSpacing();
             ImGui::TextWrapped(infos.str().c_str());
             ImGuiYSpacing();
-            ImGui::SetCursorPosX(w_width / 2 - 100);
+            ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, ImGui::GetWindowHeight() - 200));
             if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+                FadeToBlack(fade_counter);
                 imguiWindow = ImGuiWindow::mainMenu;
             }
             ImGui::End();
@@ -447,12 +453,13 @@ int myMain()
 
         if (faderClock.getElapsedTime() > sf::seconds(0.005f) && fade_counter < 256) {
             fader.setFillColor(sf::Color(0, 0, 0, 255-fade_counter));
-            fade_counter++;
+            fade_counter+=6;
             faderClock.restart();
         }
 
         window.draw(fader);
         window.display();
+        Sleep(sleep_delay); //On limite la vitesse du jeu à maximum 60FPS
     }
     ImGui::SFML::Shutdown();
     return 0;

@@ -78,4 +78,8 @@ public:
 	void writeWindEvent(void);
 	void writeSeagullEvent(void);
 	void writeMaterialEvent(void);
+	void executeStormEventForTest();
+	void executeWindEventForTest();
+	void executeSeagullEventForTest();
+	void executeMaterialEventForTest();
 };

@@ -187,7 +187,6 @@ Status Façade::nextDay(std::map<TokensType, int>& tokens) {
 		status = Status::defeat;
 	std::ofstream recap("resources/recap.txt", std::ios::trunc);
 	recap << recapText.str() << std::endl;
-	std::cout << recapText.str() << std::endl;
 	recap.close();
 	return status;
 }
@@ -272,7 +271,10 @@ void Façade::connectMaterialEventToFaçade(MaterialEvent* m) {
 * @param distance distance à retrancher
 */
 void Façade::moveBack(int const distance) {
-	distanceTravelled > distance ?  distanceTravelled.fetch_sub(distance) : 0;
+	distanceTravelled.fetch_sub(distance);
+	if (distanceTravelled.load() < 0) {
+		distanceTravelled.store(0);
+	}
 	recapText << std::endl << "Distance parcourue : -" << distance << "km" << std::endl << std::endl;
 }
 
@@ -281,7 +283,10 @@ void Façade::moveBack(int const distance) {
 * @param food nombre de poissons à retrancher
 */
 void Façade::loseFood(int const food) {
-	fishCount > food ? fishCount.fetch_sub(food) : 0;
+	fishCount.fetch_sub(food);
+	if (fishCount.load() < 0) {
+		fishCount.store(0);
+	}
 	recapText << std::endl << "Poissons : -" << food << std::endl << std::endl;
 }
 
@@ -385,3 +390,35 @@ bool Façade::getRowingUpgradeStatus() {
 bool Façade::getFishingUpgradeStatus() {
 	return fishingBonus > 0;
 }
+
+/**
+* Fonction pour tester la bonne execution de StormEvent
+*/
+void Façade::executeStormEventForTest() {
+	context->setEvent(eventVector[0]);
+	context->executeEvent();
+}
+
+/**
+* Fonction pour tester la bonne execution de WindEvent
+*/
+void Façade::executeWindEventForTest() {
+	context->setEvent(eventVector[1]);
+	context->executeEvent();
+}
+
+/**
+* Fonction pour tester la bonne execution de SeagullEvent
+*/
+void Façade::executeSeagullEventForTest() {
+	context->setEvent(eventVector[2]);
+	context->executeEvent();
+}
+/**
+* Fonction pour tester la bonne execution de MaterialEvent
+*/
+void Façade::executeMaterialEventForTest() {
+	context->setEvent(eventVector[3]);
+	context->executeEvent();
+}
+

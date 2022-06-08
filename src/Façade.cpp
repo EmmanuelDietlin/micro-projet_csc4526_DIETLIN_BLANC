@@ -5,6 +5,7 @@
 #include "RepairBoatAction.h"
 #include "StormEvent.h"
 #include "WindEvent.h"
+#include "SeagullEvent.h"
 #include <random>
 #include <fstream>
 #include <iostream>
@@ -39,13 +40,14 @@ Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int 
 	recap << recapText.str();
 	recap.close();
 	recapText.str(std::string());
-	connectDeathBoatToFaçade();
-	connectDeathPlayerToFaçade();
 	eventVector.push_back(std::make_shared<StormEvent>());
 	eventVector.push_back(std::make_shared<WindEvent>());	
+	eventVector.push_back(std::make_shared<SeagullEvent>());	
+	eventVector.push_back(std::make_shared<MaterialEvent>());	
 	connectStormEventToFaçade((StormEvent*)eventVector[0].get());
-	connectWindEventToFaçade((WindEvent*)eventVector[1].get()); 
-
+	connectWindEventToFaçade((WindEvent*)eventVector[1].get());
+	connectSeagullEventToFaçade((SeagullEvent*)eventVector[2].get());
+	connectMaterialEventToFaçade((MaterialEvent*)eventVector[3].get());
 }
 
 /**
@@ -103,7 +105,7 @@ void Façade::executeFishingAction(int const tokens) {
 	int f = fishingBonus;
 	if (tokens > 0) {
 		context->setAction(std::make_unique<FishingAction>(tokens));
-		f = context->executeAction();
+		f += context->executeAction();
 	}
 	fishCount.fetch_add(f);
 	if (f > 0) {
@@ -170,7 +172,6 @@ Status Façade::nextDay(std::map<TokensType, int>& tokens) {
 	if (tokens[TokensType::upgradeRowingToken]) executeUpgradeRowingAction(tokens[TokensType::upgradeRowingToken]);
 	dailyEvent();
 	fishCount.fetch_sub(fish_eating_number);
-	std::cout << fishCount << std::endl;
 	if (fishCount < 0) {
 		player->takeDamage(fishCount * damage_starvation * -1);
 		fishCount = 0;
@@ -223,7 +224,6 @@ Méthode exécutant ou non un évènement choisit au hasard selon un tirage aléatoir
 */
 void Façade::dailyEvent() {
 	int probaDailyEvent = random_n_to_m(1, 100);
-	std::cout << probaDailyEvent << std::endl;
 	if (probaDailyEvent <= proba_event) {
 		size_t size = eventVector.size();
 		context->setEvent(eventVector[random_n_to_m(0, size - 1)]);
@@ -231,7 +231,11 @@ void Façade::dailyEvent() {
 	}
 }
 
+/**
+* Connecte un évènement de type StormEvent à la méthode loseFood de la façade et takeDamage du bateau.
+*/
 void Façade::connectStormEventToFaçade(StormEvent* s) {
+	s->stormEventSignal.connect(this, &Façade::writeStormEvent);
 	s->damageBoatSignal.connect(boat.get(), &Entity::takeDamage);
 	s->foodLostSignal.connect(this, &Façade::loseFood);
 }
@@ -240,7 +244,25 @@ void Façade::connectStormEventToFaçade(StormEvent* s) {
 * Connecte un évènement de type WindEvent à la méthode moveBack de la façade.
 */
 void Façade::connectWindEventToFaçade(WindEvent* w) {
+	w->windEventSignal.connect(this, &Façade::writeWindEvent);
 	w->moveBackSignal.connect(this, &Façade::moveBack);
+}
+
+/**
+* Connecte un évènement de type SeagullEvent à la méthode loseFood de la façade et takeDamage du player.
+*/
+void Façade::connectSeagullEventToFaçade(SeagullEvent* s) {
+	s->seagullEventSignal.connect(this, &Façade::writeSeagullEvent);
+	s->damagePlayerSignal.connect(player.get(), &Entity::takeDamage);
+	s->foodLostSignal.connect(this, &Façade::loseFood);
+}
+
+/**
+* Connecte un évènement de type MaterialEvent à la méthode findMaterial de la façade.
+*/
+void Façade::connectMaterialEventToFaçade(MaterialEvent* m) {
+	m->materialEventSignal.connect(this, &Façade::writeMaterialEvent);
+	m->materialFoundSignal.connect(this, &Façade::findMaterial);
 }
 
 /**
@@ -249,8 +271,6 @@ void Façade::connectWindEventToFaçade(WindEvent* w) {
 */
 void Façade::moveBack(int const distance) {
 	distanceTravelled > distance ?  distanceTravelled.fetch_sub(distance) : 0;
-	recapText << "Un vent violent souffle pendant toute la journee, vous faisant perdre une partie de "
-		<< "votre progression !" << std::endl;
 	recapText << std::endl << "Distance parcourue : -" << distance << "km" << std::endl << std::endl;
 }
 
@@ -260,10 +280,48 @@ void Façade::moveBack(int const distance) {
 */
 void Façade::loseFood(int const food) {
 	fishCount > food ? fishCount.fetch_sub(food) : 0;
-	std::cout << fishCount << std::endl;
-	recapText << "La tempete fait bringuebaler votre embarcation dans tous les sens, et "
-		<< " une partie de vos provisions tombe par dessus bord !" << std::endl;
 	recapText << std::endl << "Poissons : -" << food << std::endl << std::endl;
+}
+
+/**
+* Augmente la quantité de matériaux.
+* @param material nombre de matériaux à ajouter
+*/
+void Façade::findMaterial(int const material) {
+	materials.fetch_add(material);
+	recapText << std::endl << "Materiaux : +" << material << std::endl << std::endl;
+}
+
+/**
+* Ecrit le message annonçant un événement de type StormEvent.
+*/
+void Façade::writeStormEvent() {
+	recapText << "La tempete fait bringuebaler votre embarcation dans tous les sens,"
+		<< " une partie de vos provisions tombe par dessus bord et votre bateau est abime !" << std::endl;
+}
+
+/**
+* Ecrit le message annonçant un événement de type WindEvent.
+*/
+void Façade::writeWindEvent() {
+	recapText << "Un vent violent souffle pendant toute la journee, vous faisant perdre une partie de "
+		<< "votre progression !" << std::endl;
+}
+
+/**
+* Ecrit le message annonçant un événement de type SeagullEvent.
+*/
+void Façade::writeSeagullEvent() {
+	recapText << "Vous vous faites attaquer par un groupe de mouettes,"
+		<< " une partie de vos provisions est perdue et vous etes blesse !" << std::endl;
+}
+
+/**
+* Ecrit le message annonçant un événement de type MaterialEvent.
+*/
+void Façade::writeMaterialEvent() {
+	recapText << "Aujourd'hui est un jour de chance,"
+		<< " vous trouvez des materiaux pour vos ameliorations !" << std::endl;
 }
 
 int Façade::random_n_to_m(int const nbMin, int const nbMax)
@@ -302,7 +360,6 @@ void Façade::executeUpgradeRowingAction(int const tokens) {
 		materials.fetch_sub(boat_materials_required);
 		context->setAction(std::make_unique<UpgradeRowingAction>(tokens));
 		rowingBonus += context->executeAction();
-		std::cout << rowingBonus << std::endl;
 		recapText << "Avec les materiaux que vous avez recuperes, vous avez pu fabriquer de quoi mieux"
 			<< " naviguer. Vous pourrez parcourir plus de distance avec votre barque !" << std::endl;
 		recapText << std::endl << "Bateau ameliore" << std::endl << std::endl;

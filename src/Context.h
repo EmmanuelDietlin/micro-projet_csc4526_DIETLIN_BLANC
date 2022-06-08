@@ -2,6 +2,11 @@
 #include "Event.h"
 #include <memory>
 
+/**
+Classe représentant un contexte d'exécution.
+Sert à implémenter le patron de conception "Strategy", et contient donc pour ce faire un champ 
+Action et un champ Event, que Context peut exécuter.
+*/
 class Context {
 private:
 	std::unique_ptr<Action> action = nullptr;

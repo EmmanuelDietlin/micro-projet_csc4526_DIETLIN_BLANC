@@ -18,7 +18,7 @@ const int max_tokens_nb = 5;
 const int starting_fish_number = 2;
 const int fish_eating_number = 2;
 const int damage_starvation = 10;
-const int proba_event = 100;
+const int proba_event = 30;
 const int rod_materials_required = 20;
 const int boat_materials_required = 40;
 
@@ -26,6 +26,10 @@ enum class TokensType { tokenNbr, fishingsTokens, rowingTokens, healingTokens, r
 	upgradeFishingToken, upgradeRowingToken, remainingTokens };
 enum class Status { onGoing, victory, defeat };
 
+/**
+Classe faisant l'interface vers le système de jeu. 
+Fournit les méthodes permettant le déroulement du jeu jusqu'à la victoire ou la défaite du joueur.
+*/
 class Façade {
 private:
 	int action_tokens;

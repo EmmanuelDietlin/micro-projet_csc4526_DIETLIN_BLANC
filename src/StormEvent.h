@@ -1,6 +1,9 @@
 #pragma once
 #include "Event.h"
 
+/**
+Classe représentant l'évènement de tempête
+*/
 class StormEvent : public Event {
 private:
 	const int damageBoat = 20;

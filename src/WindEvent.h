@@ -1,6 +1,10 @@
 #pragma once
 #include "Event.h"
 
+/**
+Classe représentant l'évènement "vent"
+
+*/
 class WindEvent : public Event {
 private:
 	const int moveBackDistance = 50;

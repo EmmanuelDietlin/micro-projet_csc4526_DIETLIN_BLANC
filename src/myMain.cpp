@@ -13,7 +13,6 @@
 #include "SFMLOrthogonalLayer.h"
 #include "signals.h"
 
-
 const int w_height = 800;
 const int w_width = 1000;
 const int maxDay = 47;
@@ -22,7 +21,14 @@ const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 const int spacing = 10;
 const int baseMaterialNbr = 10;
+const int sleep_delay = 17; //nbr de ms pour avoir 60FPS
 
+/// <summary>
+/// Choisit un entier aléatoirement entre deux entiers, selon une distribution uniforme
+/// </summary>
+/// <param name="start"> entier de départ </param>
+/// <param name="end">entier de fin</param>
+/// <returns> entier choisi</returns>
 int random_int(int const start, int const end) {
     static std::random_device rd;
     static std::default_random_engine engine(rd());
@@ -30,12 +36,23 @@ int random_int(int const start, int const end) {
     return distribution(engine);
 }
 
+/// <summary>
+/// Créé un texte ImGui centré sur la page ImGui.
+/// </summary>
+/// <param name="s"> chaine de charactères pour le texte </param>
 void TextCentered(std::string const& s) {
     auto textWidth = ImGui::CalcTextSize(s.c_str()).x;
     ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
     ImGui::Text(s.c_str());
 }
 
+/// <summary>
+/// Calcule le nombre de jetons restants.
+/// Empêche de consommer plus de jetons que disponibles.
+/// La méthode est à utiliser à chaque fois qu'on modifie le nombre d'un type de jetons dans la map des jetons
+/// </summary>
+/// <param name="t"> map des jetons </param>
+/// <param name="type"> type des jetons qu'on ajoute </param>
 void RemainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
     int r;
     r = t[TokensType::tokenNbr];
@@ -55,14 +72,29 @@ void RemainingTokens(std::map<TokensType, int>& t, TokensType const& type) {
     t[TokensType::remainingTokens] = r;
 }
 
+/// <summary>
+/// Ajoute un espacement de taille "spacing" entre deux éléments ImGui.
+/// </summary>
 void ImGuiYSpacing() {
     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + spacing);
 }
 
+/// <summary>
+/// Déclenchement le fondu au noir.
+/// </summary>
+/// <param name="f"> compteur pour le fondu </param>
 void FadeToBlack(int& f) {
     f = 0;
 }
-
+/// <summary>
+/// Génère une fenêtre ImGui couvant toute la taille de la fenêtre, avec un titre et un bouton.
+/// Vérifie également si le bouton est pressé
+/// </summary>
+/// <param name="title"> Titre de la fenêtre </param>
+/// <param name="txt1"> Ligne 1 du texte de la page </param>
+/// <param name="txt2"> Ligne 2 du texte de la page </param>
+/// <param name="b_label"> Texte du bouton </param>
+/// <returns> vrai si le bouton est pressé </returns>
 bool SetMenuWindow(std::string const& title, std::string const& txt1, std::string const& txt2,
 	std::string const& b_label) {
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
@@ -84,6 +116,12 @@ bool SetMenuWindow(std::string const& title, std::string const& txt1, std::strin
 
 	return false;
 }
+
+/// <summary>
+/// Lis le contenu du fichier "recap.txt", regroupant le compte rendu des actions et évènements 
+/// d'une journée
+/// </summary>
+/// <param name="s"> conteneur du texte lu dans le fichier </param>
 void readRecap(std::stringstream& s) {
     s.str(std::string());   
     std::ifstream recapFile("resources/recap.txt");
@@ -91,6 +129,10 @@ void readRecap(std::stringstream& s) {
     recapFile.close();
 }
 
+/// <summary>
+/// Remet à zéro la répartition des jetons d'action dans la map.
+/// </summary>
+/// <param name="t"> map des jetons</param>
 void resetTokens(std::map<TokensType, int>& t) {
     for (auto it = t.begin(); it != t.end(); it++) {
         if (it->first != TokensType::tokenNbr && it->first != TokensType::remainingTokens)
@@ -110,6 +152,9 @@ int myMain()
     sf::Clock globalClock;
     sf::Clock deltaClock;
     sf::Clock faderClock;
+    
+    
+
     auto imguiWindow = ImGuiWindow::mainMenu;
 
     std::stringstream recapText;
@@ -393,10 +438,12 @@ int myMain()
             ImGuiYSpacing();
             TextCentered("Informations");
             ImGui::SetWindowFontScale(1.3f);
+            ImGuiYSpacing();
             ImGui::TextWrapped(infos.str().c_str());
             ImGuiYSpacing();
-            ImGui::SetCursorPosX(w_width / 2 - 100);
+            ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, ImGui::GetWindowHeight() - 200));
             if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+                FadeToBlack(fade_counter);
                 imguiWindow = ImGuiWindow::mainMenu;
             }
             ImGui::End();
@@ -406,12 +453,13 @@ int myMain()
 
         if (faderClock.getElapsedTime() > sf::seconds(0.005f) && fade_counter < 256) {
             fader.setFillColor(sf::Color(0, 0, 0, 255-fade_counter));
-            fade_counter++;
+            fade_counter+=6;
             faderClock.restart();
         }
 
         window.draw(fader);
         window.display();
+        Sleep(sleep_delay); //On limite la vitesse du jeu à maximum 60FPS
     }
     ImGui::SFML::Shutdown();
     return 0;

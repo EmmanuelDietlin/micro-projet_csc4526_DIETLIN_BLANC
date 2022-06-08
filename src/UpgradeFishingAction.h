@@ -1,5 +1,8 @@
 #include "Action.h"
 
+/**
+Classe représentant l'action d'améliorer la pêche
+*/
 class UpgradeFishingAction : public Action {
 public:
 	explicit UpgradeFishingAction(int const tokenNb);

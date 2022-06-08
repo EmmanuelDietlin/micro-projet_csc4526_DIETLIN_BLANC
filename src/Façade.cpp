@@ -9,10 +9,17 @@
 #include <fstream>
 #include <iostream>
 
-/*
-Constructeur de la façade. Prend en paramètres le nombre maximal de jours pour parcourir
-la distance, la distance à parcourir dans le délai imparti, les points de vie de départ
-du joueur, les points de vie de départ de l'embarcation.
+/**
+Constructeur de la classe Façade.
+*
+*@param maxDay  Nombre maximal de jours du jeu.
+*@param MaxDistance Distance à parcourir.
+*@param playerHp pv de départ du joueur.
+*@param playerMaxHp pv max du joueur.
+*@param boatHp pv de départ du bateau.
+*@param boatMaxHp pv max du bateau.
+*@param materials nombre de matériaux au démarrage.
+*
 */
 Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int const playerMaxHp,
 	int const boatHp, int const boatMaxHp, int const materials)
@@ -38,21 +45,31 @@ Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int 
 	connectWindEventToFaçade((WindEvent*)eventVector[1].get()); 
 }
 
-
+/**
+Renvoie le nombre de jetons du jeu.
+* @return le nombre de jetons
+*/
 int Façade::getTokenNbr() {
 	return action_tokens;
 }
-
+/**
+Renvoie le nombre de jours actuel du jeu.
+* @return le nombre de jours
+*/
 int Façade::getDayCount() {
 	return dayCount;
 }
-
+/**
+Renvoie la distance parcourue par le joueur.
+* @return la distance parcourue
+*/
 int Façade::getDistanceTravelled() {
 	return distanceTravelled;
 }
 
-/*
+/**
 Execute l'action de ramer, avec le nombre de jetons passé en paramètre
+*@param tokens nombre de jetons pour l'action
 */
 void Façade::executeRowingAction(int const tokens) {
 	int d = rowingBonus;
@@ -75,8 +92,9 @@ void Façade::executeRowingAction(int const tokens) {
 	}
 }
 
-/*
+/**
 Execute l'action de pêcher, avec le nombre de jetons passé en paramètres
+*@param tokens nombre de jetons pour l'action
 */
 void Façade::executeFishingAction(int const tokens) {
 	int f = fishingBonus;
@@ -99,8 +117,10 @@ void Façade::executeFishingAction(int const tokens) {
 	
 }
 
-/*
+/**
 Execute l'action de se soigner, avec le nombre de jetons passé en paramètres
+*@param tokens nombre de jetons pour l'action
+*
 */
 void Façade::executeHealingAction(int const tokens) {
 	if (tokens > 0) {
@@ -113,8 +133,10 @@ void Façade::executeHealingAction(int const tokens) {
 	}
 }
 
-/*
+/**
 Execute l'action de réparer le bateau, avec le nombre de jetons passé en paramètres
+*@param tokens nombre de jetons pour l'action
+*
 */
 void Façade::executeRepairAction(int const tokens) {
 	if (tokens > 0) {
@@ -127,10 +149,11 @@ void Façade::executeRepairAction(int const tokens) {
 	}
 }
 
-/*
-Passe au jour suivant. Peut déclencher un évènement choisi de manière aléatoire, et 
-consomme un certain nombre de poissons.
+/**
+Passe au jour suivant. Peut déclencher un évènement choisi de manière aléatoire, et consomme un certain nombre de poissons.
 Ecrit également dans un fichier recap.txt le récapitulatif des actions et évènements.
+*@param tokens map contenant tous les jetons d'actions
+*@return le status du jeu (onGoing, victory, defeat)
 */
 Status Façade::nextDay(std::map<TokensType, int>& tokens) {
 	auto status = Status::onGoing;
@@ -163,23 +186,38 @@ Status Façade::nextDay(std::map<TokensType, int>& tokens) {
 	return status;
 }
 
+/**
+Renvoie le nombre de poissons actuellement en possession du joueur.
+* @return le nombre de poissons
+*/
 int Façade::getFishCount() {
 	return fishCount;
 }
-
+/**
+Renvoie la vie actuelle du joueur.
+* @return les points de vie
+*/
 int Façade::getPlayerHp() {
 	return player->getHp();
 }
-
+/**
+Renvoie la vie actuelle du bateau.
+* @return les points de vie
+*/
 int Façade::getBoatHp() {
 	return boat->getHp();
 }
-
+/**
+Renvoie le nombre de matériaux en possession du joueur.
+* @return le nombre de matériaux
+*/
 int Façade::getMaterials() {
 	return materials;
 }
 
-
+/**
+Méthode exécutant ou non un évènement choisit au hasard selon un tirage aléatoire.
+*/
 void Façade::dailyEvent() {
 	int probaDailyEvent = random_n_to_m(1, 100);
 	std::cout << probaDailyEvent << std::endl;
@@ -190,15 +228,26 @@ void Façade::dailyEvent() {
 	}
 }
 
+
+/**
+Connecte un évènement de type StormEvent à la méthode takeDamage de la façade.
+*/
 void Façade::connectStormEventToFaçade(StormEvent* s) {
 	s->damageBoatSignal.connect(boat.get(), &Entity::takeDamage);
 	s->foodLostSignal.connect(this, &Façade::loseFood);
 }
 
+/**
+* Connecte un évènement de type WindEvent à la méthode moveBack de la façade.
+*/
 void Façade::connectWindEventToFaçade(WindEvent* w) {
 	w->moveBackSignal.connect(this, &Façade::moveBack);
 }
 
+/**
+* Diminue la distance parcourue. Ne peut pas faire passer la distance parcourue en dessous de 0.
+* @param distance distance à retrancher
+*/
 void Façade::moveBack(int const distance) {
 	distanceTravelled > distance ?  distanceTravelled.fetch_sub(distance) : 0;
 	recapText << "Un vent violent souffle pendant toute la journee, vous faisant perdre une partie de "
@@ -206,6 +255,10 @@ void Façade::moveBack(int const distance) {
 	recapText << std::endl << "Distance parcourue : -" << distance << "km" << std::endl << std::endl;
 }
 
+/**
+* Diminue la quantité de nourriture. Ne peut pas faire passer la quantité de poisson en dessous de 0.
+* @param food nombre de poissons à retrancher
+*/
 void Façade::loseFood(int const food) {
 	fishCount > food ? fishCount.fetch_sub(food) : 0;
 	std::cout << fishCount << std::endl;
@@ -222,8 +275,15 @@ int Façade::random_n_to_m(int const nbMin, int const nbMax)
 	return distribution(engine);
 }
 
+
+/**
+* Execute l'action d'améliorer la pêche.
+* @param tokens nombre de jetons pour l'amélioration
+*/
 void Façade::executeUpgradeFishingAction(int const tokens) {
-	if (tokens > 0 && materials >= rod_materials_required) {
+	int tkns = tokens;
+	if (tkns > 0 && materials >= rod_materials_required) {
+		if (tkns > 1) tkns = 1;
 		materials.fetch_sub(rod_materials_required);
 		context->setAction(std::make_unique<UpgradeFishingAction>(tokens));
 		fishingBonus += context->executeAction();
@@ -232,9 +292,14 @@ void Façade::executeUpgradeFishingAction(int const tokens) {
 		recapText << std::endl << "Canne a peche + 1" << std::endl << std::endl;
 	}
 }
-
+/**
+* Execute l'action d'améliorer le bateau.
+* @param tokens nombre de jetons pour l'amélioration
+*/
 void Façade::executeUpgradeRowingAction(int const tokens) {
-	if (tokens > 0 && materials >= boat_materials_required) {
+	int tkns = tokens;
+	if (tkns > 0 && materials >= boat_materials_required) {
+		if (tkns > 1) tkns = 1;
 		materials.fetch_sub(boat_materials_required);
 		context->setAction(std::make_unique<UpgradeRowingAction>(tokens));
 		rowingBonus += context->executeAction();
@@ -245,10 +310,20 @@ void Façade::executeUpgradeRowingAction(int const tokens) {
 	}
 }
 
+
+/**
+* Renvoie si l'on peut améliorer le bateau ou non.
+* @return vrai si on peut améliorer
+*/
 bool Façade::getRowingUpgradeStatus() {
 	return rowingBonus > 0;
 }
 
+
+/**
+* Renvoie si l'on peut améliorer la pêche ou non.
+* @return vrai si on peut améliorer
+*/
 bool Façade::getFishingUpgradeStatus() {
 	return fishingBonus > 0;
 }

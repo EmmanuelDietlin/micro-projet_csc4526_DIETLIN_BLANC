@@ -21,8 +21,14 @@ const int maxDistance = 6700;
 const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 const int spacing = 10;
+const int baseMaterialNbr = 10;
 
-
+int random_int(int const start, int const end) {
+    static std::random_device rd;
+    static std::default_random_engine engine(rd());
+    std::uniform_int_distribution<> distribution(start, end);
+    return distribution(engine);
+}
 
 void TextCentered(std::string const& s) {
     auto textWidth = ImGui::CalcTextSize(s.c_str()).x;
@@ -66,12 +72,12 @@ bool SetMenuWindow(std::string const& title, std::string const& txt1, std::strin
 	ImGui::Begin(title.c_str(), NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
 		| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
 
-	ImGui::SetCursorPosY(w_height * 0.2f);
+	ImGui::SetCursorPosY(w_height * 0.1f);
 	ImGui::SetWindowFontScale(5);
 	TextCentered(txt1);
 	TextCentered(txt2);
 	ImGui::SetWindowFontScale(1.3f);
-	ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 50));
+	ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, w_height / 2 - 100));
 	if (ImGui::Button(b_label.c_str(), sf::Vector2f(200, 100))) {
 		return true;
 	}
@@ -84,6 +90,15 @@ void readRecap(std::stringstream& s) {
     s << recapFile.rdbuf();
     recapFile.close();
 }
+
+void resetTokens(std::map<TokensType, int>& t) {
+    for (auto it = t.begin(); it != t.end(); it++) {
+        if (it->first != TokensType::tokenNbr && it->first != TokensType::remainingTokens)
+            it->second = 0;
+    }
+    t[TokensType::remainingTokens] = t[TokensType::tokenNbr];
+}
+
 
 
 
@@ -98,6 +113,15 @@ int myMain()
     auto imguiWindow = ImGuiWindow::mainMenu;
 
     std::stringstream recapText;
+    bool upgradeFishing = false;
+    bool upgradeRowing = false;
+
+    std::stringstream infos;
+    std::ifstream infoFile("resources/readme.txt");
+    infos << infoFile.rdbuf();
+    infoFile.close();
+
+    int random_bg = random_int(0, 100);
 
     std::unique_ptr<Façade> façade;
     int fade_counter = 256;
@@ -123,7 +147,7 @@ int myMain()
     playerTexture.loadFromImage(sprites[0]);
     int spriteIndex = 0;
     sf::RectangleShape player(sf::Vector2f(70, 70));
-    player.setPosition(sf::Vector2f(710, 390));
+    player.setPosition(sf::Vector2f(720, 390));
     player.setTexture(&playerTexture);
 
     auto spriteClock = globalClock.getElapsedTime();
@@ -134,6 +158,10 @@ int myMain()
     MapLayer layerBackground(map, 0);
     MapLayer layerBoat(map, 1);
     MapLayer layerForeground(map, 2);
+    MapLayer layerRowingUpgrade(map, 4);
+    MapLayer layerFishingUpgrade(map, 5);
+    MapLayer layerFarBoat(map, 6);
+    MapLayer layerFarIslands(map, 7);
 
     std::map<TokensType, int> tokens;
     tokens[TokensType::tokenNbr] = 0;
@@ -142,6 +170,8 @@ int myMain()
     tokens[TokensType::healingTokens] = 0;
     tokens[TokensType::repairTokens] = 0;
     tokens[TokensType::remainingTokens] = 0;
+    tokens[TokensType::upgradeFishingToken] = 0;
+    tokens[TokensType::upgradeRowingToken] = 0;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -164,7 +194,7 @@ int myMain()
             if (SetMenuWindow("Main menu", "Les revoltes", "de la Bounty",
                 "Commencer la partie")) {
                 FadeToBlack(fade_counter);
-                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp);
+                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterialNbr);
                 tokens[TokensType::tokenNbr] = façade->getTokenNbr();
                 tokens[TokensType::remainingTokens] = façade->getTokenNbr();
                 readRecap(recapText);
@@ -180,9 +210,16 @@ int myMain()
             }
             ImGuiYSpacing();
             ImGui::SetCursorPosX(w_width / 2 - 100);
+            if (ImGui::Button("Informations", sf::Vector2f(200, 100))) {
+                FadeToBlack(fade_counter);
+                imguiWindow = ImGuiWindow::informations;
+            }
+            ImGuiYSpacing();
+            ImGui::SetCursorPosX(w_width / 2 - 100);
             if (ImGui::Button("Quitter le jeu", sf::Vector2f(200, 100))) {
                 window.close();
             }
+            
             ImGui::End();
             ImGui::PopStyleColor(2);
             window.draw(mainMenuLayer1);
@@ -227,16 +264,50 @@ int myMain()
 				}
 				ImGuiYSpacing();
 				ImGui::Text("Poissons : %d", façade->getFishCount());
+                ImGuiYSpacing();
+                ImGui::Text("Materiaux : %d", façade->getMaterials());
+                ImGuiYSpacing();
+                float cursor_y = ImGui::GetCursorPosY();
+                if (ImGui::Checkbox("Ameliorer peche", &upgradeFishing)) {
+                    if ((upgradeRowing && façade->getMaterials() - rod_materials_required - boat_materials_required < 0) ||
+                        (!upgradeRowing && façade->getMaterials() < rod_materials_required) || (tokens[TokensType::remainingTokens] == 0)) {
+                        upgradeFishing = false;
+                    }
+                    upgradeFishing ? tokens[TokensType::upgradeFishingToken] = 1 : tokens[TokensType::upgradeFishingToken] = 0;
+                    RemainingTokens(tokens, TokensType::upgradeFishingToken);
+                }
+                ImGui::Text("%d materiaux + \n1 jeton", rod_materials_required);
+                ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.5f);
+                ImGui::SetCursorPosY(cursor_y);
+                if (ImGui::Checkbox("Ameliorer bateau", &upgradeRowing)) {
+                    if ((upgradeFishing && façade->getMaterials() - rod_materials_required - boat_materials_required < 0) ||
+                        (!upgradeFishing && façade->getMaterials() < boat_materials_required) || (tokens[TokensType::remainingTokens] == 0)) {
+                        upgradeRowing = false;
+                    }
+                    upgradeRowing ? tokens[TokensType::upgradeRowingToken] = 1 : tokens[TokensType::upgradeRowingToken] = 0;
+                    RemainingTokens(tokens, TokensType::upgradeRowingToken);
+                }
+                ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.5f);
+                ImGui::Text("%d materiaux + \n1 jeton", boat_materials_required);
+
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
 				if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
+                    std::cout << "upgradeRowing : " << tokens[TokensType::upgradeRowingToken] << std::endl;
+                    std::cout << "upgradeFishing : " << tokens[TokensType::upgradeFishingToken] << std::endl;
 					FadeToBlack(fade_counter);
-                    façade->nextDay(tokens);
+                    auto ret = façade->nextDay(tokens);
 					readRecap(recapText);
-                    if (imguiWindow == ImGuiWindow::gameWindow2) {
+                    resetTokens(tokens);
+                    upgradeFishing = false;
+                    upgradeRowing = false;
+                    random_bg = random_int(0, 100);
+                    if (ret == Status::onGoing)
                         imguiWindow = ImGuiWindow::gameWindow1;
-                        std::cout << façade->getPlayerHp() << std::endl;
-                    }
+                    else if (ret == Status::victory)
+                        imguiWindow = ImGuiWindow::victory;
+                    else if (ret == Status::defeat)
+                        imguiWindow = ImGuiWindow::defeat;
 				}
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);
 				if (ImGui::Button("Page precedente")) {
@@ -247,7 +318,7 @@ int myMain()
 			ImGui::End();
 
 
-            ImGui::SetNextWindowPos(sf::Vector2f(650, 300));
+            ImGui::SetNextWindowPos(sf::Vector2f(650, 290));
             ImGui::SetNextWindowSize(sf::Vector2f(150, 100));
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
 
@@ -270,6 +341,19 @@ int myMain()
             window.draw(layerBackground);
             window.draw(layerBoat);
             window.draw(layerForeground);
+            if (façade->getFishingUpgradeStatus()) window.draw(layerFishingUpgrade);
+            if (façade->getRowingUpgradeStatus()) window.draw(layerRowingUpgrade);
+
+            if (random_bg < 10) {
+                window.draw(layerFarBoat);
+            }
+            else if (random_bg < 20) {
+                window.draw(layerFarIslands);
+            }
+            else if (random_bg < 30) {
+                window.draw(layerFarBoat);
+                window.draw(layerFarIslands);
+            }
             window.draw(player);
 
             ImGui::SFML::Render(window);
@@ -297,7 +381,27 @@ int myMain()
             ImGui::SFML::Render(window);
         }
         else if (imguiWindow == ImGuiWindow::informations) {
-            //A implémenter
+            ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0, 0, 0, 0));
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0.5f, 0.5f));
+            ImGui::SetNextWindowPos(sf::Vector2f(0, 0));
+            ImGui::SetNextWindowSize(sf::Vector2f(w_width, w_height));
+            ImGui::Begin("Informations", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
+                | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
+
+            ImGui::SetCursorPosY(w_height * 0.1f);
+            ImGui::SetWindowFontScale(5);
+            ImGuiYSpacing();
+            TextCentered("Informations");
+            ImGui::SetWindowFontScale(1.3f);
+            ImGui::TextWrapped(infos.str().c_str());
+            ImGuiYSpacing();
+            ImGui::SetCursorPosX(w_width / 2 - 100);
+            if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
+                imguiWindow = ImGuiWindow::mainMenu;
+            }
+            ImGui::End();
+            ImGui::PopStyleColor(2);
+            ImGui::SFML::Render(window);
         }
 
         if (faderClock.getElapsedTime() > sf::seconds(0.005f) && fade_counter < 256) {

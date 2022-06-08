@@ -8,9 +8,9 @@ private:
 	std::weak_ptr<Event> evnt;
 
 public:
-	explicit Context();
+	explicit Context() = default;
 	void setAction(std::unique_ptr<Action> &&action);
-	void setEvent(std::shared_ptr<Event> const &evnt);
+	void setEvent(std::shared_ptr<Event> const &e);
 	int executeAction();
 	void executeEvent();
 };

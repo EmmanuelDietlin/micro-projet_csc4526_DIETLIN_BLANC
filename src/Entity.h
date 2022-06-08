@@ -1,13 +1,14 @@
 #pragma once
 #include "signals.h"
+#include <atomic>
 
 class Entity {
 private:
-	int hp;
+	std::atomic<int> hp;
 	int maxHp;
-public:
-	vdk::signal<void(void)> deathSignal;
+protected:
 	explicit Entity(int const hp, int const maxHp);
+public:
 	void takeDamage(int const dmg);
 	void heal(int const heal);
 	int getHp();

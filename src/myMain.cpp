@@ -177,6 +177,18 @@ int myMain()
     mainMenubg.load("resources/mainMenubg.tmx");
     MapLayer mainMenuLayer1(mainMenubg, 0);
 
+    tmx::Map victoryBg;
+    victoryBg.load("resources/victory_background.tmx");
+    MapLayer victoryLayer1(victoryBg, 0);
+
+    tmx::Map defeatBg;
+    defeatBg.load("resources/defeat_background.tmx");
+    MapLayer defeatLayer1(defeatBg, 0);
+
+    tmx::Map infoBg;
+    infoBg.load("resources/informations_background.tmx");
+    MapLayer infoLayer1(infoBg, 0);
+
     std::vector<sf::Image> sprites;
     sf::Image i;
     i.loadFromFile("resources/sprites/boy_1.png");
@@ -412,6 +424,8 @@ int myMain()
             }
             ImGui::End();
             ImGui::PopStyleColor(2);
+
+            window.draw(victoryLayer1);
             ImGui::SFML::Render(window);
         }
         else if (imguiWindow == ImGuiWindow::defeat) {
@@ -423,6 +437,8 @@ int myMain()
             }
             ImGui::End();
             ImGui::PopStyleColor(2);
+
+            window.draw(defeatLayer1);
             ImGui::SFML::Render(window);
         }
         else if (imguiWindow == ImGuiWindow::informations) {
@@ -441,14 +457,18 @@ int myMain()
             ImGuiYSpacing();
             ImGui::TextWrapped(infos.str().c_str());
             ImGuiYSpacing();
-            ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, ImGui::GetWindowHeight() - 200));
+            ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, ImGui::GetWindowHeight() - 125));
             if (ImGui::Button("Retour au menu", sf::Vector2f(200, 100))) {
                 FadeToBlack(fade_counter);
                 imguiWindow = ImGuiWindow::mainMenu;
             }
             ImGui::End();
             ImGui::PopStyleColor(2);
+
+            window.draw(infoLayer1);
             ImGui::SFML::Render(window);
+
+            
         }
 
         if (faderClock.getElapsedTime() > sf::seconds(0.005f) && fade_counter < 256) {

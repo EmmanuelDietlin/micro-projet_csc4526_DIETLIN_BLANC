@@ -20,3 +20,9 @@ Fish Rod: Craftpix.net - https://opengameart.org/content/fishing-game-assets-pix
 Sail boat: KokoroReflections - https://opengameart.org/content/old-fashioned-pirate-ship
 
 Islands: Alucard - https://opengameart.org/content/island-background-2d
+
+Island Background: Nathanael Mortensen - https://www.artstation.com/artwork/9el8DR
+
+Underwater background : Vecteezy.com - https://www.vecteezy.com/vector-art/5205042-underwater-world-vector-illustration-with-yellow-fish-reefs-and-sunken-ship
+
+Island Background 2 : http://clipart-library.com/clipart/8iEbRgorT.htm

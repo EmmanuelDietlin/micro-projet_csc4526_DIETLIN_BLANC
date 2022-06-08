@@ -8,6 +8,8 @@
 #include "signals.h"
 #include "StormEvent.h"
 #include "WindEvent.h"
+#include "SeagullEvent.h"
+#include "MaterialEvent.h"
 #include "UpgradeFishingAction.h"
 #include "UpgradeRowingAction.h"
 #include <atomic>
@@ -46,6 +48,8 @@ private:
 	std::stringstream recapText;
 	void connectStormEventToFaçade(StormEvent* stormEvent);
 	void connectWindEventToFaçade(WindEvent* windEvent);
+	void connectSeagullEventToFaçade(SeagullEvent* seagullEvent);
+	void connectMaterialEventToFaçade(MaterialEvent* materialEvent);
 	int random_n_to_m(int const nbMin, int const nbMax);
 public:
 	Façade(int const maxDay, int const MaxDistance, int const playerHp, 
@@ -69,5 +73,9 @@ public:
 	void dailyEvent();
 	void moveBack(int const distance);
 	void loseFood(int const food);
-	
+	void findMaterial(int const material);
+	void writeStormEvent(void);
+	void writeWindEvent(void);
+	void writeSeagullEvent(void);
+	void writeMaterialEvent(void);
 };

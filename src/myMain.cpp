@@ -23,7 +23,12 @@ const int boatBaseHp = 200;
 const int spacing = 10;
 const int baseMaterialNbr = 10;
 
-
+int random_int(int const start, int const end) {
+    static std::random_device rd;
+    static std::default_random_engine engine(rd());
+    std::uniform_int_distribution<> distribution(start, end);
+    return distribution(engine);
+}
 
 void TextCentered(std::string const& s) {
     auto textWidth = ImGui::CalcTextSize(s.c_str()).x;
@@ -116,6 +121,7 @@ int myMain()
     infos << infoFile.rdbuf();
     infoFile.close();
 
+    int random_bg = random_int(0, 100);
 
     std::unique_ptr<Façade> façade;
     int fade_counter = 256;
@@ -154,6 +160,8 @@ int myMain()
     MapLayer layerForeground(map, 2);
     MapLayer layerRowingUpgrade(map, 4);
     MapLayer layerFishingUpgrade(map, 5);
+    MapLayer layerFarBoat(map, 6);
+    MapLayer layerFarIslands(map, 7);
 
     std::map<TokensType, int> tokens;
     tokens[TokensType::tokenNbr] = 0;
@@ -293,6 +301,7 @@ int myMain()
                     resetTokens(tokens);
                     upgradeFishing = false;
                     upgradeRowing = false;
+                    random_bg = random_int(0, 100);
                     if (ret == Status::onGoing)
                         imguiWindow = ImGuiWindow::gameWindow1;
                     else if (ret == Status::victory)
@@ -334,6 +343,17 @@ int myMain()
             window.draw(layerForeground);
             if (façade->getFishingUpgradeStatus()) window.draw(layerFishingUpgrade);
             if (façade->getRowingUpgradeStatus()) window.draw(layerRowingUpgrade);
+
+            if (random_bg < 10) {
+                window.draw(layerFarBoat);
+            }
+            else if (random_bg < 20) {
+                window.draw(layerFarIslands);
+            }
+            else if (random_bg < 30) {
+                window.draw(layerFarBoat);
+                window.draw(layerFarIslands);
+            }
             window.draw(player);
 
             ImGui::SFML::Render(window);

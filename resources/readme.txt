@@ -26,3 +26,7 @@ Island Background: Nathanael Mortensen - https://www.artstation.com/artwork/9el8
 Underwater background : Vecteezy.com - https://www.vecteezy.com/vector-art/5205042-underwater-world-vector-illustration-with-yellow-fish-reefs-and-sunken-ship
 
 Island Background 2 : http://clipart-library.com/clipart/8iEbRgorT.htm
+
+Waves sound: https://mixkit.co/free-sound-effects/sea/
+
+Minecraft: C418 - https://www.youtube.com/watch?v=XuZDeT8zI5c&ab_channel=C418-Topic

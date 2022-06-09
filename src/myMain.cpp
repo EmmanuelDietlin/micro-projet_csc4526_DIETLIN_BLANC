@@ -156,8 +156,6 @@ int myMain()
     
     sf::Music ambiance;
     ambiance.openFromFile("resources/music/Minecraft.wav");
-    //ambiance.openFromFile("resources/music/atmospheric.wav");
-    //ambiance.openFromFile("resources/music/sad_piano.wav");
     ambiance.setLoop(true);
     ambiance.setVolume(5);
     ambiance.play();
@@ -369,9 +367,7 @@ int myMain()
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
 				if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
-                    //std::cout << "upgradeRowing : " << tokens[TokensType::upgradeRowingToken] << std::endl;
-                    //std::cout << "upgradeFishing : " << tokens[TokensType::upgradeFishingToken] << std::endl;
-					FadeToBlack(fade_counter);
+                   FadeToBlack(fade_counter);
                     auto ret = façade->nextDay(tokens);
 					readRecap(recapText);
                     resetTokens(tokens);

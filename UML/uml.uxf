@@ -143,6 +143,7 @@ fontsize=10
 --
 - damageBoat: int
 - foodLost: int
+- stormEventSignal: signal&lt;void(void)&gt;
 - damageBoatSignal: signal&lt;void(int const)&gt;
 - foodLostSignal: signal&lt;void(int const)&gt;
 --
@@ -174,6 +175,7 @@ Event
     <panel_attributes>WindEvent
 --
 - moveBackDistance: int
+- windEventSignal: signal&lt;void(void)&gt;
 - moveBackSignal: signal&lt;void(int const)&gt;
 --
 + execute()</panel_attributes>
@@ -493,7 +495,7 @@ m2=1</panel_attributes>
       <w>200</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>StormEvent
+    <panel_attributes>SeagullEvent
 --
 - damagePlayer: int
 - foodLost: int
@@ -515,5 +517,34 @@ m2=1</panel_attributes>
     <panel_attributes>lt=&lt;.
 &lt;&lt;instanceOf&gt;&gt;</panel_attributes>
     <additional_attributes>10.0;10.0;80.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1110</x>
+      <y>650</y>
+      <w>200</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>MaterialEvent
+--
+- materialFound: int
+- materialEventSignal: signal&lt;void(void)&gt; 
+- materialFoundSignal: signal&lt;void(int const)&gt; 
+--
++ execute()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>570</y>
+      <w>330</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;instanceOf&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;310.0;80.0</additional_attributes>
   </element>
 </diagram>

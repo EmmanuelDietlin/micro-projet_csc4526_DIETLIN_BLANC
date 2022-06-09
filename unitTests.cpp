@@ -99,11 +99,9 @@ TEST(TestGameplayFaçade, TestNextDay2) {
     tokens[TokensType::rowingTokens] = 2;
     tokens[TokensType::upgradeFishingToken] = 1;
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
-    int d_ref = 0;
-    int f_ref = f.getFishCount();
     int mat_ref = f.getMaterials();
     auto s = f.nextDay(tokens);
-    EXPECT_TRUE(f.getDistanceTravelled() >= d_ref);
+    EXPECT_TRUE(f.getDistanceTravelled() >= 0);
     EXPECT_TRUE(f.getFishCount() >= 0);
     EXPECT_FALSE(f.getFishingUpgradeStatus());
     EXPECT_FALSE(f.getRowingUpgradeStatus());
@@ -116,11 +114,9 @@ TEST(TestGameplayFaçade, TestNextDay3) {
     tokens[TokensType::rowingTokens] = 2;
     tokens[TokensType::upgradeFishingToken] = 1;
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials*10);
-    int d_ref = 0;
-    int f_ref = f.getFishCount();
     int mat_ref = f.getMaterials();
     auto s = f.nextDay(tokens);
-    EXPECT_TRUE(f.getDistanceTravelled() >= d_ref);
+    EXPECT_TRUE(f.getDistanceTravelled() >= 0);
     EXPECT_TRUE(f.getFishCount() >= 0);
     EXPECT_TRUE(f.getFishingUpgradeStatus());
     EXPECT_FALSE(f.getRowingUpgradeStatus());

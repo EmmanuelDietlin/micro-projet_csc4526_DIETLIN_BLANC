@@ -55,6 +55,8 @@ private:
 	void writeWindEvent(void);
 	void writeSeagullEvent(void);
 	void writeMaterialEvent(void);
+	void damagePlayer(int const dmg);
+	void damageBoat(int const dmg);
 public:
 	GameplayFaçade(int const maxDay, int const MaxDistance, int const playerHp, 
 		int const playerMaxHp, int const boatHp, int const boatMaxHp, int const materials);

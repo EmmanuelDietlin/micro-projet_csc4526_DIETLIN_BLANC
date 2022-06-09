@@ -17,4 +17,5 @@ public:
 	void takeDamage(int const dmg);
 	void heal(int const heal);
 	int getHp();
+	bool stronglyDamaged();
 };

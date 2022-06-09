@@ -6,7 +6,7 @@ const int maxDay = 47;
 const int maxDistance = 6700;
 const int playerBaseHp = 100;
 const int boatBaseHp = 200;
-const int baseMaterials = 10;
+const int baseMaterials = 100;
 
 /*
 Test de la pêche lorsque le joueur est au-dessus de 50% de pv
@@ -56,17 +56,34 @@ TEST(TestGameplayFaçade, TestRowing2) {
 
 TEST(TestGameplayFaçade, TestHealing) {
     int token_nb = 2;
-    GameplayFaçade f(maxDay, maxDistance, playerBaseHp/2, playerBaseHp, boatBaseHp/2, boatBaseHp, baseMaterials);
-    f.executeHealingAction(2);
-    EXPECT_EQ(f.getPlayerHp(), playerBaseHp/2 + 30);
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp/2, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+    f.executeHealingAction(token_nb);
+    EXPECT_EQ(f.getPlayerHp(), 80);
 }
 
 TEST(TestGameplayFaçade, TestRepairing) {
     int token_nb = 2;
-    GameplayFaçade f(maxDay, maxDistance, playerBaseHp / 2, playerBaseHp, boatBaseHp / 2, boatBaseHp, baseMaterials);
-    f.executeRepairAction(2);
-    EXPECT_EQ(f.getBoatHp(), boatBaseHp/2 + 30);
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp / 2, boatBaseHp, baseMaterials);
+    f.executeRepairAction(token_nb);
+    EXPECT_EQ(f.getBoatHp(), 130);
 }
+
+TEST(TestGameplayFaçade, TestUpgradeRowingAction) {
+    int token_nb = 1;
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+    f.executeUpgradeRowingAction(token_nb);
+    EXPECT_TRUE(f.getRowingUpgradeStatus());
+    EXPECT_EQ(f.getMaterials(), baseMaterials - boat_materials_required);
+}
+
+TEST(TestGameplayFaçade, TestUpgradeFishingAction) {
+    int token_nb = 1;
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+    f.executeUpgradeFishingAction(token_nb);
+    EXPECT_TRUE(f.getFishingUpgradeStatus());
+    EXPECT_EQ(f.getMaterials(), baseMaterials - rod_materials_required);
+}
+
 
 TEST(TestGameplayFaçade, TestStormEvent) {
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
@@ -115,34 +132,20 @@ TEST(TestGameplayFaçade, TestNextDay1) {
     EXPECT_TRUE(f.getFishCount() >= 0);
     EXPECT_FALSE(f.getFishingUpgradeStatus());
     EXPECT_FALSE(f.getRowingUpgradeStatus());
-
-}
-
-/*
-Dans ce test, on va essayer d'améliorer la pêche alors que nous n'avons pas assez de matériaux
-On vérifiera donc que l'on à bien pas amélioré la pêche au jour suivant.
-*/
-TEST(TestGameplayFaçade, TestNextDay2) {
-    std::map<TokensType, int> tokens;
-    tokens[TokensType::upgradeFishingToken] = 1;
-    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
-    int mat_ref = f.getMaterials();
-    auto s = f.nextDay(tokens);
-    EXPECT_TRUE(f.getDistanceTravelled() >= 0);
-    EXPECT_TRUE(f.getFishCount() >= 0);
-    EXPECT_FALSE(f.getFishingUpgradeStatus());
-    EXPECT_FALSE(f.getRowingUpgradeStatus());
     EXPECT_TRUE(f.getMaterials() >= mat_ref);
 }
 
 /*
-Dans ce test, on a assez de matériaux pour améliorer la pêche. On vérifiera donc qu'on a bien réussi
-à améliorer celle-ci.
+Dans ce test, on va tester le fonctionnement de la méthode nextday de la façade.
+On exécutera ici 4 actions : se soigner, réparer, améliorer le bateau et améliorer la canne.
 */
-TEST(TestGameplayFaçade, TestNextDay3) {
+TEST(TestGameplayFaçade, TestNextDay2) {
     std::map<TokensType, int> tokens;
+    tokens[TokensType::healingTokens] = 2;
+    tokens[TokensType::repairTokens] = 1;
     tokens[TokensType::upgradeFishingToken] = 1;
-    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials*10);
+    tokens[TokensType::upgradeRowingToken] = 1;
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp*0.5, playerBaseHp, boatBaseHp*0.5, boatBaseHp, baseMaterials*0.5);
     int mat_ref = f.getMaterials();
     auto s = f.nextDay(tokens);
     EXPECT_TRUE(f.getDistanceTravelled() >= 0);
@@ -150,7 +153,10 @@ TEST(TestGameplayFaçade, TestNextDay3) {
     EXPECT_TRUE(f.getFishingUpgradeStatus());
     EXPECT_FALSE(f.getRowingUpgradeStatus());
     EXPECT_TRUE(f.getMaterials() < mat_ref);
+    EXPECT_TRUE(f.getPlayerHp() <= playerBaseHp);
+    EXPECT_TRUE(f.getBoatHp() <= boatBaseHp);
 }
+
 
 
 

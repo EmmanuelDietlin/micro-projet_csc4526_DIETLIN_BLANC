@@ -165,7 +165,7 @@ int myMain()
     sf::Music waves;
     waves.openFromFile("resources/music/waves.wav");
     waves.setLoop(true);
-    waves.setVolume(0.5f);
+    waves.setVolume(0.2f);
 
 
     auto imguiWindow = ImGuiWindow::mainMenu;
@@ -255,12 +255,16 @@ int myMain()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             if (imguiWindow != ImGuiWindow::mainMenu) {
                 FadeToBlack(fade_counter);
+                waves.stop();
                 imguiWindow = ImGuiWindow::mainMenu;
             }
         }
         ImGui::SFML::Update(window, deltaClock.restart());
 
         if (imguiWindow == ImGuiWindow::mainMenu) {
+            if (ambiance.getStatus() == sf::Music::Stopped) {
+                ambiance.play();
+            }
             if (SetMenuWindow("Main menu", "Les revoltes", "de la Bounty",
                 "Commencer la partie")) {
                 FadeToBlack(fade_counter);
@@ -276,6 +280,7 @@ int myMain()
             if (façade) {
                 if (ImGui::Button("Continuer la partie", sf::Vector2f(200, 100))) {
                     FadeToBlack(fade_counter);
+                    waves.play();
                     imguiWindow = ImGuiWindow::gameWindow1;
                 }
             }
@@ -364,8 +369,8 @@ int myMain()
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - 160) * 0.5f);
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 180);
 				if (ImGui::Button("Jour suivant", ImVec2(160, 90))) {
-                    std::cout << "upgradeRowing : " << tokens[TokensType::upgradeRowingToken] << std::endl;
-                    std::cout << "upgradeFishing : " << tokens[TokensType::upgradeFishingToken] << std::endl;
+                    //std::cout << "upgradeRowing : " << tokens[TokensType::upgradeRowingToken] << std::endl;
+                    //std::cout << "upgradeFishing : " << tokens[TokensType::upgradeFishingToken] << std::endl;
 					FadeToBlack(fade_counter);
                     auto ret = façade->nextDay(tokens);
 					readRecap(recapText);
@@ -430,6 +435,10 @@ int myMain()
             ImGui::SFML::Render(window);
         }
         else if (imguiWindow == ImGuiWindow::victory) {
+            if(waves.getStatus() == sf::Music::Playing)
+                waves.stop();
+            if (ambiance.getStatus() == sf::Music::Playing)
+                ambiance.stop();
             if (SetMenuWindow("Victory screen", "Vous avez", "gagne !",
                 "Retour au menu")) {
                 FadeToBlack(fade_counter);
@@ -443,6 +452,10 @@ int myMain()
             ImGui::SFML::Render(window);
         }
         else if (imguiWindow == ImGuiWindow::defeat) {
+            if (waves.getStatus() == sf::Music::Playing)
+                waves.stop();
+            if (ambiance.getStatus() == sf::Music::Playing)
+                ambiance.stop();
             if (SetMenuWindow("Defeat screen", "Vous avez", "perdu !",
                 "Retour au menu")) {
                 FadeToBlack(fade_counter);
@@ -463,12 +476,13 @@ int myMain()
             ImGui::Begin("Informations", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove
                 | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
 
-            ImGui::SetCursorPosY(w_height * 0.1f);
+            ImGui::SetCursorPosY(w_height * 0.02f);
             ImGui::SetWindowFontScale(5);
             ImGuiYSpacing();
             TextCentered("Informations");
             ImGui::SetWindowFontScale(1.3f);
             ImGuiYSpacing();
+            ImGui::SetCursorPosX(10);
             ImGui::TextWrapped(infos.str().c_str());
             ImGuiYSpacing();
             ImGui::SetCursorPos(sf::Vector2f(w_width / 2 - 100, ImGui::GetWindowHeight() - 125));

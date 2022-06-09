@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="left-up" width="64" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="1">
+<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="left-up" width="64" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="1">
  <tileset firstgid="1" source="map_assets/ocean.tsx"/>
  <tileset firstgid="391" source="map_assets/boat.tsx"/>
  <tileset firstgid="511" source="map_assets/ocean_16x8.tsx"/>
@@ -9,45 +9,45 @@
  <tileset firstgid="3075" source="map_assets/sail.tsx"/>
  <tileset firstgid="3156" source="map_assets/fish_rod.tsx"/>
  <tileset firstgid="3157" source="map_assets/sail_boat.tsx"/>
- <tileset firstgid="3237" source="map_assets/islands.tsx"/>
- <layer id="1" name="ocean" width="64" height="45">
+ <tileset firstgid="3205" source="map_assets/islands.tsx"/>
+ <layer id="1" name="ocean" width="64" height="50">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
- <layer id="2" name="boat" width="64" height="45">
+ <layer id="2" name="boat" width="64" height="50">
   <data encoding="base64" compression="zlib">
-   eJztzzsSgkAARMHl9P7IRDQD1EwUj+icwQCC7a56+UwpAAAAAAAAsI1dU8o+HdIxnVLbbL1qPed87dIl9emabhX9H/J1TFO6p0d6VvT/la9zeqdPWtK3ov8AAADwrx8l4w6t
+   eJztzzsSgkAARMHl9P7IRDQD1EwUj+hcwQSC7a56+UwpAAAAAAAAsI1dU8o+HdIxnVLbbL1qPed87dIl9emabhX9H/J1TFO6p0d6VvT/la9zeqdPWtK3ov8AAAAAwH9+iyoOrQ==
   </data>
  </layer>
- <layer id="3" name="ocean_foreground" width="64" height="45">
+ <layer id="3" name="ocean_foreground" width="64" height="50">
   <data encoding="base64" compression="zlib">
-   eJztz0lSAlEABNGPwa77/pcSRJGpG1RQJkVBZXBiMD2CC6INf2bE21eFYGZmZmZmv+00CaGCKs5QwzkuUE+KXnf8LvnYQBMttNFBhjyC/10+9nCFa9ygjwFuI/h/x8chRhhjginu8RDB/xkfH/GEORZ4xgteI/i/5OMKa2zwhnd84DOC/1983GKHPQ4/n9MQSjhJi15nZmZmZmZ/rVY5hDY6yJCXi15kZmZmZmZm9j/6BicMNiQ=
+   eJztz0lSAlEABNGPwa77/pcSRJGpG1RQJkVBZXBiMD2CC6I1fr6I3FeFIEmSJOm3TpMQKlSlM6rROV1QPSl63fFd8rFBTWpRmzqUUR7B/y4fe3RF13RDfRrQbQT/7/g4pBGNaUJTuqeHCP7P+PhITzSnBT3TC71G8H/JxxWtaUNv9E4f9BnB/y8+bmlHezr8fE5DKNFJWvQ6SZIkSX9NqxxCmzqUUV4uepEkSZIkSZKk/+wb6t42JA==
   </data>
  </layer>
- <layer id="6" name="night" width="64" height="45" visible="0" opacity="0.58">
+ <layer id="6" name="night" width="64" height="50" visible="0" opacity="0.58">
   <data encoding="base64" compression="zlib">
-   eJztmUsOwjAMRNlz/8sAbUpPRheNZEVpEnsmqPksZgFSS549GSN5ez4e30O70FZJi1IvQO9Dn4ArptKzeIawVhrVrldJ7Xxd3Cn5XYmQM2nrx/RayOl/Q+snlhBvp85Xck53UZ8ctwMUvhfxUaqvJYp5q0YGpXiZmboqe7FH+lIjg3K8SJbKjEDeoz1zqVg+YWWshcG/5ypDatxv9D74M/se5LJB3gXtHUr5CD0/c9bk5hBjtqVYkLlRW6x8Z+XZvzXyf//R+d3g/KP3fwH4e6nb5J/8k3/yT/7Jr+XooQYWhqUjfguH9bnJ3wf/6P7fwOfuxG/pZU/+t7D05H8kA0p0dVc0qlkvy2/sZ9162Btb6qvx1t33xlb+3F1rZW+M5hYrg1LzKZYnjExdAX6ZnYzMzuWnFHtvzOw72iOWTzT5z/JU2J8W9sbI3B5hb5zLz9b3xta5zcp3Vp5Z1erc1nhMZly4F2t1bmszR362zrW7zW2rpDd+vWHY9Q==
+   eJztWcsOwyAM233//zPb+li/bD0UKUItkNhMBYLkwyaVxonjVMr6fDy+OzaBtRImJV4A3js+Ea8zlMYSOMS50qB2vkpyF/KyHJD/lQCJSZs/ptZinuEdWj2xgGg7FV9JnMtFfnK8FwDxvYiOUnUtwZm2anhQii/TU2dlLbaTutTwoBxfxEulRyD3aGMuBUsnLI+1cAj3XHlIjf5G+yHEHGqQ8wbZC9oeSukIjZ85a3JziDHbUlyQuVEbLH9n+dm/MfK3/+j8l8H5j17/CeDfS96cv/N3/s7f+Tt/LY8ecmDhMHXE38LD+pzz74P/6PpfwefuxN9Sy570b+HSk/4RDyjBVa9oUDNflndsR9562Btb8qvR1t33xlb+uV5rZW+M+hbLg1Lz6cxPGJ46A/yldzI8O+efEuy9MbPuaI1YOtH4P0tTcX1a2Bsjc3uEvXHOP1vfG1vnNsvfWX5mRatzW6Mx6XHxXqzVua31HPnbOtfuNretkNrw48ePn1HPD8X02PU=
   </data>
  </layer>
- <layer id="7" name="rowingUpgrade" width="64" height="45" visible="0">
+ <layer id="7" name="rowingUpgrade" width="64" height="50" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztzzkOgmAUReG/cEwQh0JQC0EpnCgUZf9L8+zBRIp3vuT096YkSZIkSZIkSZI0jFGW0pgmNKUZzbOhV/3Pgq85LWlFa9oE+r/la0El7WhPh0D/j3ytqKYTnakJ9P/C1yvd6E4PagP9f/L1RR296UN9oP+SJEmSJP3iCyYxBcU=
+   eJztzzkSglAUBdEfOFYhDoGgBoISOBEoyv6XZm/BRILXp6rze1OSJEmSJEmSJEkaxihLaUwTmtKM5tnQq/5nwdeclrSiNW0C/d/ytaCSdrSnQ6D/R75WVNOJztQE+n/h65VudKcHtYH+P/n6oo7e9KE+0H9JkiRJkiRJv/sCAOQFxQ==
   </data>
  </layer>
- <layer id="8" name="fishingUpgrade" width="64" height="45" visible="0">
+ <layer id="8" name="fishingUpgrade" width="64" height="50" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztzsEAAAAIBLADCC+g0MOox0awBAAAAAAAAPiiK3N9AAAAAPhsAURVAOE=
+   eJztzsEAAAAIBLADCC+g0MOox0awBAAAAAAAAPiiK3N9AAAAAADgnwWpkQDh
   </data>
  </layer>
- <layer id="9" name="far_boat" width="64" height="45">
+ <layer id="9" name="far_boat" width="64" height="50">
   <data encoding="base64" compression="zlib">
-   eJztz9cNwkAABNErwO2RMybnZHKGwpkmEBI3T5r/3RAkSZIkSZIkxSKXhJCnAhWpRGWqUDX59brvq/GxTg1qUovalFIngv9dPvaoTwMa0ojGNIng/5SPM5rTgpa0ojVtIvif8XFLO9rTgY50onME/y98vNKN7vSgJ73oHcF/SZIkSZIk6Z98AJpbFpk=
+   eJztz9cNwkAABNErwO2RMybnZHKGwpkmEEI3T5r/3RAkSZIkSZIkxSKXhJCnAhWpRGWqUDX59brvq/GxTg1qUovalFIngv9dPvaoTwMa0ojGNIng/5SPM5rTgpa0ojVtIvif8XFLO9rTgY50onME/y98vNKN7vSgJ73oHcF/SZIkSZIkSZL0/z6d+haZ
   </data>
  </layer>
- <layer id="10" name="far_island" width="64" height="45">
+ <layer id="10" name="far_island" width="64" height="50">
   <data encoding="base64" compression="zlib">
-   eJztz8kRglAUBdEXwM8/DURcCMjCcYEDC8dw7Cikytenqvf3RkiSJEmSJEnSf6pKxKLMveJ3ar4uqaEVralN9L/ja08bGmhLu0T/93w90JFONNI50f8LX690o4nu9Ej0/8nXF73pk+i3JEmSJEmScvoCbEsYUg==
+   eJztz7cNQlEURMFXwO8dG2ADbIANsOWxVYDEnZFOvtsaAAAAAMB/6nWt9btfr/ieQb4O0yiN0yRNC/2f5es8LdIyrdK60P9Nvm7TLu3TIR0L/T/l6zld0jXd0r3Q/0e+PtMrvQv9BgAAAACASj4xJBSS
   </data>
  </layer>
 </map>

@@ -41,7 +41,7 @@ TEST(TestGameplayFaçade, TestStormEvent) {
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int fish_ref = f.getFishCount();
     int boat_HP_ref = f.getBoatHp();
-    f.executeStormEventForTest();
+    f.executeStormEvent();
     EXPECT_TRUE(f.getFishCount() < fish_ref);
     EXPECT_TRUE(f.getBoatHp() < boat_HP_ref);
 }
@@ -49,7 +49,7 @@ TEST(TestGameplayFaçade, TestStormEvent) {
 TEST(TestGameplayFaçade, TestWindEvent) {
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     f.moveBack(-100);
-    f.executeWindEventForTest();
+    f.executeWindEvent();
     EXPECT_TRUE(f.getDistanceTravelled() < 100);
 }
 
@@ -57,7 +57,7 @@ TEST(TestGameplayFaçade, TestSeagullEvent) {
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int fish_ref = f.getFishCount();
     int player_HP_ref = f.getPlayerHp();
-    f.executeSeagullEventForTest();
+    f.executeSeagullEvent();
     EXPECT_TRUE(f.getFishCount() < fish_ref);
     EXPECT_TRUE(f.getPlayerHp() < player_HP_ref);
 }
@@ -65,7 +65,7 @@ TEST(TestGameplayFaçade, TestSeagullEvent) {
 TEST(TestGameplayFaçade, TestMaterialEvent) {
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int material_ref = f.getMaterials();
-    f.executeMaterialEventForTest();
+    f.executeMaterialEvent();
     EXPECT_TRUE(f.getMaterials() > material_ref);
 }
 

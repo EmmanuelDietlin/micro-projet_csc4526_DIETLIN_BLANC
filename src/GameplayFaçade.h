@@ -51,6 +51,10 @@ private:
 	void connectSeagullEventToFaçade(SeagullEvent* seagullEvent);
 	void connectMaterialEventToFaçade(MaterialEvent* materialEvent);
 	int random_n_to_m(int const nbMin, int const nbMax);
+	void writeStormEvent(void);
+	void writeWindEvent(void);
+	void writeSeagullEvent(void);
+	void writeMaterialEvent(void);
 public:
 	GameplayFaçade(int const maxDay, int const MaxDistance, int const playerHp, 
 		int const playerMaxHp, int const boatHp, int const boatMaxHp, int const materials);
@@ -74,12 +78,8 @@ public:
 	void moveBack(int const distance);
 	void loseFood(int const food);
 	void findMaterial(int const material);
-	void writeStormEvent(void);
-	void writeWindEvent(void);
-	void writeSeagullEvent(void);
-	void writeMaterialEvent(void);
-	void executeStormEventForTest();
-	void executeWindEventForTest();
-	void executeSeagullEventForTest();
-	void executeMaterialEventForTest();
+	void executeStormEvent();
+	void executeWindEvent();
+	void executeSeagullEvent();
+	void executeMaterialEvent();
 };

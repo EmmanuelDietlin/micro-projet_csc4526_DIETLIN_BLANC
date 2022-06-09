@@ -60,8 +60,8 @@ fontsize=10
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1000</x>
-      <y>110</y>
+      <x>990</x>
+      <y>90</y>
       <w>150</w>
       <h>120</h>
     </coordinates>
@@ -134,7 +134,7 @@ fontsize=10
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>770</x>
+      <x>660</x>
       <y>650</y>
       <w>200</w>
       <h>120</h>
@@ -145,6 +145,7 @@ fontsize=10
 - foodLost: int
 - damageBoatSignal: signal&lt;void(int const)&gt;
 - foodLostSignal: signal&lt;void(int const)&gt;
+--
 + execute()</panel_attributes>
     <additional_attributes/>
   </element>
@@ -165,7 +166,7 @@ Event
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>540</x>
+      <x>440</x>
       <y>650</y>
       <w>200</w>
       <h>120</h>
@@ -181,50 +182,50 @@ Event
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>630</x>
+      <x>530</x>
       <y>570</y>
-      <w>210</w>
+      <w>310</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;instanceOf&gt;&gt;</panel_attributes>
-    <additional_attributes>190.0;10.0;10.0;80.0</additional_attributes>
+    <additional_attributes>290.0;10.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>820</x>
+      <x>710</x>
       <y>570</y>
-      <w>90</w>
+      <w>150</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;instanceOf&gt;&gt;</panel_attributes>
-    <additional_attributes>20.0;10.0;10.0;80.0</additional_attributes>
+    <additional_attributes>130.0;10.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>880</x>
-      <y>180</y>
-      <w>140</w>
-      <h>40</h>
+      <y>170</y>
+      <w>130</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;instanceOf&gt;&gt;</panel_attributes>
-    <additional_attributes>120.0;20.0;10.0;20.0</additional_attributes>
+    <additional_attributes>110.0;10.0;10.0;30.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>880</x>
       <y>90</y>
-      <w>140</w>
-      <h>70</h>
+      <w>130</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;instanceOf&gt;&gt;</panel_attributes>
-    <additional_attributes>120.0;50.0;10.0;10.0</additional_attributes>
+    <additional_attributes>110.0;30.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -234,7 +235,8 @@ Event
       <w>120</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
     <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
   </element>
   <element>
@@ -245,7 +247,8 @@ Event
       <w>120</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
     <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
   </element>
   <element>
@@ -254,9 +257,9 @@ Event
       <x>410</x>
       <y>0</y>
       <w>290</w>
-      <h>420</h>
+      <h>450</h>
     </coordinates>
-    <panel_attributes>Façade
+    <panel_attributes>GameplayFaçade
 --
 - action_tokens: int
 - fishCount: atomic&lt;int&gt;
@@ -269,9 +272,6 @@ Event
 - rowingBonus: int
 - recapText: stringstream
 --
-- connectStormEventToFaçade(stormEvent: *StormEvent): void
-- connectWindEventToFaçade(windEvent: WindEvent*): void
-- random_n_to_m(nbMin: int, nbMax: int): int
 + getTokenNbr(): int
 + getDistanceTravelled()
 + getDayCount(): int
@@ -290,14 +290,19 @@ Event
 + nextDay(tokens: map&lt;TokensType, int&gt;): Status
 + dailyEvent(): void
 + moveBack(distance: int): void
-+ loseFood(food: int): void</panel_attributes>
++ loseFood(food: int): void
++ findMaterial(material: int): void
++ executeStormEvent(): void
++ executeWindEvent(): void
++ executeSeagullEvent(): void
++ executeMaterialEvent(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>440</x>
-      <y>460</y>
+      <y>500</y>
       <w>210</w>
       <h>120</h>
     </coordinates>
@@ -315,12 +320,13 @@ Event
     <id>Relation</id>
     <coordinates>
       <x>530</x>
-      <y>410</y>
+      <y>440</y>
       <w>30</w>
-      <h>70</h>
+      <h>80</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -436,22 +442,23 @@ Event
       <x>300</x>
       <y>270</y>
       <w>160</w>
-      <h>280</h>
+      <h>300</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>140.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
+    <additional_attributes>140.0;280.0;10.0;280.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>640</x>
-      <y>510</y>
+      <y>530</y>
       <w>160</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>lt=-
-m1=0..n
-m2=0..1</panel_attributes>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=0..n</panel_attributes>
     <additional_attributes>140.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
@@ -474,7 +481,39 @@ m2=0..1</panel_attributes>
       <w>190</w>
       <h>180</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
     <additional_attributes>10.0;10.0;170.0;10.0;170.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>890</x>
+      <y>650</y>
+      <w>200</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>StormEvent
+--
+- damagePlayer: int
+- foodLost: int
+- seagullEventSignal: signal&lt;void(void)&gt; 
+- damagePlayerSignal: signal&lt;void(int const)&gt; 
+- 	foodLostSignal: signal&lt;void(int const)&gt; 
+--
++ execute()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>570</y>
+      <w>120</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;instanceOf&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;80.0</additional_attributes>
   </element>
 </diagram>

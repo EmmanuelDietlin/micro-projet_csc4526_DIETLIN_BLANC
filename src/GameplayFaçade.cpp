@@ -394,7 +394,7 @@ bool GameplayFaçade::getFishingUpgradeStatus() {
 /**
 * Fonction pour tester la bonne execution de StormEvent
 */
-void GameplayFaçade::executeStormEventForTest() {
+void GameplayFaçade::executeStormEvent() {
 	context->setEvent(eventVector[0]);
 	context->executeEvent();
 }
@@ -402,7 +402,7 @@ void GameplayFaçade::executeStormEventForTest() {
 /**
 * Fonction pour tester la bonne execution de WindEvent
 */
-void GameplayFaçade::executeWindEventForTest() {
+void GameplayFaçade::executeWindEvent() {
 	context->setEvent(eventVector[1]);
 	context->executeEvent();
 }
@@ -410,14 +410,14 @@ void GameplayFaçade::executeWindEventForTest() {
 /**
 * Fonction pour tester la bonne execution de SeagullEvent
 */
-void GameplayFaçade::executeSeagullEventForTest() {
+void GameplayFaçade::executeSeagullEvent() {
 	context->setEvent(eventVector[2]);
 	context->executeEvent();
 }
 /**
 * Fonction pour tester la bonne execution de MaterialEvent
 */
-void GameplayFaçade::executeMaterialEventForTest() {
+void GameplayFaçade::executeMaterialEvent() {
 	context->setEvent(eventVector[3]);
 	context->executeEvent();
 }

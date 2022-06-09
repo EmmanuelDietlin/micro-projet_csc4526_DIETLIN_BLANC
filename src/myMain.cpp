@@ -12,6 +12,7 @@
 #include <memory>
 #include "SFMLOrthogonalLayer.h"
 #include "signals.h"
+#include <SFML/Audio.hpp>
 
 const int w_height = 800;
 const int w_width = 1000;
@@ -153,7 +154,19 @@ int myMain()
     sf::Clock deltaClock;
     sf::Clock faderClock;
     
-    
+    sf::Music ambiance;
+    ambiance.openFromFile("resources/music/Minecraft.wav");
+    //ambiance.openFromFile("resources/music/atmospheric.wav");
+    //ambiance.openFromFile("resources/music/sad_piano.wav");
+    ambiance.setLoop(true);
+    ambiance.setVolume(5);
+    ambiance.play();
+
+    sf::Music waves;
+    waves.openFromFile("resources/music/waves.wav");
+    waves.setLoop(true);
+    waves.setVolume(0.5f);
+
 
     auto imguiWindow = ImGuiWindow::mainMenu;
 
@@ -255,6 +268,7 @@ int myMain()
                 tokens[TokensType::tokenNbr] = façade->getTokenNbr();
                 tokens[TokensType::remainingTokens] = façade->getTokenNbr();
                 readRecap(recapText);
+                waves.play();
                 imguiWindow = ImGuiWindow::gameWindow1;
             }
             ImGuiYSpacing();

@@ -40,14 +40,14 @@ GameplayFaçade::GameplayFaçade(int const maxDay, int const maxDistance, int cons
 	recap << recapText.str();
 	recap.close();
 	recapText.str(std::string());
-	eventVector.push_back(std::make_shared<StormEvent>());
-	eventVector.push_back(std::make_shared<WindEvent>());	
-	eventVector.push_back(std::make_shared<SeagullEvent>());	
-	eventVector.push_back(std::make_shared<MaterialEvent>());	
-	connectStormEventToFaçade((StormEvent*)eventVector[0].get());
-	connectWindEventToFaçade((WindEvent*)eventVector[1].get());
-	connectSeagullEventToFaçade((SeagullEvent*)eventVector[2].get());
-	connectMaterialEventToFaçade((MaterialEvent*)eventVector[3].get());
+	badEventVector.push_back(std::make_shared<StormEvent>());
+	badEventVector.push_back(std::make_shared<WindEvent>());
+	badEventVector.push_back(std::make_shared<SeagullEvent>());
+	goodEventVector.push_back(std::make_shared<MaterialEvent>());
+	connectStormEventToFaçade((StormEvent*)badEventVector[0].get());
+	connectWindEventToFaçade((WindEvent*)badEventVector[1].get());
+	connectSeagullEventToFaçade((SeagullEvent*)badEventVector[2].get());
+	connectMaterialEventToFaçade((MaterialEvent*)goodEventVector[0].get());
 }
 
 /**
@@ -236,10 +236,16 @@ int GameplayFaçade::getMaterials() {
 Méthode exécutant ou non un évènement choisit au hasard selon un tirage aléatoire.
 */
 void GameplayFaçade::dailyEvent() {
-	int probaDailyEvent = random_n_to_m(1, 100);
-	if (probaDailyEvent <= proba_event) {
-		size_t size = eventVector.size();
-		context->setEvent(eventVector[random_n_to_m(0, size - 1)]);
+	int probaGoodDailyEvent = random_n_to_m(1, 100);
+	int probaBadDailyEvent = random_n_to_m(1, 100);
+	if (probaGoodDailyEvent <= proba_good_event) {
+		size_t size = goodEventVector.size();
+		context->setEvent(goodEventVector[random_n_to_m(0, size - 1)]);
+		context->executeEvent();
+	}
+	if (probaBadDailyEvent <= proba_bad_event) {
+		size_t size = badEventVector.size();
+		context->setEvent(badEventVector[random_n_to_m(0, size - 1)]);
 		context->executeEvent();
 	}
 }
@@ -407,7 +413,7 @@ bool GameplayFaçade::getFishingUpgradeStatus() {
 * Fonction pour tester la bonne execution de StormEvent
 */
 void GameplayFaçade::executeStormEvent() {
-	context->setEvent(eventVector[0]);
+	context->setEvent(badEventVector[0]);
 	context->executeEvent();
 }
 
@@ -415,7 +421,7 @@ void GameplayFaçade::executeStormEvent() {
 * Fonction pour tester la bonne execution de WindEvent
 */
 void GameplayFaçade::executeWindEvent() {
-	context->setEvent(eventVector[1]);
+	context->setEvent(badEventVector[1]);
 	context->executeEvent();
 }
 
@@ -423,14 +429,14 @@ void GameplayFaçade::executeWindEvent() {
 * Fonction pour tester la bonne execution de SeagullEvent
 */
 void GameplayFaçade::executeSeagullEvent() {
-	context->setEvent(eventVector[2]);
+	context->setEvent(badEventVector[2]);
 	context->executeEvent();
 }
 /**
 * Fonction pour tester la bonne execution de MaterialEvent
 */
 void GameplayFaçade::executeMaterialEvent() {
-	context->setEvent(eventVector[3]);
+	context->setEvent(goodEventVector[0]);
 	context->executeEvent();
 }
 

@@ -18,7 +18,8 @@ const int max_tokens_nb = 5;
 const int starting_fish_number = 2;
 const int fish_eating_number = 2;
 const int damage_starvation = 10;
-const int proba_event = 30;
+const int proba_bad_event = 60;
+const int proba_good_event = 15;
 const int rod_materials_required = 20;
 const int boat_materials_required = 40;
 
@@ -44,7 +45,8 @@ private:
 	std::unique_ptr<Boat> boat;
 	std::unique_ptr<Player> player;
 	std::unique_ptr<Context> context;
-	std::vector<std::shared_ptr<Event>> eventVector;
+	std::vector<std::shared_ptr<Event>> goodEventVector;
+	std::vector<std::shared_ptr<Event>> badEventVector;
 	std::stringstream recapText;
 	void connectStormEventToFaçade(StormEvent* stormEvent);
 	void connectWindEventToFaçade(WindEvent* windEvent);

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <string>
-#include "Façade.h"
+#include "GameplayFaçade.h"
 
 const int maxDay = 47;
 const int maxDistance = 6700;
@@ -8,9 +8,9 @@ const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 const int baseMaterials = 100;
 
-TEST(TestFaçade, TestFishing) {
+TEST(TestGameplayFaçade, TestFishing) {
     int token_nb = 2;
-    Façade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int fish_ref = f.getFishCount();
     f.executeFishingAction(2);
     EXPECT_TRUE(f.getFishCount() >= fish_ref);
@@ -18,27 +18,27 @@ TEST(TestFaçade, TestFishing) {
 
 TEST(TestFaçade, TestRowing) {
     int token_nb = 2;
-    Façade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     f.executeRowingAction(2);
     EXPECT_TRUE(f.getDistanceTravelled() >= 0);
 }
 
-TEST(TestFaçade, TestHealing) {
+TEST(TestGameplayFaçade, TestHealing) {
     int token_nb = 2;
-    Façade f(maxDay, maxDistance, playerBaseHp/2, playerBaseHp, boatBaseHp/2, boatBaseHp, baseMaterials);
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp/2, playerBaseHp, boatBaseHp/2, boatBaseHp, baseMaterials);
     f.executeHealingAction(2);
     EXPECT_EQ(f.getPlayerHp(), playerBaseHp/2 + 40);
 }
 
-TEST(TestFaçade, TestRepairing) {
+TEST(TestGameplayFaçade, TestRepairing) {
     int token_nb = 2;
-    Façade f(maxDay, maxDistance, playerBaseHp / 2, playerBaseHp, boatBaseHp / 2, boatBaseHp, baseMaterials);
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp / 2, playerBaseHp, boatBaseHp / 2, boatBaseHp, baseMaterials);
     f.executeRepairAction(2);
     EXPECT_EQ(f.getBoatHp(), boatBaseHp/2 + 40);
 }
 
-TEST(TestFaçade, TestStormEvent) {
-    Façade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+TEST(TestGameplayFaçade, TestStormEvent) {
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int fish_ref = f.getFishCount();
     int boat_HP_ref = f.getBoatHp();
     f.executeStormEventForTest();
@@ -46,15 +46,15 @@ TEST(TestFaçade, TestStormEvent) {
     EXPECT_TRUE(f.getBoatHp() < boat_HP_ref);
 }
 
-TEST(TestFaçade, TestWindEvent) {
-    Façade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+TEST(TestGameplayFaçade, TestWindEvent) {
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     f.moveBack(-100);
     f.executeWindEventForTest();
     EXPECT_TRUE(f.getDistanceTravelled() < 100);
 }
 
-TEST(TestFaçade, TestSeagullEvent) {
-    Façade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+TEST(TestGameplayFaçade, TestSeagullEvent) {
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int fish_ref = f.getFishCount();
     int player_HP_ref = f.getPlayerHp();
     f.executeSeagullEventForTest();
@@ -62,18 +62,18 @@ TEST(TestFaçade, TestSeagullEvent) {
     EXPECT_TRUE(f.getPlayerHp() < player_HP_ref);
 }
 
-TEST(TestFaçade, TestMaterialEvent) {
-    Façade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+TEST(TestGameplayFaçade, TestMaterialEvent) {
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int material_ref = f.getMaterials();
     f.executeMaterialEventForTest();
     EXPECT_TRUE(f.getMaterials() > material_ref);
 }
 
-TEST(TestFaçade, TestNextDay1) {
+TEST(TestGameplayFaçade, TestNextDay1) {
     std::map<TokensType, int> tokens;
     tokens[TokensType::fishingsTokens] = 2;
     tokens[TokensType::rowingTokens] = 3;
-    Façade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int d_ref = 0;
     int f_ref = f.getFishCount();
     int mat_ref = f.getMaterials();
@@ -85,11 +85,11 @@ TEST(TestFaçade, TestNextDay1) {
     EXPECT_EQ(f.getMaterials(), mat_ref);
 }
 
-TEST(TestFaçade, TestNextDay2) {
+TEST(TestGameplayFaçade, TestNextDay2) {
     //faire le test mais cette fois en essayant d'améliorer mais pas assez de matériaux
 }
 
-TEST(TestFaçade, TestNextDay3) {
+TEST(TestGameplayFaçade, TestNextDay3) {
     //Faire le test avec assez de matériaux pour améliorer
 }
 

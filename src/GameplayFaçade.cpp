@@ -1,4 +1,4 @@
-#include "Façade.h"
+#include "GameplayFaçade.h"
 #include "FishingAction.h"
 #include "RowingAction.h"
 #include "HealPlayerAction.h"
@@ -22,7 +22,7 @@ Constructeur de la classe Façade.
 *@param materials nombre de matériaux au démarrage.
 *
 */
-Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int const playerMaxHp,
+GameplayFaçade::GameplayFaçade(int const maxDay, int const maxDistance, int const playerHp, int const playerMaxHp,
 	int const boatHp, int const boatMaxHp, int const materials)
 	: action_tokens(max_tokens_nb),
 	fishCount(starting_fish_number), 
@@ -54,21 +54,21 @@ Façade::Façade(int const maxDay, int const maxDistance, int const playerHp, int 
 Renvoie le nombre de jetons du jeu.
 * @return le nombre de jetons
 */
-int Façade::getTokenNbr() {
+int GameplayFaçade::getTokenNbr() {
 	return action_tokens;
 }
 /**
 Renvoie le nombre de jours actuel du jeu.
 * @return le nombre de jours
 */
-int Façade::getDayCount() {
+int GameplayFaçade::getDayCount() {
 	return dayCount;
 }
 /**
 Renvoie la distance parcourue par le joueur.
 * @return la distance parcourue
 */
-int Façade::getDistanceTravelled() {
+int GameplayFaçade::getDistanceTravelled() {
 	return distanceTravelled;
 }
 
@@ -76,7 +76,7 @@ int Façade::getDistanceTravelled() {
 Execute l'action de ramer, avec le nombre de jetons passé en paramètre
 *@param tokens nombre de jetons pour l'action
 */
-void Façade::executeRowingAction(int const tokens) {
+void GameplayFaçade::executeRowingAction(int const tokens) {
 	int d = rowingBonus;
 	if (tokens > 0) {
 		context->setAction(std::make_unique<RowingAction>(tokens));
@@ -101,7 +101,7 @@ void Façade::executeRowingAction(int const tokens) {
 Execute l'action de pêcher, avec le nombre de jetons passé en paramètres
 *@param tokens nombre de jetons pour l'action
 */
-void Façade::executeFishingAction(int const tokens) {
+void GameplayFaçade::executeFishingAction(int const tokens) {
 	int f = fishingBonus;
 	if (tokens > 0) {
 		context->setAction(std::make_unique<FishingAction>(tokens));
@@ -127,7 +127,7 @@ Execute l'action de se soigner, avec le nombre de jetons passé en paramètres
 *@param tokens nombre de jetons pour l'action
 *
 */
-void Façade::executeHealingAction(int const tokens) {
+void GameplayFaçade::executeHealingAction(int const tokens) {
 	if (tokens > 0) {
 		context->setAction(std::make_unique<HealPlayerAction>(tokens));
 		int h = context->executeAction();
@@ -143,7 +143,7 @@ Execute l'action de réparer le bateau, avec le nombre de jetons passé en paramèt
 *@param tokens nombre de jetons pour l'action
 *
 */
-void Façade::executeRepairAction(int const tokens) {
+void GameplayFaçade::executeRepairAction(int const tokens) {
 	if (tokens > 0) {
 		context->setAction(std::make_unique<RepairBoatAction>(tokens));
 		int h = context->executeAction();
@@ -160,7 +160,7 @@ Ecrit également dans un fichier recap.txt le récapitulatif des actions et évènem
 *@param tokens map contenant tous les jetons d'actions
 *@return le status du jeu (onGoing, victory, defeat)
 */
-Status Façade::nextDay(std::map<TokensType, int>& tokens) {
+Status GameplayFaçade::nextDay(std::map<TokensType, int>& tokens) {
 	auto status = Status::onGoing;
 	recapText.str(std::string());
 	dayCount++;
@@ -195,35 +195,35 @@ Status Façade::nextDay(std::map<TokensType, int>& tokens) {
 Renvoie le nombre de poissons actuellement en possession du joueur.
 * @return le nombre de poissons
 */
-int Façade::getFishCount() {
+int GameplayFaçade::getFishCount() {
 	return fishCount;
 }
 /**
 Renvoie la vie actuelle du joueur.
 * @return les points de vie
 */
-int Façade::getPlayerHp() {
+int GameplayFaçade::getPlayerHp() {
 	return player->getHp();
 }
 /**
 Renvoie la vie actuelle du bateau.
 * @return les points de vie
 */
-int Façade::getBoatHp() {
+int GameplayFaçade::getBoatHp() {
 	return boat->getHp();
 }
 /**
 Renvoie le nombre de matériaux en possession du joueur.
 * @return le nombre de matériaux
 */
-int Façade::getMaterials() {
+int GameplayFaçade::getMaterials() {
 	return materials;
 }
 
 /**
 Méthode exécutant ou non un évènement choisit au hasard selon un tirage aléatoire.
 */
-void Façade::dailyEvent() {
+void GameplayFaçade::dailyEvent() {
 	int probaDailyEvent = random_n_to_m(1, 100);
 	if (probaDailyEvent <= proba_event) {
 		size_t size = eventVector.size();
@@ -235,42 +235,42 @@ void Façade::dailyEvent() {
 /**
 * Connecte un évènement de type StormEvent à la méthode loseFood de la façade et takeDamage du bateau.
 */
-void Façade::connectStormEventToFaçade(StormEvent* s) {
-	s->stormEventSignal.connect(this, &Façade::writeStormEvent);
+void GameplayFaçade::connectStormEventToFaçade(StormEvent* s) {
+	s->stormEventSignal.connect(this, &GameplayFaçade::writeStormEvent);
 	s->damageBoatSignal.connect(boat.get(), &Entity::takeDamage);
-	s->foodLostSignal.connect(this, &Façade::loseFood);
+	s->foodLostSignal.connect(this, &GameplayFaçade::loseFood);
 }
 
 /**
 * Connecte un évènement de type WindEvent à la méthode moveBack de la façade.
 */
-void Façade::connectWindEventToFaçade(WindEvent* w) {
-	w->windEventSignal.connect(this, &Façade::writeWindEvent);
-	w->moveBackSignal.connect(this, &Façade::moveBack);
+void GameplayFaçade::connectWindEventToFaçade(WindEvent* w) {
+	w->windEventSignal.connect(this, &GameplayFaçade::writeWindEvent);
+	w->moveBackSignal.connect(this, &GameplayFaçade::moveBack);
 }
 
 /**
 * Connecte un évènement de type SeagullEvent à la méthode loseFood de la façade et takeDamage du player.
 */
-void Façade::connectSeagullEventToFaçade(SeagullEvent* s) {
-	s->seagullEventSignal.connect(this, &Façade::writeSeagullEvent);
+void GameplayFaçade::connectSeagullEventToFaçade(SeagullEvent* s) {
+	s->seagullEventSignal.connect(this, &GameplayFaçade::writeSeagullEvent);
 	s->damagePlayerSignal.connect(player.get(), &Entity::takeDamage);
-	s->foodLostSignal.connect(this, &Façade::loseFood);
+	s->foodLostSignal.connect(this, &GameplayFaçade::loseFood);
 }
 
 /**
 * Connecte un évènement de type MaterialEvent à la méthode findMaterial de la façade.
 */
-void Façade::connectMaterialEventToFaçade(MaterialEvent* m) {
-	m->materialEventSignal.connect(this, &Façade::writeMaterialEvent);
-	m->materialFoundSignal.connect(this, &Façade::findMaterial);
+void GameplayFaçade::connectMaterialEventToFaçade(MaterialEvent* m) {
+	m->materialEventSignal.connect(this, &GameplayFaçade::writeMaterialEvent);
+	m->materialFoundSignal.connect(this, &GameplayFaçade::findMaterial);
 }
 
 /**
 * Diminue la distance parcourue. Ne peut pas faire passer la distance parcourue en dessous de 0.
 * @param distance distance à retrancher
 */
-void Façade::moveBack(int const distance) {
+void GameplayFaçade::moveBack(int const distance) {
 	distanceTravelled.fetch_sub(distance);
 	if (distanceTravelled.load() < 0) {
 		distanceTravelled.store(0);
@@ -282,7 +282,7 @@ void Façade::moveBack(int const distance) {
 * Diminue la quantité de nourriture. Ne peut pas faire passer la quantité de poisson en dessous de 0.
 * @param food nombre de poissons à retrancher
 */
-void Façade::loseFood(int const food) {
+void GameplayFaçade::loseFood(int const food) {
 	fishCount.fetch_sub(food);
 	if (fishCount.load() < 0) {
 		fishCount.store(0);
@@ -294,7 +294,7 @@ void Façade::loseFood(int const food) {
 * Augmente la quantité de matériaux.
 * @param material nombre de matériaux à ajouter
 */
-void Façade::findMaterial(int const material) {
+void GameplayFaçade::findMaterial(int const material) {
 	materials.fetch_add(material);
 	recapText << std::endl << "Materiaux : +" << material << std::endl << std::endl;
 }
@@ -302,7 +302,7 @@ void Façade::findMaterial(int const material) {
 /**
 * Ecrit le message annonçant un événement de type StormEvent.
 */
-void Façade::writeStormEvent() {
+void GameplayFaçade::writeStormEvent() {
 	recapText << "La tempete fait bringuebaler votre embarcation dans tous les sens,"
 		<< " une partie de vos provisions tombe par dessus bord et votre bateau est abime !" << std::endl;
 }
@@ -310,7 +310,7 @@ void Façade::writeStormEvent() {
 /**
 * Ecrit le message annonçant un événement de type WindEvent.
 */
-void Façade::writeWindEvent() {
+void GameplayFaçade::writeWindEvent() {
 	recapText << "Un vent violent souffle pendant toute la journee, vous faisant perdre une partie de "
 		<< "votre progression !" << std::endl;
 }
@@ -318,7 +318,7 @@ void Façade::writeWindEvent() {
 /**
 * Ecrit le message annonçant un événement de type SeagullEvent.
 */
-void Façade::writeSeagullEvent() {
+void GameplayFaçade::writeSeagullEvent() {
 	recapText << "Vous vous faites attaquer par un groupe de mouettes,"
 		<< " une partie de vos provisions est perdue et vous etes blesse !" << std::endl;
 }
@@ -326,12 +326,12 @@ void Façade::writeSeagullEvent() {
 /**
 * Ecrit le message annonçant un événement de type MaterialEvent.
 */
-void Façade::writeMaterialEvent() {
+void GameplayFaçade::writeMaterialEvent() {
 	recapText << "Aujourd'hui est un jour de chance,"
 		<< " vous trouvez des materiaux pour vos ameliorations !" << std::endl;
 }
 
-int Façade::random_n_to_m(int const nbMin, int const nbMax)
+int GameplayFaçade::random_n_to_m(int const nbMin, int const nbMax)
 {
 	static std::random_device rd;
 	static std::default_random_engine engine(rd());
@@ -344,7 +344,7 @@ int Façade::random_n_to_m(int const nbMin, int const nbMax)
 * Execute l'action d'améliorer la pêche.
 * @param tokens nombre de jetons pour l'amélioration
 */
-void Façade::executeUpgradeFishingAction(int const tokens) {
+void GameplayFaçade::executeUpgradeFishingAction(int const tokens) {
 	int tkns = tokens;
 	if (tkns > 0 && materials >= rod_materials_required) {
 		if (tkns > 1) tkns = 1;
@@ -360,7 +360,7 @@ void Façade::executeUpgradeFishingAction(int const tokens) {
 * Execute l'action d'améliorer le bateau.
 * @param tokens nombre de jetons pour l'amélioration
 */
-void Façade::executeUpgradeRowingAction(int const tokens) {
+void GameplayFaçade::executeUpgradeRowingAction(int const tokens) {
 	int tkns = tokens;
 	if (tkns > 0 && materials >= boat_materials_required) {
 		if (tkns > 1) tkns = 1;
@@ -378,7 +378,7 @@ void Façade::executeUpgradeRowingAction(int const tokens) {
 * Renvoie si l'on peut améliorer le bateau ou non.
 * @return vrai si on peut améliorer
 */
-bool Façade::getRowingUpgradeStatus() {
+bool GameplayFaçade::getRowingUpgradeStatus() {
 	return rowingBonus > 0;
 }
 
@@ -387,14 +387,14 @@ bool Façade::getRowingUpgradeStatus() {
 * Renvoie si l'on peut améliorer la pêche ou non.
 * @return vrai si on peut améliorer
 */
-bool Façade::getFishingUpgradeStatus() {
+bool GameplayFaçade::getFishingUpgradeStatus() {
 	return fishingBonus > 0;
 }
 
 /**
 * Fonction pour tester la bonne execution de StormEvent
 */
-void Façade::executeStormEventForTest() {
+void GameplayFaçade::executeStormEventForTest() {
 	context->setEvent(eventVector[0]);
 	context->executeEvent();
 }
@@ -402,7 +402,7 @@ void Façade::executeStormEventForTest() {
 /**
 * Fonction pour tester la bonne execution de WindEvent
 */
-void Façade::executeWindEventForTest() {
+void GameplayFaçade::executeWindEventForTest() {
 	context->setEvent(eventVector[1]);
 	context->executeEvent();
 }
@@ -410,14 +410,14 @@ void Façade::executeWindEventForTest() {
 /**
 * Fonction pour tester la bonne execution de SeagullEvent
 */
-void Façade::executeSeagullEventForTest() {
+void GameplayFaçade::executeSeagullEventForTest() {
 	context->setEvent(eventVector[2]);
 	context->executeEvent();
 }
 /**
 * Fonction pour tester la bonne execution de MaterialEvent
 */
-void Façade::executeMaterialEventForTest() {
+void GameplayFaçade::executeMaterialEventForTest() {
 	context->setEvent(eventVector[3]);
 	context->executeEvent();
 }

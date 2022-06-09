@@ -30,7 +30,7 @@ enum class Status { onGoing, victory, defeat };
 Classe faisant l'interface vers le système de jeu. 
 Fournit les méthodes permettant le déroulement du jeu jusqu'à la victoire ou la défaite du joueur.
 */
-class Façade {
+class GameplayFaçade {
 private:
 	int action_tokens;
 	std::atomic<int> fishCount;
@@ -52,7 +52,7 @@ private:
 	void connectMaterialEventToFaçade(MaterialEvent* materialEvent);
 	int random_n_to_m(int const nbMin, int const nbMax);
 public:
-	Façade(int const maxDay, int const MaxDistance, int const playerHp, 
+	GameplayFaçade(int const maxDay, int const MaxDistance, int const playerHp, 
 		int const playerMaxHp, int const boatHp, int const boatMaxHp, int const materials);
 	int getTokenNbr();
 	int getDistanceTravelled();

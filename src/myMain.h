@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include <sstream>
-#include "Façade.h"
+#include "GameplayFaçade.h"
 
 enum class ImGuiWindow { mainMenu, gameWindow1, gameWindow2, victory, defeat, informations };
 

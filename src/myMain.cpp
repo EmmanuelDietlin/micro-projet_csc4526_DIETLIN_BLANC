@@ -168,7 +168,7 @@ int myMain()
 
     int random_bg = random_int(0, 100);
 
-    std::unique_ptr<Façade> façade;
+    std::unique_ptr<GameplayFaçade> façade;
     int fade_counter = 256;
     sf::RectangleShape fader(sf::Vector2f(w_width, w_height));
     fader.setFillColor(sf::Color(0,0,0,0));
@@ -251,7 +251,7 @@ int myMain()
             if (SetMenuWindow("Main menu", "Les revoltes", "de la Bounty",
                 "Commencer la partie")) {
                 FadeToBlack(fade_counter);
-                façade = std::make_unique<Façade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterialNbr);
+                façade = std::make_unique<GameplayFaçade>(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterialNbr);
                 tokens[TokensType::tokenNbr] = façade->getTokenNbr();
                 tokens[TokensType::remainingTokens] = façade->getTokenNbr();
                 readRecap(recapText);

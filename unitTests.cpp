@@ -8,19 +8,50 @@ const int playerBaseHp = 100;
 const int boatBaseHp = 200;
 const int baseMaterials = 10;
 
-TEST(TestGameplayFaçade, TestFishing) {
-    int token_nb = 2;
+/*
+Test de la pêche lorsque le joueur est au-dessus de 50% de pv
+*/
+TEST(TestGameplayFaçade, TestFishing1) {
+    int token_nb = 1;
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int fish_ref = f.getFishCount();
-    f.executeFishingAction(2);
+    f.executeFishingAction(token_nb);
     EXPECT_TRUE(f.getFishCount() >= fish_ref);
 }
 
-TEST(TestFaçade, TestRowing) {
-    int token_nb = 2;
+/*
+Test de la pêche lorsque le joueur est en dessous de 50% de pv
+On utilise qu'un seul token, donc normalement aucun poisson ne devrait être pêché
+*/
+TEST(TestGameplayFaçade, TestFishing2) {
+    int token_nb = 1;
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp * 0.25, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+    int fish_ref = f.getFishCount();
+    f.executeFishingAction(token_nb);
+    EXPECT_EQ(f.getFishCount(), fish_ref);
+}
+
+/*
+Test de la navigation lorsque le bateau est au-dessus de 50% de pv
+*/
+TEST(TestGameplayFaçade, TestRowing1) {
+    int token_nb = 1;
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
-    f.executeRowingAction(2);
-    EXPECT_TRUE(f.getDistanceTravelled() >= 0);
+    int dist_ref = f.getDistanceTravelled();
+    f.executeRowingAction(token_nb);
+    EXPECT_TRUE(f.getDistanceTravelled() >= dist_ref);
+}
+
+/*
+Test de la navigation lorsque le bateau est en dessous de 50% de pv.
+On utilise qu'un seul jeton, donc normalement la distance parcourue ne devrait pas augmenter
+*/
+TEST(TestGameplayFaçade, TestRowing2) {
+    int token_nb = 1;
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp*0.25, boatBaseHp, baseMaterials);
+    int dist_ref = f.getDistanceTravelled();
+    f.executeRowingAction(token_nb);
+    EXPECT_EQ(f.getDistanceTravelled(), dist_ref);
 }
 
 TEST(TestGameplayFaçade, TestHealing) {
@@ -78,11 +109,9 @@ TEST(TestGameplayFaçade, TestNextDay1) {
     tokens[TokensType::fishingsTokens] = 2;
     tokens[TokensType::rowingTokens] = 3;
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
-    int d_ref = 0;
-    int f_ref = f.getFishCount();
     int mat_ref = f.getMaterials();
     auto s = f.nextDay(tokens);
-    EXPECT_TRUE(f.getDistanceTravelled() >= d_ref);
+    EXPECT_TRUE(f.getDistanceTravelled() >= 0);
     EXPECT_TRUE(f.getFishCount() >= 0);
     EXPECT_FALSE(f.getFishingUpgradeStatus());
     EXPECT_FALSE(f.getRowingUpgradeStatus());
@@ -95,8 +124,6 @@ On vérifiera donc que l'on à bien pas amélioré la pêche au jour suivant.
 */
 TEST(TestGameplayFaçade, TestNextDay2) {
     std::map<TokensType, int> tokens;
-    tokens[TokensType::fishingsTokens] = 2;
-    tokens[TokensType::rowingTokens] = 2;
     tokens[TokensType::upgradeFishingToken] = 1;
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
     int mat_ref = f.getMaterials();
@@ -108,10 +135,12 @@ TEST(TestGameplayFaçade, TestNextDay2) {
     EXPECT_TRUE(f.getMaterials() >= mat_ref);
 }
 
+/*
+Dans ce test, on a assez de matériaux pour améliorer la pêche. On vérifiera donc qu'on a bien réussi
+à améliorer celle-ci.
+*/
 TEST(TestGameplayFaçade, TestNextDay3) {
     std::map<TokensType, int> tokens;
-    tokens[TokensType::fishingsTokens] = 2;
-    tokens[TokensType::rowingTokens] = 2;
     tokens[TokensType::upgradeFishingToken] = 1;
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials*10);
     int mat_ref = f.getMaterials();
@@ -120,7 +149,7 @@ TEST(TestGameplayFaçade, TestNextDay3) {
     EXPECT_TRUE(f.getFishCount() >= 0);
     EXPECT_TRUE(f.getFishingUpgradeStatus());
     EXPECT_FALSE(f.getRowingUpgradeStatus());
-    EXPECT_EQ(f.getMaterials(), mat_ref - rod_materials_required);
+    EXPECT_TRUE(f.getMaterials() < mat_ref);
 }
 
 

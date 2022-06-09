@@ -85,9 +85,7 @@ void GameplayFaçade::executeRowingAction(int const tokens) {
 			<< std::endl << "Distance parcourue reduite" << std::endl << std::endl;
 	}
 	if (toks > 0) {
-		if (boat->stronglyDamaged()) {
-			context->setAction(std::make_unique<RowingAction>(toks));
-		}
+		context->setAction(std::make_unique<RowingAction>(toks));
 		d += context->executeAction();
 	}
 	distanceTravelled.fetch_add(d);

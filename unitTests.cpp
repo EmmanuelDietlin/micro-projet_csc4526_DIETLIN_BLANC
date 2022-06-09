@@ -27,14 +27,14 @@ TEST(TestGameplayFaçade, TestHealing) {
     int token_nb = 2;
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp/2, playerBaseHp, boatBaseHp/2, boatBaseHp, baseMaterials);
     f.executeHealingAction(2);
-    EXPECT_EQ(f.getPlayerHp(), playerBaseHp/2 + 40);
+    EXPECT_EQ(f.getPlayerHp(), playerBaseHp/2 + 30);
 }
 
 TEST(TestGameplayFaçade, TestRepairing) {
     int token_nb = 2;
     GameplayFaçade f(maxDay, maxDistance, playerBaseHp / 2, playerBaseHp, boatBaseHp / 2, boatBaseHp, baseMaterials);
     f.executeRepairAction(2);
-    EXPECT_EQ(f.getBoatHp(), boatBaseHp/2 + 40);
+    EXPECT_EQ(f.getBoatHp(), boatBaseHp/2 + 30);
 }
 
 TEST(TestGameplayFaçade, TestStormEvent) {

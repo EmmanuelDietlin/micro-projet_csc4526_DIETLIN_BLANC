@@ -6,7 +6,7 @@ const int maxDay = 47;
 const int maxDistance = 6700;
 const int playerBaseHp = 100;
 const int boatBaseHp = 200;
-const int baseMaterials = 100;
+const int baseMaterials = 10;
 
 TEST(TestGameplayFaçade, TestFishing) {
     int token_nb = 2;
@@ -69,6 +69,10 @@ TEST(TestGameplayFaçade, TestMaterialEvent) {
     EXPECT_TRUE(f.getMaterials() > material_ref);
 }
 
+/*
+Dans ce test, on va tester le fonctionnement de la méthode nextday de la façade.
+On exécutera ici 2 actions, pêcher et naviguer.
+*/
 TEST(TestGameplayFaçade, TestNextDay1) {
     std::map<TokensType, int> tokens;
     tokens[TokensType::fishingsTokens] = 2;
@@ -82,15 +86,41 @@ TEST(TestGameplayFaçade, TestNextDay1) {
     EXPECT_TRUE(f.getFishCount() >= 0);
     EXPECT_FALSE(f.getFishingUpgradeStatus());
     EXPECT_FALSE(f.getRowingUpgradeStatus());
-    EXPECT_EQ(f.getMaterials(), mat_ref);
+
 }
 
+/*
+Dans ce test, on va essayer d'améliorer la pêche alors que nous n'avons pas assez de matériaux
+On vérifiera donc que l'on à bien pas amélioré la pêche au jour suivant.
+*/
 TEST(TestGameplayFaçade, TestNextDay2) {
-    //faire le test mais cette fois en essayant d'améliorer mais pas assez de matériaux
+    std::map<TokensType, int> tokens;
+    tokens[TokensType::fishingsTokens] = 2;
+    tokens[TokensType::rowingTokens] = 2;
+    tokens[TokensType::upgradeFishingToken] = 1;
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials);
+    int mat_ref = f.getMaterials();
+    auto s = f.nextDay(tokens);
+    EXPECT_TRUE(f.getDistanceTravelled() >= 0);
+    EXPECT_TRUE(f.getFishCount() >= 0);
+    EXPECT_FALSE(f.getFishingUpgradeStatus());
+    EXPECT_FALSE(f.getRowingUpgradeStatus());
+    EXPECT_TRUE(f.getMaterials() >= mat_ref);
 }
 
 TEST(TestGameplayFaçade, TestNextDay3) {
-    //Faire le test avec assez de matériaux pour améliorer
+    std::map<TokensType, int> tokens;
+    tokens[TokensType::fishingsTokens] = 2;
+    tokens[TokensType::rowingTokens] = 2;
+    tokens[TokensType::upgradeFishingToken] = 1;
+    GameplayFaçade f(maxDay, maxDistance, playerBaseHp, playerBaseHp, boatBaseHp, boatBaseHp, baseMaterials*10);
+    int mat_ref = f.getMaterials();
+    auto s = f.nextDay(tokens);
+    EXPECT_TRUE(f.getDistanceTravelled() >= 0);
+    EXPECT_TRUE(f.getFishCount() >= 0);
+    EXPECT_TRUE(f.getFishingUpgradeStatus());
+    EXPECT_FALSE(f.getRowingUpgradeStatus());
+    EXPECT_EQ(f.getMaterials(), mat_ref - rod_materials_required);
 }
 
 

@@ -31,3 +31,11 @@ void Entity::heal(int const heal) {
 int Entity::getHp() {
 	return hp;
 }
+
+/// <summary>
+/// Renvoie si l'entité est fortement endommagée ou non
+/// </summary>
+/// <returns></returns>
+bool Entity::stronglyDamaged() {
+	return hp <= 0.5 * maxHp;
+}

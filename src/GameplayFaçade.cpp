@@ -78,8 +78,16 @@ Execute l'action de ramer, avec le nombre de jetons passé en paramètre
 */
 void GameplayFaçade::executeRowingAction(int const tokens) {
 	int d = rowingBonus;
-	if (tokens > 0) {
-		context->setAction(std::make_unique<RowingAction>(tokens));
+	int toks = tokens;
+	if (boat->stronglyDamaged()) {
+		toks--;
+		recapText << "L'etat du bateau rend difficile la naviguation !"
+			<< std::endl << "Distance parcourue reduite" << std::endl << std::endl;
+	}
+	if (toks > 0) {
+		if (boat->stronglyDamaged()) {
+			context->setAction(std::make_unique<RowingAction>(toks));
+		}
 		d += context->executeAction();
 	}
 	distanceTravelled.fetch_add(d);
@@ -103,8 +111,14 @@ Execute l'action de pêcher, avec le nombre de jetons passé en paramètres
 */
 void GameplayFaçade::executeFishingAction(int const tokens) {
 	int f = fishingBonus;
-	if (tokens > 0) {
-		context->setAction(std::make_unique<FishingAction>(tokens));
+	int toks = tokens;
+	if (player->stronglyDamaged()) {
+		toks--;
+		recapText << "Du fait de votre etat, vous ne pouvez pas agir autant que vous le souhaitez !"
+			<< std::endl << "Nombre de poissons peche diminue" << std::endl << std::endl;
+	}
+	if (toks > 0) {
+		context->setAction(std::make_unique<FishingAction>(toks));
 		f += context->executeAction();
 	}
 	fishCount.fetch_add(f);
@@ -243,7 +257,7 @@ void GameplayFaçade::dailyEvent() {
 */
 void GameplayFaçade::connectStormEventToFaçade(StormEvent* s) {
 	s->stormEventSignal.connect(this, &GameplayFaçade::writeStormEvent);
-	s->damageBoatSignal.connect(boat.get(), &Entity::takeDamage);
+	s->damageBoatSignal.connect(this, &GameplayFaçade::damageBoat);
 	s->foodLostSignal.connect(this, &GameplayFaçade::loseFood);
 }
 
@@ -260,7 +274,7 @@ void GameplayFaçade::connectWindEventToFaçade(WindEvent* w) {
 */
 void GameplayFaçade::connectSeagullEventToFaçade(SeagullEvent* s) {
 	s->seagullEventSignal.connect(this, &GameplayFaçade::writeSeagullEvent);
-	s->damagePlayerSignal.connect(player.get(), &Entity::takeDamage);
+	s->damagePlayerSignal.connect(this, &GameplayFaçade::damagePlayer);
 	s->foodLostSignal.connect(this, &GameplayFaçade::loseFood);
 }
 
@@ -281,7 +295,7 @@ void GameplayFaçade::moveBack(int const distance) {
 	if (distanceTravelled.load() < 0) {
 		distanceTravelled.store(0);
 	}
-	recapText << std::endl << "Distance parcourue : -" << distance << "km" << std::endl << std::endl;
+	recapText << std::endl << "Distance parcourue : -" << distance << "km" << std::endl;
 }
 
 /**
@@ -293,7 +307,7 @@ void GameplayFaçade::loseFood(int const food) {
 	if (fishCount.load() < 0) {
 		fishCount.store(0);
 	}
-	recapText << std::endl << "Poissons : -" << food << std::endl << std::endl;
+	recapText << std::endl << "Poissons : -" << food << std::endl;
 }
 
 /**
@@ -302,7 +316,7 @@ void GameplayFaçade::loseFood(int const food) {
 */
 void GameplayFaçade::findMaterial(int const material) {
 	materials.fetch_add(material);
-	recapText << std::endl << "Materiaux : +" << material << std::endl << std::endl;
+	recapText << std::endl << "Materiaux : +" << material << std::endl;
 }
 
 /**
@@ -426,5 +440,24 @@ void GameplayFaçade::executeSeagullEvent() {
 void GameplayFaçade::executeMaterialEvent() {
 	context->setEvent(goodEventVector[0]);
 	context->executeEvent();
+}
+
+/// <summary>
+/// Occasionne des dommages au bateau et écrit l'action dans le récapitulatif
+/// </summary>
+/// <param name="dmg"> quantite de dommages à infliger </param>
+void GameplayFaçade::damageBoat(int const dmg) {
+	boat->takeDamage(dmg);
+	recapText << std::endl << "Pv bateau -" << dmg << std::endl << std::endl;
+}
+
+
+/// <summary>
+/// Occasionne des dommages au joueur et écrit l'action dans le récapitulatif
+/// </summary>
+/// <param name="dmg"> quantite de dommages à infliger </param>
+void GameplayFaçade::damagePlayer(int const dmg) {
+	player->takeDamage(dmg);
+	recapText << std::endl << "Pv -" << dmg << std::endl << std::endl;
 }
 

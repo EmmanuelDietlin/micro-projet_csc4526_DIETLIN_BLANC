@@ -9,7 +9,7 @@ Ce projet s'inspire de l'oeuvre de Jules Verne, "[Les révoltés de la Bounty]("ht
 
 #--------
 
-##Outils
+## Outils
 
 Le jeu est programmé en C++ via l'IDE **Visual Studio Community 2022**. 
 Les fonds d'écran sont des cartes générées via l'outil [Tiled](https://www.mapeditor.org/), et implémentée en utilisant
@@ -18,35 +18,34 @@ Le jeu utilise également la bibliothèque [vdk-signals](https://github.com/vdksof
 
 #--------
 
-##Principe de jeu
+## Principe de jeu
 
-![ecran principal]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/main_menu_window")
+![ecran principal]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/main_menu_window.png")
 
 L'objectif du jeu est de parcourir une distance de 6700km en 47 jours ou moins. Pour ce faire,
 le joueur peut décider à chaque tour de jeu (un tour = un jour) quelles actions effectuer.
 Il dispose pour cela d'un certains nombre de jetons d'action qu'il peut répartir comme il le souhaite.
 Une fois les jetons répartis, le joueur peut passer au jour suivant.
 
-![ecran de répartition des jetons]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/game_window")
+![ecran de répartition des jetons]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/game_window.png")
 
 Au début de chaque journée, un compte-rendu des actions effectuées, des ressources récoltées et de la 
 distance parcourue est affiché. Il y a également une chance que des évènements se déclenchent à la fin d'un tour
 de jeu, ajoutant donc une partie d'aléatoire au jeu. Ces évènements peuvent être positifs ou négatifs.
 
-![récapitulatif de la journée précédente]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/game_window_2")
+![récapitulatif de la journée précédente]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/game_window_2.png")
 
 Le joueur gagne la partie s'il parvient à parcourir 6700km en au plus 47 jours.
 Il perd si le bateau ou le joueur n'a plus de vie, ou bien s'il n'est pas parvenu à parcourir 
 la distance requise dans le temps imparti.
 
-![ecran de victoire]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/game_window_2")
+![ecran de victoire]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/game_window_2.png")
 
-![écran de défaite]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/game_window_2")
-
+![écran de défaite]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/game_window_2.png")
 
 #--------
 
-##Ressources
+## Ressources
 
 Toutes les ressources se trouvent dans le fichier *resources*
 

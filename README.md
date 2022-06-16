@@ -20,7 +20,7 @@ Le jeu utilise également la bibliothèque [vdk-signals](https://github.com/vdksof
 
 ## Principe de jeu
 
-![ecran principal]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/tree/main/resources/screenshots/main_menu_window.png")
+[![ecran principal](resources/screenshots/main_menu_window.png)]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/")
 
 L'objectif du jeu est de parcourir une distance de 6700km en 47 jours ou moins. Pour ce faire,
 le joueur peut décider à chaque tour de jeu (un tour = un jour) quelles actions effectuer.

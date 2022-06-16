@@ -7,7 +7,7 @@ Il a été réalisé en 15 jours, du 25/05/2022 au 9/06/2022, dans le cadre du modul
 
 Ce projet s'inspire de l'oeuvre de Jules Verne, "[Les révoltés de la Bounty]("https://fr.wikipedia.org/wiki/Les_R%C3%A9volt%C3%A9s_de_la_Bounty_(nouvelle)")".
 
-#--------
+# --------
 
 ## Outils
 
@@ -16,7 +16,7 @@ Les fonds d'écran sont des cartes générées via l'outil [Tiled](https://www.maped
 la bibliothèque [tmxlite](https://github.com/fallahn/tmxlite).
 Le jeu utilise également la bibliothèque [vdk-signals](https://github.com/vdksoft/signals/blob/master/docs/signals.md).
 
-#--------
+# --------
 
 ## Principe de jeu
 
@@ -43,7 +43,7 @@ la distance requise dans le temps imparti.
 
 [![ecran de défaite](resources/screenshots/defeat_window.png)]("https://github.com/EmmanuelDietlin/micro-projet_csc4526_DIETLIN_BLANC/")
 
-#--------
+# --------
 
 ## Ressources
 

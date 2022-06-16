@@ -5,7 +5,7 @@ Ce projet a été réalisé par Emmanuel DIETLIN et Ludovic BLANC, étudiants de 2ème
 
 Il a été réalisé en 15 jours, du 25/05/2022 au 9/06/2022, dans le cadre du module CSC4525 - Programmation C++.
 
-Ce projet s'inspire de l'oeuvre de Jules Verne, [[Les révoltés de la Bounty](Les_R%C3%A9volt%C3%A9s_de_la_Bounty_(nouvelle))](https://fr.wikipedia.org/wiki/).
+Ce projet s'inspire de l'oeuvre de Jules Verne, "Les révoltés de la Bounty".
 
 --------
 

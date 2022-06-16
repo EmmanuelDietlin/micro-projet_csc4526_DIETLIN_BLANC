@@ -34,12 +34,12 @@ Fournit les méthodes permettant le déroulement du jeu jusqu'à la victoire ou la 
 class GameplayFaçade {
 private:
 	int action_tokens;
-	std::atomic<int> fishCount;
-	std::atomic<int> distanceTravelled = 0;
+	int fishCount;
+	int distanceTravelled = 0;
 	int dayCount = 1;
 	int maxDay;
 	int maxDistance;
-	std::atomic<int> materials;
+	int materials;
 	int fishingBonus = 0;
 	int rowingBonus = 0;
 	std::unique_ptr<Boat> boat;

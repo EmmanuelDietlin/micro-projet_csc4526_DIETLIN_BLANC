@@ -88,7 +88,7 @@ void GameplayFaçade::executeRowingAction(int const tokens) {
 		context->setAction(std::make_unique<RowingAction>(toks));
 		d += context->executeAction();
 	}
-	distanceTravelled.fetch_add(d);
+	distanceTravelled += (d);
 	if (d > 0) {
 		if (d < 200) {
 			recapText << "Une combinaison de vents defavorables et de mer calme vous ont conduit a ne parcourir qu'une"
@@ -102,6 +102,8 @@ void GameplayFaçade::executeRowingAction(int const tokens) {
 
 	}
 }
+
+
 
 /**
 Execute l'action de pêcher, avec le nombre de jetons passé en paramètres
@@ -119,7 +121,7 @@ void GameplayFaçade::executeFishingAction(int const tokens) {
 		context->setAction(std::make_unique<FishingAction>(toks));
 		f += context->executeAction();
 	}
-	fishCount.fetch_add(f);
+	fishCount += (f);
 	//if (f > 0) {
 		if (f < 3) {
 			recapText << "Vous avez lance votre ligne dans l'eau, mais la chance ne vous a pas sourit : seuls quelques malheureux"
@@ -183,7 +185,7 @@ Status GameplayFaçade::nextDay(std::map<TokensType, int>& tokens) {
 	if (tokens[TokensType::upgradeFishingToken]) executeUpgradeFishingAction(tokens[TokensType::upgradeFishingToken]);
 	if (tokens[TokensType::upgradeRowingToken]) executeUpgradeRowingAction(tokens[TokensType::upgradeRowingToken]);
 	dailyEvent();
-	fishCount.fetch_sub(fish_eating_number);
+	fishCount -= (fish_eating_number);
 	if (fishCount < 0) {
 		recapText << "Le manque de nourriture vous affaiblit !" << std::endl <<
 			"pv " << fishCount * damage_starvation << std::endl << std::endl;
@@ -289,10 +291,7 @@ void GameplayFaçade::connectMaterialEventToFaçade(MaterialEvent* m) {
 * @param distance distance à retrancher
 */
 void GameplayFaçade::moveBack(int const distance) {
-	distanceTravelled.fetch_sub(distance);
-	if (distanceTravelled.load() < 0) {
-		distanceTravelled.store(0);
-	}
+	distanceTravelled = std::max(distanceTravelled - distance, 0);
 	recapText << std::endl << "Distance parcourue : -" << distance << "km" << std::endl;
 }
 
@@ -301,10 +300,7 @@ void GameplayFaçade::moveBack(int const distance) {
 * @param food nombre de poissons à retrancher
 */
 void GameplayFaçade::loseFood(int const food) {
-	fishCount.fetch_sub(food);
-	if (fishCount.load() < 0) {
-		fishCount.store(0);
-	}
+	fishCount -= std::max(fishCount - food, 0);
 	recapText << std::endl << "Poissons : -" << food << std::endl;
 }
 
@@ -313,7 +309,7 @@ void GameplayFaçade::loseFood(int const food) {
 * @param material nombre de matériaux à ajouter
 */
 void GameplayFaçade::findMaterial(int const material) {
-	materials.fetch_add(material);
+	materials += (material);
 	recapText << std::endl << "Materiaux : +" << material << std::endl;
 }
 
@@ -366,7 +362,7 @@ void GameplayFaçade::executeUpgradeFishingAction(int const tokens) {
 	int tkns = tokens;
 	if (tkns > 0 && materials >= rod_materials_required) {
 		if (tkns > 1) tkns = 1;
-		materials.fetch_sub(rod_materials_required);
+		materials -= (rod_materials_required);
 		context->setAction(std::make_unique<UpgradeFishingAction>(tokens));
 		fishingBonus += context->executeAction();
 		recapText << "Avec les materiaux que vous avez recuperes, vous avez pu fabriquer une canne "
@@ -382,7 +378,7 @@ void GameplayFaçade::executeUpgradeRowingAction(int const tokens) {
 	int tkns = tokens;
 	if (tkns > 0 && materials >= boat_materials_required) {
 		if (tkns > 1) tkns = 1;
-		materials.fetch_sub(boat_materials_required);
+		materials -= (boat_materials_required);
 		context->setAction(std::make_unique<UpgradeRowingAction>(tokens));
 		rowingBonus += context->executeAction();
 		recapText << "Avec les materiaux que vous avez recuperes, vous avez pu fabriquer de quoi mieux"

@@ -244,7 +244,7 @@ void GameplayFaçade::moveBack(int const distance) {
 * @param food nombre de poissons à retrancher
 */
 void GameplayFaçade::loseFood(int const food) {
-	fishCount -= std::max(fishCount - food, 0);
+	fishCount = std::max(fishCount - food, 0);
 	recapText << std::endl << "Poissons : -" << food << std::endl;
 }
 

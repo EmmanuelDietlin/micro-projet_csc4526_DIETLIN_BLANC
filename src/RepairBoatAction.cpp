@@ -16,7 +16,7 @@ int RepairBoatAction::execute() {
 		healToReturn += tokenNb * repairFactor;
 		(*recapText) << "Reparer l'embarcation est une sage idee pour eviter de se retrouver au milieu"
 			<< " de l'ocean accroche a une planche pour tenter de se maintenir a flot." << std::endl;
-		(*recapText) << std::endl << "Reparation : " << healToReturn << std::endl << std::endl;
+		(*recapText) << std::endl << "Reparations : " << healToReturn << std::endl << std::endl;
 	}
 	return healToReturn;
 }

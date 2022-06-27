@@ -3,7 +3,10 @@
 * Constructeur de la classe Action
 * @param tokenNb nombre de jetons pour l'action
 */
-Action::Action(int const tokenNb) : tokenNb(tokenNb) {}
+Action::Action(int const tokenNb, std::stringstream* recapText) :
+	tokenNb(tokenNb),
+	recapText(recapText)
+	{}
 
 /**
 * Ajoute des tokens à l'action

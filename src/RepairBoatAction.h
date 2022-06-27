@@ -7,6 +7,6 @@ class RepairBoatAction : public Action {
 private:
 	int const repairFactor = 15;
 public:
-	explicit RepairBoatAction(int const tokenNb);
+	explicit RepairBoatAction(int const tokenNb, std::stringstream* recapText);
 	int execute() override;
 };

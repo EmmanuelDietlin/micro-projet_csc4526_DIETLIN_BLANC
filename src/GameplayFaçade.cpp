@@ -77,30 +77,8 @@ Execute l'action de ramer, avec le nombre de jetons passé en paramètre
 *@param tokens nombre de jetons pour l'action
 */
 void GameplayFaçade::executeRowingAction(int const tokens) {
-	int d = rowingBonus;
-	int toks = tokens;
-	if (boat->stronglyDamaged()) {
-		toks--;
-		recapText << "L'etat du bateau rend difficile la naviguation !"
-			<< std::endl << "Distance parcourue reduite" << std::endl << std::endl;
-	}
-	if (toks > 0) {
-		context->setAction(std::make_unique<RowingAction>(toks));
-		d += context->executeAction();
-	}
-	distanceTravelled += (d);
-	if (d > 0) {
-		if (d < 200) {
-			recapText << "Une combinaison de vents defavorables et de mer calme vous ont conduit a ne parcourir qu'une"
-				<< " courte distance, diminuant donc vos chances de parvenir a votre objectif dans le temps imparti..." << std::endl;
-		}
-		else {
-			recapText << "Des vents favorables et de bonnes decisions de votre part vous permettent de parcourir une grande distance."
-				<< " A ce rythme, l'objectif sera surement atteint rapidement !" << std::endl;
-		}
-		recapText << std::endl << "Distance parcourue : " << d << " km" << std::endl << std::endl;
-
-	}
+	context->setAction(std::make_unique<RowingAction>(tokens, &recapText, rowingBonus, boat.get()));
+	distanceTravelled += context->executeAction();
 }
 
 
@@ -110,30 +88,8 @@ Execute l'action de pêcher, avec le nombre de jetons passé en paramètres
 *@param tokens nombre de jetons pour l'action
 */
 void GameplayFaçade::executeFishingAction(int const tokens) {
-	int f = fishingBonus;
-	int toks = tokens;
-	if (player->stronglyDamaged()) {
-		toks--;
-		recapText << "Du fait de votre etat, vous ne pouvez pas agir autant que vous le souhaitez !"
-			<< std::endl << "Nombre de poissons peche diminue" << std::endl << std::endl;
-	}
-	if (toks > 0) {
-		context->setAction(std::make_unique<FishingAction>(toks));
-		f += context->executeAction();
-	}
-	fishCount += (f);
-	//if (f > 0) {
-		if (f < 3) {
-			recapText << "Vous avez lance votre ligne dans l'eau, mais la chance ne vous a pas sourit : seuls quelques malheureux"
-				<< " poissons ont mordu a l'appat. Il va sans doute falloir vous rationner..." << std::endl;
-		}
-		else {
-			recapText << "La chance vous a sourit : vous n'avez eu qu'a lancer votre ligne dans l'eau, et aussitot de nombreux"
-				<< " poissons se sont jetes dessus ! Sacre festin en perspective !" << std::endl;
-		}
-		recapText << std::endl << "Poissons peches : " << f << std::endl << std::endl;
-	//}
-	
+	context->setAction(std::make_unique<FishingAction>(tokens, &recapText, fishingBonus, player.get()));
+	fishCount += context->executeAction();
 }
 
 /**
@@ -142,14 +98,8 @@ Execute l'action de se soigner, avec le nombre de jetons passé en paramètres
 *
 */
 void GameplayFaçade::executeHealingAction(int const tokens) {
-	if (tokens > 0) {
-		context->setAction(std::make_unique<HealPlayerAction>(tokens));
-		int h = context->executeAction();
-		player->heal(h);
-		recapText << "Un peu de repos ne fait pas de mal ! En vous reposant, vous avez pu recuperer"
-			<< " une partie de votre energie" << std::endl;
-		recapText << std::endl << "Vie : +" << h << std::endl << std::endl;
-	}
+	context->setAction(std::make_unique<HealPlayerAction>(tokens, &recapText));
+	player->heal(context->executeAction());
 }
 
 /**
@@ -158,14 +108,8 @@ Execute l'action de réparer le bateau, avec le nombre de jetons passé en paramèt
 *
 */
 void GameplayFaçade::executeRepairAction(int const tokens) {
-	if (tokens > 0) {
-		context->setAction(std::make_unique<RepairBoatAction>(tokens));
-		int h = context->executeAction();
-		boat->heal(h);
-		recapText << "Reparer l'embarcation est une sage idee pour eviter de se retrouver au milieu"
-			<< " de l'ocean accroche a une planche pour tenter de se maintenir a flot." << std::endl;
-		recapText << std::endl << "Reparation : " << h << std::endl << std::endl;
-	}
+	context->setAction(std::make_unique<RepairBoatAction>(tokens, &recapText));
+	boat->heal(context->executeAction());
 }
 
 /**
@@ -359,15 +303,11 @@ int GameplayFaçade::random_n_to_m(int const nbMin, int const nbMax)
 * @param tokens nombre de jetons pour l'amélioration
 */
 void GameplayFaçade::executeUpgradeFishingAction(int const tokens) {
-	int tkns = tokens;
-	if (tkns > 0 && materials >= rod_materials_required) {
-		if (tkns > 1) tkns = 1;
-		materials -= (rod_materials_required);
-		context->setAction(std::make_unique<UpgradeFishingAction>(tokens));
-		fishingBonus += context->executeAction();
-		recapText << "Avec les materiaux que vous avez recuperes, vous avez pu fabriquer une canne "
-			<< " a peche. Cela vous permettra de recolter plus de poisson !" << std::endl;
-		recapText << std::endl << "Canne a peche + 1" << std::endl << std::endl;
+	context->setAction(std::make_unique<UpgradeFishingAction>(tokens, &recapText, materials, rod_materials_required));
+	int upgradeResult = context->executeAction();
+	if (upgradeResult > 0) {
+		fishingBonus += upgradeResult;
+		materials -= rod_materials_required;
 	}
 }
 /**
@@ -375,15 +315,11 @@ void GameplayFaçade::executeUpgradeFishingAction(int const tokens) {
 * @param tokens nombre de jetons pour l'amélioration
 */
 void GameplayFaçade::executeUpgradeRowingAction(int const tokens) {
-	int tkns = tokens;
-	if (tkns > 0 && materials >= boat_materials_required) {
-		if (tkns > 1) tkns = 1;
-		materials -= (boat_materials_required);
-		context->setAction(std::make_unique<UpgradeRowingAction>(tokens));
-		rowingBonus += context->executeAction();
-		recapText << "Avec les materiaux que vous avez recuperes, vous avez pu fabriquer de quoi mieux"
-			<< " naviguer. Vous pourrez parcourir plus de distance avec votre barque !" << std::endl;
-		recapText << std::endl << "Bateau ameliore" << std::endl << std::endl;
+	context->setAction(std::make_unique<UpgradeRowingAction>(tokens, &recapText, materials, boat_materials_required));
+	int upgradeResult = context->executeAction();
+	if (upgradeResult > 0) {
+		rowingBonus += upgradeResult;
+		materials -= boat_materials_required;
 	}
 }
 

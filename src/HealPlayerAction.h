@@ -7,6 +7,6 @@ class HealPlayerAction : public Action {
 private:
 	int const healFactor = 15;
 public:
-	explicit HealPlayerAction(int const tokenNb);
+	explicit HealPlayerAction(int const tokenNb, std::stringstream* recapText);
 	int execute() override;
 };

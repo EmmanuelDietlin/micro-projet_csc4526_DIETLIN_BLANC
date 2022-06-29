@@ -12,7 +12,6 @@
 #include "MaterialEvent.h"
 #include "UpgradeFishingAction.h"
 #include "UpgradeRowingAction.h"
-#include <atomic>
 
 const int max_tokens_nb = 5;
 const int starting_fish_number = 2;

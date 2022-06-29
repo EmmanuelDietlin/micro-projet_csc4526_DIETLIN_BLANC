@@ -1,5 +1,6 @@
 #pragma once
 #include <random>
+#include <sstream>
 
 /**
 Classe abstraite Action.
@@ -16,7 +17,8 @@ public:
 	void clearTokens();
 	int getTokenNb() const ;
 protected:
-	explicit Action(int const tokenNb);
+	explicit Action(int const tokenNb, std::stringstream* recapText);
 	int random_int(int const start, int const end);
 	int tokenNb;
+	std::stringstream* recapText;
 };

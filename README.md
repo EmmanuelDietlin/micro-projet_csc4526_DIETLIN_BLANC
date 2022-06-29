@@ -14,7 +14,7 @@ Ce projet s'inspire de l'oeuvre de Jules Verne, "Les révoltés de la Bounty".
 Le jeu est programmé en C++ via l'IDE **Visual Studio Community 2022**. 
 Les fonds d'écran sont des cartes générées via l'outil [Tiled](https://www.mapeditor.org/), et implémentée en utilisant
 la bibliothèque [tmxlite](https://github.com/fallahn/tmxlite).
-Le jeu utilise également la bibliothèque [vdk-signals](https://github.com/vdksoft/signals/blob/master/docs/signals.md).
+Le jeu utilise également la bibliothèque [vdk-signals](https://vdksoft.github.io/signals/index.html).
 
 --------
 
